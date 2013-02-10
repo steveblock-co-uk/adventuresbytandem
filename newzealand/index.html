@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-family: "Courier", Serif;
+        font-size: 12px;
+      }
+      img#tandem {
+        position: absolute; /* required to be clickable outside parent */
+        z-index: 10;
+        width: 30px;
+        /* border: 1px solid red; */
+      }
+      div#title {
+        position: absolute;
+        top: 10px;
+        left: 600px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      div#map {
+        position: absolute;
+        top: 10px;
+        left: 100px;
+        background-image: url('map.png');
+        height: 678px;
+        width: 491px;
+      }
+      div#map div#line {
+        position: absolute;
+        top: 23px;
+        left: 83px;
+        background-image: url('line_83_23.png');
+        height: 644px;
+        width: 306px;
+      }
+      p.defaultCaption {
+        display: none;
+        position: absolute;
+        top: 50px;
+        left: 600px;
+        border: 1px solid green;
+      }
+      p.defaultDescription {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 600px;
+        border: 1px solid green;
+      }
+      div.defaultRouteSegment {
+        position: absolute;
+        background-repeat: no-repeat;
+        /* border: 1px solid green; */
+      }
+      div.defaultMainPhoto {
+        display: none;
+        position: absolute;
+        left: 600px;
+        top: 320px;
+        border: 1px solid red;
+      }
+      div.defaultMainPhoto img {
+        width: 400px;
+      }
+      img.defaultPhoto {
+        display: none;
+        position: absolute;
+        width: 200px;
+        border: 1px solid blue;
+      }
+    </style>
+
+    <script type="text/javascript">
+      // TODO: This should go away
+      var currentEntry = 0;
+      var entries;
+
+      // Temp
+      function previousEntry() {
+        if (currentEntry > 0) {
+          tandem = entries[currentEntry--].hide();
+          entries[currentEntry].show(tandem);
+        }
+      }
+      function nextEntry() {
+        console.log('nextEntry(): currentEntry=' + currentEntry);
+        if (currentEntry < entries.length - 1) {
+          tandem = entries[currentEntry++].hide();
+          entries[currentEntry].show(tandem);
+        }
+      }
+
+      function showElement(e) {
+        e.style.display = 'block';
+      }
+      function hideElement(e) {
+        e.style.display = 'none';
+      }
+      function positionElement(e, p) {
+        e.style.left = p.x() + "px";
+        e.style.top = p.y() + "px";
+      }
+      function sizeElement(e, p) {
+        e.style.width = p.x() + "px";
+        e.style.height = p.y() + "px";
+      }
+
+      // TODO: Use AddEntry() global to remove need for this
+      var numEntries = 0;
+      // A single entry on the route
+      function Entry(caption, description, routeSegment, photos) {
+        console.log('Entry()');
+        this.id_ = ++numEntries;
+        this.caption_ = caption;
+        this.description_ = description;
+        this.routeSegment_ = routeSegment;
+        this.photos_ = photos;
+        this.routeSegment_.setEntry(this);
+      }
+      Entry.prototype.id = function(tandem) {
+        return this.id_;
+      }
+      Entry.prototype.show = function(tandem) {
+        console.log('Entry.show(): id_=' + this.id_);
+        this.caption_.show();
+        this.description_.show();
+        this.routeSegment_.showSelected();
+        for (var i = 0; i < this.photos_.length; i++)
+          this.photos_[i].show();
+        this.routeSegment_.adoptTandem(tandem)
+      }
+      Entry.prototype.hide = function() {
+        console.log('Entry.hide(): id_=' + this.id_);
+        this.caption_.hide();
+        this.description_.hide();
+        this.routeSegment_.hide();
+        for (var i = 0; i < this.photos_.length; i++)
+          this.photos_[i].hide();
+        return this.routeSegment_.tandem();
+      }
+      Entry.prototype.highlightRouteSegment = function() {
+        console.log('Entry.highlightRouteSegment()');
+        this.routeSegment_.showHighlighted();
+      }
+
+      function Caption(text) {
+        console.log('Caption(): text="' + text + '"');
+        this.text_ = text;
+      }
+      // TODO: Inherit show/hide ?
+      Caption.prototype.show = function() {
+        console.log('Caption.show()');
+        showElement(this.element());
+      }
+      Caption.prototype.hide = function() {
+        console.log('Caption.hide()');
+        hideElement(this.element());
+      }
+      Caption.prototype.element = function() {
+        if (this.element_)
+          return this.element_;
+        console.log('Caption.element()');
+        this.element_ = document.createElement('p');
+        this.element_.innerText = this.text_;
+        this.element_.className = 'defaultCaption';
+        document.body.appendChild(this.element_);
+        return this.element_;
+      }
+
+      function Description(text) {
+        console.log('Description(): text="' + text + '"');
+        this.text_ = text;
+      }
+      // TODO: Inherit show/hide ?
+      Description.prototype.show = function() {
+        console.log('Description.show()');
+        showElement(this.element());
+      }
+      Description.prototype.hide = function() {
+        console.log('Description.hide()');
+        hideElement(this.element());
+      }
+      Description.prototype.element = function() {
+        if (this.element_)
+          return this.element_;
+        console.log('Description.element()');
+        this.element_ = document.createElement('p');
+        this.element_.innerText = this.text_;
+        this.element_.className = 'defaultDescription';
+        document.body.appendChild(this.element_);
+        return this.element_;
+      }
+
+      function RouteSegment(position, size, selectedImageName, selectedImageOffset, highlightedImageName, highlightedImageOffset) {
+        console.log('RouteSegment()');
+        this.selectedImageName_ = selectedImageName;
+        this.selectedImageOffset_ = selectedImageOffset;
+        //this.selectedImageName_ = highlightedImageName;
+        //this.selectedImageOffset_ = highlightedImageOffset;
+        this.highlightedImageName_ = highlightedImageName;
+        this.highlightedImageOffset_ = highlightedImageOffset;
+        this.createElement(position, size);
+        this.isSelected_ = false;
+      }
+      RouteSegment.prototype.setEntry = function(entry) {
+        this.entry_ = entry;
+        this.element_.id = 'route_segment_' + this.entry_.id();
+      }
+      RouteSegment.prototype.showSelected = function() {
+        console.log('RouteSegment.showSelected()');
+        this.element_.style.backgroundImage = 'url(' + this.selectedImageName_ + ')';
+        this.element_.style.backgroundPosition = this.selectedImageOffset_.x() + 'px ' + this.selectedImageOffset_.y() + 'px';
+        this.isSelected_ = true;
+      }
+      RouteSegment.prototype.showHighlighted = function() {
+        console.log('RouteSegment.showHighlighted()');
+        this.element_.style.backgroundImage = 'url(' + this.highlightedImageName_ + ')';
+        this.element_.style.backgroundPosition = this.highlightedImageOffset_.x() + 'px ' + this.highlightedImageOffset_.y() + 'px';
+      }
+      RouteSegment.prototype.hide = function() {
+        console.log('RouteSegment.hide()');
+        this.element_.style.backgroundImage = null;
+        this.isSelected_ = false;
+      }
+      // Need to create RouteSegment for entire line at start up
+      RouteSegment.prototype.createElement = function(position, size) {
+        console.log('RouteSegment.createElement()');
+        this.element_ = document.createElement('div');
+        this.element_.className = 'defaultRouteSegment';
+        this.addEventListener('dragenter', this.onDragEnter);
+        this.addEventListener('dragleave', this.onDragLeave);
+        this.addEventListener('dragover', this.onDragOver);
+        this.addEventListener('drop', this.onDrop);
+        positionElement(this.element_, position);
+        sizeElement(this.element_, size);
+        document.getElementById('map').appendChild(this.element_);
+        return this.element_;
+      }
+      RouteSegment.prototype.tandem = function() {
+        console.log('RouteSegment.tandem(): entry_.id()=' + this.entry_.id() + ', tandem_=' + this.tandem_);
+        return this.tandem_;
+      }
+      RouteSegment.prototype.adoptTandem = function(tandem) {
+        console.log('RouteSegment.adoptTandem(): entry_.id()=' + this.entry_.id() + ', tandem=' + tandem);
+        this.tandem_ = tandem;
+        this.element_.appendChild(this.tandem_.element());
+      }
+      RouteSegment.prototype.addEventListener = function(name, handler) {
+        // We need this anonymous function to bind 'this'
+        // so we can use it for the context of the handler.
+        // TODO: Need events to start at top, so we get enter for RouteSegment, not Tandem.
+        (function(context) {
+          context.element_.addEventListener(name, function(e) { handler.apply(context, [e]); }, false);
+        })(this);
+      }
+      RouteSegment.prototype.onDragEnter = function(event) {
+        console.log('RouteSegment.onDragEnter(): event.target.id=' + event.target.id);
+        // Needed once we fix event bubbling?
+        if (event.target.id == 'tandem')
+          return;
+        if (this.isSelected_)
+          return;
+        this.entry_.highlightRouteSegment(); 
+      }
+      RouteSegment.prototype.onDragLeave = function(event) {
+        console.log('RouteSegment.onDragLeave(): event.target.id=' + event.target.id);
+        // Needed once we fix event bubbling?
+        if (event.target.id == 'tandem')
+          return;
+        if (this.isSelected_)
+          return;
+        this.entry_.hide(); 
+      }
+      RouteSegment.prototype.onDragOver = function(event) {
+        //console.log('RouteSegment.onDragOver(): event.target.id=' + event.target.id);
+        // Needed once we fix event bubbling?
+        if (event.target.id == 'tandem')
+          return;
+        event.preventDefault(); // override default drag feedback. Allows drop event.
+      }
+      RouteSegment.prototype.onDrop = function(event) {
+        var previousId = event.dataTransfer.getData('text/plain');
+        console.log('RouteSegment.onDrop(): event.target.id=' + event.target.id + ', previousId=' + previousId);
+        tandem = idToEntry(id).hide();
+        this.entry_.show(tandem); 
+      }
+
+      // TODO: Use getEntry(index) global to avoid need for this.
+      function idToEntry(id) {
+        console.log('idToEntry(): id=' + id);
+        return entries[new Number(id.split('_')[2]) - 1];
+      }
+
+      // TODO: Inherit MainPhoto
+      function Photo(fileName, position) {
+        console.log('Photo(): fileName="' + fileName + '"');
+        this.fileName_ = fileName;
+        this.position_ = position;
+      }
+      Photo.prototype.show = function() {
+        console.log('Photo.show()');
+        showElement(this.element());
+      }
+      Photo.prototype.hide = function() {
+        console.log('Photo.hide()');
+        hideElement(this.element());
+      }
+      Photo.prototype.element = function() {
+        if (this.element_)
+          return this.element_;
+        console.log('Photo.element()');
+        this.element_ = document.createElement('img');
+        this.element_.src = this.fileName_;
+        this.element_.className = 'defaultPhoto';
+        positionElement(this.element_, this.position_);
+        document.body.appendChild(this.element_);
+        return this.element_;
+      }
+
+      MainPhoto.prototype = new Photo();
+      MainPhoto.prototype.constructor = MainPhoto;
+      function MainPhoto(fileName, caption) {
+        console.log('MainPhoto(): fileName="' + fileName + '"');
+        this.fileName_ = fileName; 
+        this.caption_ = caption; 
+      }
+      MainPhoto.prototype.element = function() {
+        if (this.element_)
+          return this.element_;
+        console.log('MainPhoto.element()');
+        var image = document.createElement('img');
+        image.src = this.fileName_;
+        var caption = document.createElement('p');
+        caption.innerText = this.caption_;
+        this.element_ = document.createElement('div');
+        this.element_.className = 'defaultMainPhoto';
+        this.element_.appendChild(image);
+        this.element_.appendChild(caption);
+        document.body.appendChild(this.element_);
+        return this.element_;
+      }
+
+      function Tandem() {
+        this.element_ = document.createElement('img');
+        this.element_.src = 'tandem.png';
+        this.element_.id = 'tandem';
+        this.addEventListener('dragstart', this.onDragStart);
+        this.addEventListener('dragend', this.onDragEnd);
+      }
+      Tandem.prototype.addEventListener = function(name, handler) {
+        // We need this anonymous function to bind 'this'
+        // so we can use it for the context of the handler.
+        (function(context) {
+          context.element_.addEventListener(name, function(e) { handler.apply(context, [e]); }, false);
+        })(this);
+      }
+      Tandem.prototype.element = function() {
+        return this.element_;
+      }
+      Tandem.prototype.onDragStart = function(event) {
+        // event.target is the tandem image.
+        id = event.target.parentNode.id;
+        console.log('Tandem.onDragStart(): id=' + id);
+        event.dataTransfer.effectAllowed = 'move';
+        // TODO: Pass id of entry?
+        event.dataTransfer.setData('text/plain', id);
+        // TODO: remove tandem here? Need to replace it on dragend if not drop.
+      }
+      Tandem.prototype.onDragEnd = function(event) {
+        // event.target is the tandem image.
+        console.log('Tandem.onDragEnd(): event.target.id=' + event.target.id);
+      }
+
+      function Pair(x, y) {
+        this.x_ = x;
+        this.y_ = y;
+      }
+      Pair.prototype.x = function() {
+        return this.x_;
+      }
+      Pair.prototype.y = function() {
+        return this.y_;
+      }
+
+      var rightPosition = new Pair(620, 120);
+      var leftPosition = new Pair(30, 170);
+      var entries = [];
+      function onLoad() {
+        console.log('onLoad()');
+        entries = [
+            new Entry(new Caption('Caption 1'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(80, 607), new Pair(16, 57), 'line_1_selected.png', new Pair(1, 2), 'line_1_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 1'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 2'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(93, 581), new Pair(11, 31), 'line_2_selected.png', new Pair(1, 0), 'line_2_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 2'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 3'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(96, 560), new Pair(31, 30), 'line_3_selected.png', new Pair(0, 1), 'line_3_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 3'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 4'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(105, 521), new Pair(21, 41), 'line_4_selected.png', new Pair(1, 1), 'line_4_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 4'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 5'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(106, 492), new Pair(46, 32), 'line_5_selected.png', new Pair(0, 0), 'line_5_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 5'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 6'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(146, 480), new Pair(18, 15), 'line_6_selected.png', new Pair(4, 2), 'line_6_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 6'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 7'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(162, 430), new Pair(33, 53), 'line_7_selected.png', new Pair(2, 0), 'line_7_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 7'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 8'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(188, 405), new Pair(42, 24), 'line_8_selected.png', new Pair(1, 1), 'line_8_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 8'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 9'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(229, 382), new Pair(36, 28), 'line_9_selected.png', new Pair(1, 1), 'line_9_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 9'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 10'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(264, 373), new Pair(29, 16), 'line_10_selected.png', new Pair(1, 1), 'line_10_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 10'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 11'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(320, 327), new Pair(33, 61), 'line_11_selected.png', new Pair(1, 0), 'line_11_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 11'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 12'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(345, 285), new Pair(27, 39), 'line_12_selected.png', new Pair(1, 1), 'line_12_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 12'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 13'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(357, 265), new Pair(13, 23), 'line_13_selected.png', new Pair(1, 0), 'line_13_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 13'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 14'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(366, 217), new Pair(22, 47), 'line_14_selected.png', new Pair(1, 2), 'line_14_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 14'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 15'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(339, 187), new Pair(46, 34), 'line_15_selected.png', new Pair(1, 1), 'line_15_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 15'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 16'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(320, 151), new Pair(24, 39), 'line_16_selected.png', new Pair(3, 2), 'line_16_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 16'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 17'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(314, 143), new Pair(11, 11), 'line_17_selected.png', new Pair(0, 2), 'line_17_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 17'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 18'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(305, 95), new Pair(16, 49), 'line_18_selected.png', new Pair(0, 0), 'line_18_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 18'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 19'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(279, 56), new Pair(32, 37), 'line_19_selected.png', new Pair(0, 0), 'line_19_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 19'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)]),
+            new Entry(new Caption('Caption 20'),
+                      new Description('Description 20'),
+                      new RouteSegment(new Pair(237, 24), new Pair(42, 38), 'line_20_selected.png', new Pair(2, 1), 'line_20_highlighted.png', new Pair(0, 0)),
+                      [new MainPhoto('france.jpg', 'day 20'),
+                       new Photo('newzealand.jpg', leftPosition),
+                       new Photo('canada.jpg', rightPosition)])];
+        entries[currentEntry].show(new Tandem());
+        console.log('onLoad(): Done');
+      }
+    </script>
+  </head>
+  <body onload="onLoad()">
+    <a href="#" onclick="previousEntry()">previous</a> | <a href="#" onclick="nextEntry()">next</a>
+    <div id="title">New Zealand by Tandem</div>
+    <div id="map">
+      <div id="line"</div>
+    </div>
+  </body>
+</html>
