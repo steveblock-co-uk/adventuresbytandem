@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>London To Sydney</title>
+    <script type="text/javascript">
+      // TOOO
+      // - Add click handler to photo to show mask
+
+      ////////////////////////////////////////////////////////////////////////////////
+      var photos = [
+        { filename: 'IMGP5975.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Lake' },
+        { filename: 'IMG_20120820_131044.jpg', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Portrait' },
+        { filename: 'IMGP5989.JPG', profilePosition: {x: 20, y: 10}, mapPosition: {x: 126, y: 540}, caption: 'Misty' },
+        { filename: 'IMGP6016.JPG', profilePosition: {x: 30, y: 10}, mapPosition: {x: 126, y: 520}, caption: 'Deserted' },
+        { filename: 'IMGP6026.JPG', profilePosition: {x: 40, y: 10}, mapPosition: {x: 124, y: 500}, caption: '' },
+        { filename: 'IMGP6049.JPG', profilePosition: {x: 50, y: 10}, mapPosition: {x: 122, y: 563}, caption: '' },
+        { filename: 'IMGP6091.JPG', profilePosition: {x: 60, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Leafy' },
+        { filename: 'IMGP6108.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Waterfall' },
+        { filename: 'IMGP6111.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Waterfall' },
+        { filename: 'IMGP6145.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: '' },
+        { filename: 'IMGP6148.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Steep' },
+        { filename: 'IMGP6156.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: '' },
+        { filename: 'IMGP6180.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: '' },
+        { filename: 'IMGP6181.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Windy' },
+        { filename: 'IMGP6187.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Windy' },
+      ];
+
+      ////////////////////////////////////////////////////////////////////////////////
+      function heightToFitBoundingBox(width, height, boxWidth, boxHeight) {
+        var AR = width / height;
+        if (boxWidth / boxHeight > AR) {
+          return Math.min(boxHeight, height);
+        }
+        return Math.min(boxWidth / AR, height);
+      }
+      function setPosition(element, position) {
+        element.style.position = 'absolute';
+        element.style.left = position.x + 'px';
+        element.style.top = position.y + 'px';
+        element.style.display = 'block';
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      // Can be new'ed up and thrown away - will take care of updating the
+      // wrapper's contents when the image has loaded and then will just die.
+      function ScaledImage(wrapper, filename, clickHandler) {
+        console.log('ScaledImage.ScaledImage()');
+        this.wrapper_ = wrapper;
+        this.image_ = new Image();
+        this.image_.onload =
+            (function(me) { return function() { me.onload(); }; })(this);
+        this.image_.src = 'photos/' + filename;
+        this.image_.style.margin = 'auto';
+        this.image_.style.display = 'block';
+        this.image_.onclick = clickHandler;
+      }
+      ScaledImage.prototype.onload = function() {
+        console.log('ScaledImage.onload()');
+        this.resize();
+        this.wrapper_.innerHTML = '';
+        this.wrapper_.appendChild(this.image_);
+      }
+      ScaledImage.prototype.resize = function() {
+        console.log('ScaledImage.resize()');
+        var height = heightToFitBoundingBox(this.image_.naturalWidth,
+                                            this.image_.naturalHeight,
+                                            this.wrapper_.clientWidth,
+                                            this.wrapper_.clientHeight);
+        this.image_.height = height;
+	// We use margin-top rather than top because the latter is only for
+	// fixed position elements. We don't use fixed position because we want
+	// to use auto margins for horizontal centering, as above.
+        // Note that image width is not updated until we insert it into the DOM?!
+        this.image_.style.marginTop = (this.wrapper_.clientHeight - height) / 2 + 'px';
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////
+      function showPhoto(index) {
+        console.log('showPhoto(): index=' + index);
+        var photo = photos[index];
+        new ScaledImage(document.getElementById('photoWrapper'),
+                        photo.filename,
+                        function() { showLargePhoto(index) });
+        updateArrows(index);
+        document.getElementById('caption').innerText = photo.caption;
+        setPosition(document.getElementById('profileMarker'), photo.profilePosition);
+        setPosition(document.getElementById('mapMarker'), photo.mapPosition);
+      }
+      function updateArrows(index) {
+        console.log('updateArrows(): index=' + index);
+        var arrowPrevious = document.getElementById('arrowPrevious');
+        var arrowNext = document.getElementById('arrowNext');
+        if (index > 0) {
+          arrowPrevious.style.display = 'block';
+          arrowPrevious.onclick = function() { showPhoto(index - 1); };
+        } else {
+          arrowPrevious.style.display = 'none';
+        }
+        if (index < photos.length - 1) {
+          arrowNext.style.display = 'block';
+          arrowNext.onclick = function() { showPhoto(index + 1); };
+        } else {
+          arrowNext.style.display = 'none';
+        }
+      }
+      function setup() {
+        console.log('setup()');
+        showPhoto(0);
+      }
+      function dismissLargePhoto() {
+        console.log('dismissLargePhoto()');
+        document.getElementById('mask').className = 'hidden';
+      }
+      function showLargePhoto(file) {
+        console.log('showLargePhoto(): index=' + index);
+        document.getElementById('mask').className = '';
+        new ScaledImage(document.getElementById('largePhotoWrapper'),
+                        // TODO: Use a different file for the larger image?
+                        photo.filename);
+        // We can do this before the image loads
+        updateMaskArrows();
+        // TODO: Why can't I set this at onload time?
+        document.body.onresize = function() { updateLargePhoto(); updateMaskArrows(); };
+      }
+      function onLargePhotoLoaded() {
+        console.log('onLargePhotoLoaded()');
+	// TODO: Strictly, should remove updateLargePhoto from the body
+	// onresize handler while it's not loaded. Probably not important.
+        document.getElementById('largePhoto').className = '';
+        updateLargePhoto();
+      }
+      function updateLargePhoto() {
+        console.log('updateLargePhoto()');
+        // TODO: Get rid of the flicker before this is first called.
+        var wrapper = document.getElementById('largePhotoWrapper');
+        var photo = document.getElementById('largePhoto');
+        photo.width = widthToFitBoundingBox(photo.naturalWidth, photo.naturalHeight, wrapper.clientWidth, wrapper.clientHeight);
+        centerVertically(photo, wrapper.clientHeight);
+      }
+      function centerVertically(node, wrapperHeight) {
+	// TODO: It would be neater to use 'top' here, but we can't use this
+	// with the image, because it's not absolutely positioned. Making it
+	// absolutely positioned would mean we can't use text-align: center for
+	// horizontal positining, but for some reason, using margin: auto for
+	// horizontal centering doesn't work with an img.
+        node.style.marginTop = (wrapperHeight - node.clientHeight) / 2 + 'px';
+      }
+      function updateMaskArrows() {
+        console.log('updateMaskArrows()');
+        var wrapper = document.getElementById('maskArrowsWrapper');
+        centerVertically(document.getElementById('maskArrowPrevious'), wrapper.clientHeight);
+        centerVertically(document.getElementById('maskArrowNext'), wrapper.clientHeight);
+      }
+*/
+    </script>
+    <style type="text/css">
+      body {
+        /* TODO: Use a cool web font? */
+        font-family: Verdana;
+      }
+      div {
+        border: 1px solid red;
+      }
+      /* The wrapper we use to set the minimum viewport size and within which
+       * everything else is positioned.
+       */
+      div#content {
+        position: relative;
+        width: 700px;
+        height: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      div#title {
+        font-size: x-large;
+      }
+      div#photoStuffWrapper {
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        top: 50px;
+        left: 0px;
+      }
+      div#photoStuffWrapper div#photoWrapper {
+        /* Not absolute so we can use margin: auto */
+        width: 300px;
+        height: 350px;
+        margin: auto;
+      }
+      div#photoStuffWrapper div#caption {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        height: 25px;
+        text-align: center;
+      }
+      div#photoStuffWrapper img.arrow {
+        display: none;
+        position: absolute;
+        top: 150px;
+        width: 25px;
+      }
+      div#photoStuffWrapper img.arrow#arrowNext {
+        right: 0px;
+      }
+      div#map {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 250px;
+        height: 500px;
+        background-image: url("map.png");
+      }
+      div#profile {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 400px;
+        height: 30px;
+        background-image: url("map.png");
+      }
+      .hidden {
+        display: none;
+      }
+      div#mask {
+	/* Note that we rely on the main content of the page (that behind the
+         * mask) to provide a reasonable minimum viewport size.
+         */
+	/* If we use position absolute here, the width is relative to that of
+	 * the enclosing block - the enclosing block with fixed position, which
+	 * is the body.
+         */
+        position: absolute;
+        /* Easier than specifiying height = 100% - 2 * margin.  */
+        right: 0px;
+        bottom: 0px;
+        margin: 5%;
+        background-color: blue;
+        opacity: 0.9;
+        border-radius: 30px;
+        /* No idea why these aren't the defaults. */
+        top: 0px; left: 0px;
+      }
+      div#mask div#largePhotoWrapper {
+	/* This needs to be absolutely positioned so we can force the size and
+         * stop it trying to expand to fit the photo.
+         */
+        position: absolute;
+        margin: 20px 60px;
+        bottom: 0px;
+        right: 0px;
+        /* TODO: text-align: center; */
+        /* No idea why these aren't the defaults. */
+        top: 0px; left: 0px;
+      }
+      div#mask div#maskArrowsWrapper {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        /* No idea why these aren't the defaults. */
+        top: 0px; left: 0px;
+      }
+      div#mask img.maskArrow {
+        position: absolute;
+        display: none;
+        width: 25px;
+      }
+      div#mask div#maskArrowNext {
+        right: 0px;
+      }
+    </style>
+  </head>
+  <body onload="setup();">
+    <div id="content">
+      <div id="title">London To Sydney</div>
+      <div id="photoStuffWrapper">
+        <div id="photoWrapper"></div>
+        <div id="caption"></div>
+        <img class="arrow" id="arrowPrevious" src="arrowLeft.png">
+        <img class="arrow" id="arrowNext" src="arrowRight.png">
+      </div>
+      <div id="map">
+        <img id="mapMarker" src="dot.png" class="hidden">
+      </div>
+      <div id="profile">
+        <img id="profileMarker" src="dot.png" class="hidden">
+      </div>
+    </div>
+    <div id="mask" onclick="dismissLargePhoto()" class="hidden">
+      <div id="largePhotoWrapper"></div>
+      <div id="maskArrowsWrapper">
+        <img class="maskArrow" id="maskArrowPrevious" src="arrowLeft.png">
+        <img class="maskArrow" id="maskArrowNext" src="arrowRight.png">
+      </div>
+    </div>
+  <body>
+</html>
