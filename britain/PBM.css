@@ -1,0 +1,237 @@
+/* styles for PBM.html, other than those specifically for the photos, blog or map divs */
+
+body {
+  position: relative; /* required so that absolute divs are positioned relative to the body, rather than the window */
+  min-width: 1300px; /* to fit index */
+}
+
+div.blob {
+  background: #333333;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+div.header {
+  height: 38px;
+  border-bottom: 2px solid white;
+  padding: 5px;
+  /* background: #AAAAAA; */
+}
+
+div.heading {
+  font-size: xx-large;
+  font-weight: bold;
+  float: left;
+  padding: 0px 30px;
+  /* border: 1px solid red; */
+}
+
+div.index {
+  padding: 2px 0px;
+}
+
+span.index {
+  float: left; /* have to use float to allow setting of span width */
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  width: 50px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: -1px; /* to allow next element to overlap border */
+}
+
+a.index {
+  font-weight: normal;
+}
+
+div.status {
+  -moz-opacity: 0.7;
+  opacity: 0.7;
+  filter:alpha(opacity=70);
+  position: absolute;
+  background: #FF8822;
+  height: 15px;
+  width: 150px;
+  visibility: hidden;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+div.footer {
+  text-align: center;
+  clear: both;
+  padding: 10px;
+  width: 90%;
+  margin: 20px auto;
+}
+
+img.w3 {
+  width: 88px;
+  height: 31px;
+}
+
+/* styles for the blog div of PBM.css */
+
+div.info {
+  padding: 10px;
+  height: 50px;
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  right: 700px;
+}
+
+div.title {
+  font-size: large;
+  font-weight: bold;
+  margin: 5px 70px; /* Left margin goes behind the floated elements (because this div may be taller than the floated */
+                    /* element, so may 'wrap' around it. So we have to set margin from edge of containing div. */
+}
+
+div.mileage {
+  font-style: italic;
+  margin: 10px 70px; /* Left margin goes behind the floated elements (because this div may be taller than the floated */
+                     /* element, so may 'wrap' around it. So we have to set margin from edge of containing div. */
+}
+
+div.blog {
+  height: 140px;
+  padding: 10px 20px;
+  position: absolute;
+  top: 160px; /* 20px below info */
+  left: 20px;
+  right: 700px;
+  overflow: hidden;
+}
+
+img.blog {
+  width: 100px;
+  height: 75px;
+  float: right;
+  margin: 5px;
+}
+
+img.blogArrow {
+  width: 50px;
+  height: 50px;
+  display: block; /* avoid hanging whitespace below image - ok in block level anchor */
+  /* border: 1px solid green; */
+}
+
+a.blogArrow {
+  float: left; /* floated -> block level element */
+  visibility: hidden; /* default value */
+  /* border: 1px solid red; */
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+
+a.blogArrow:hover {
+  background: #444444;
+}
+
+/* styles for the map div of PBM.html */
+
+/* map expands to fit height. expand to screen less 340 + 20 = 360, less 20 padding */
+
+div.mapBox {
+  padding: 10px;
+  position: absolute;
+  top: 340px; /* 20px below blog */
+  left: 20px;
+  right: 700px;
+}
+
+div.map {
+  width: 100%;
+  height: 450px;
+  min-height: 450px; /* to match bottom of photo div */
+  /* border: 1px solid red; */
+}
+
+button.reset {
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+}
+
+/* styles for the photos div of PBM.html */
+
+/* the photos div is fixed at 680x740 */
+
+/* the box around the scrolling div. */
+/* We use this to position the arrows and status box over the scrolling frame */
+div.photosBox {
+  width: 640px;
+  padding: 10px;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  margin-bottom: 20px;
+}
+
+/* the scrolling div */
+div.photosScroller {
+  height: 730px;
+  overflow: hidden; /* hide overflow (ie no scrollbars, no content outside div), but we can still get to it by sliding the scroll pos with js */
+  overflow: auto; /* scrollbar when needed */
+  /* border: 1px solid red; */
+}
+
+a.photosArrow {
+  position: absolute; /* absolute positioned -> block element - can contain block image */
+  top: 10px;
+  /* border: 1px solid red; */
+  visibility: hidden; /* default value */
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+
+a.photosArrow:hover {
+  background: #444444;
+}
+
+img.photosArrow {
+  display: block; /* to avoid hanging whitespace - ok in block level anchor */
+  width: 50px;
+  height: 50px;
+  /* border: 1px solid green; */
+}
+
+a.photosArrow {
+  visibility: none;
+}
+
+/* the div inside the scrolling div. we set the width to force a horizontal scroll and the height to prevent a vertical scroll */
+div.photos {
+  /* border: 1px solid green; */
+  height: 710px; /* 730 less >=17 for scrollbar */
+  overflow: hidden;
+}
+
+div.photoBox {
+  /*  border: 1px solid blue; */
+  float: left; /* to stack up the divs left to right (can't use a span because internal layout would be a pain with spans) */
+}
+
+img.photo {
+  /* background: white; */
+  /* padding: 2px; */
+  display: block;
+  margin: 0px auto; /* top margin gets over-ridden in js */
+}
+
+div.tag {
+  padding: 10px 50px;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+}
+
+div.ramble {
+  padding: 0px 50px;
+  text-align: center;
+}
