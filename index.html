@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C/DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"
+
+<html>
+
+  <head>
+
+    <title>Adventures By Tandem</title>
+
+    <style>
+      body {
+        background: #CCCCCC;
+        font-family: Verdana, sans-serif;
+        color: #444444;
+      }
+      a {
+        color: #444444;
+      }
+      img.preload {
+        position: absolute;
+        left: -1000px;
+      }
+      a.image {
+        position: absolute;
+        display: block;
+        width: 320px;
+        height: 240px;
+        padding: 0px;
+      }
+      div#content {
+        width: 1000px;
+        margin: auto;
+      }
+      div.photoGroup {
+        position: relative;
+        height: 500px;
+      }
+      a.image#canada {
+        background-image: url('canada-mono.jpg');
+        top: 0px;
+        left: 0px;
+      }
+      a.image#canada:hover {
+        background-image: url('canada.jpg');
+      }
+      a.image#britain {
+        background-image: url('britain-mono.jpg');
+        top: 0px;
+        left: 340px;
+      }
+      a.image#britain:hover {
+        background-image: url('britain.jpg');
+      }
+      a.image#iceland {
+        background-image: url('iceland-mono.jpg');
+        top: 0px;
+        left: 680px;
+      }
+      a.image#iceland:hover {
+        background-image: url('iceland.jpg');
+      }
+      a.image#france {
+        background-image: url('france-mono.jpg');
+        top: 260px;
+        left: 0px;
+      }
+      a.image#france:hover {
+        background-image: url('france.jpg');
+      }
+      a.image#newzealand {
+        background-image: url('newzealand-mono.jpg');
+        top: 260px;
+        left: 340px;
+      }
+      a.image#newzealand:hover {
+        background-image: url('newzealand.jpg');
+      }
+      a.image#chile {
+        background-image: url('chile-mono.jpg');
+        top: 260px;
+        left: 680px;
+      }
+      a.image#chile:hover {
+        background-image: url('chile.jpg');
+      }
+      div#status {
+        padding-top: 20px;
+        height: 30px;
+        text-align: center;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function SetText(element, text) {
+        if (typeof element.textContent == 'string') {
+          element.textContent = text;
+        } else if (typeof element.innerText == 'string') {
+          element.innerText = text;
+        }
+      }
+      function Display(text) {
+        SetText(document.getElementById('status'), text);
+      }
+      function Clear() {
+        SetText(document.getElementById('status'), '');
+      }
+    </script>
+
+  </head>
+
+  <body>
+    
+    <img class="preload" src="canada.jpg">
+    <img class="preload" src="britain.jpg">
+    <img class="preload" src="iceland.jpg">
+    <img class="preload" src="france.jpg">
+    <img class="preload" src="newzealand.jpg">
+    <img class="preload" src="chile.jpg">
+
+    <div id="content">
+      <h1 style="text-align:center; margin:50px 0px">Adventures By Tandem</h1>
+
+      <div class="photoGroup">
+        <a class="image" id="canada" href="canada" onmouseover="Display('Canada');" onmouseout="Clear();"></a>
+        <a class="image" id="britain" href="britain" onmouseover="Display('Britain');" onmouseout="Clear();"></a>
+        <a class="image" id="iceland" href="iceland" onmouseover="Display('Iceland');" onmouseout="Clear();"></a>
+        <a class="image" id="france" href="france" onmouseover="Display('France');" onmouseout="Clear();"></a>
+        <a class="image" id="newzealand" href="newzealand" onmouseover="Display('New Zealand');" onmouseout="Clear();"></a>
+        <a class="image" id="chile" href="chile" onmouseover="Display('Chile');" onmouseout="Clear();"></a>
+      </div>
+      <div id="status">.</div>
+    </div>
+
+
+  </body>
+
+</html>
