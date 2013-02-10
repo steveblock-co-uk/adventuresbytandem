@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C/DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-micorsoft-com:vml">
+
+<html>
+
+  <head>
+
+    <link type="text/css" rel="stylesheet" href="main.css">
+
+    <title> Iceland By Tandem </title>
+
+    <script src="../Scripts/utils.js" type="text/javascript"></script>
+    <script src="googleMaps.js" type="text/javascript"></script>
+    <script src="route.js" type="text/javascript"></script>
+    <script src="blog.js" type="text/javascript"></script>
+
+    <!-- good for web.mit.edu/snw/www -->
+    <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAA_Xocq18Wh01DYjhDo3vEbxQww4B36n1MWJcqWT3ccjTYRRSVWRQWr3G6zUsMyWbZ8HtxYPIlTK9GSg" type="text/javascript"></script> -->
+    <!-- good for personal.soton.ac.uk -->
+    <!--<script src="http://www.google.com/jsapi?key=ABQIAAAAclCz4bThIvpXLvyO5UlroxRHLZmsFQiB8ZRO_dTNdmH17ck2WxRrAIXMOO5yx06c5i--1k1fv8p9Cw" type="text/javascript"></script> -->
+    <!-- good for steveblock.co.uk -->
+    <!-- <script src="http://www.google.com/jsapi?key=AIzaSyBUBI5vyEr5JMs-AsQqQgmHI2MhYyH3aOs" type="text/javascript"></script> -->
+    <!-- good for adventuresbytandem.com -->
+    <script src="http://www.google.com/jsapi?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs" type="text/javascript"></script>
+
+    <script type="text/javascript">
+      var mapStatus = {
+        latitude: 65.1,
+        longitude:  -19.0,
+        zoom: 6
+      };
+      pathToScripts = '../';
+
+      LoadGoogleMaps('map', mapStatus, OnLoad);
+
+      function OnLoad() {
+        Reset();
+        LoadMapData(mapData);
+        LoadBlogData();
+      }
+      function Reset() {
+        map.setCenter( new GLatLng( mapStatus.latitude, mapStatus.longitude ), mapStatus.zoom, G_SATELLITE_MAP);
+      }
+    </script>
+
+    <style type="text/css">
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      .centered {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .content {
+        /* background-color: #aacc99; */
+        background-color: #c9ddbe;
+        color: #222266;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 11pt;
+        margin: 40px auto;
+        width: 1100px;
+        padding: 30px;
+        -moz-border-radius: 15px;
+        position: relative;
+      }
+      .title {
+        font-weight: bold;
+        font-size: xx-large;
+        margin-bottom: 40px;
+      }
+      .mapSize {
+        height: 550px;
+        width: 650px;
+      }
+      .mapWrapper {
+        margin-top: 50px;
+        float: right;
+      }
+      .mapImages {
+        position: relative;
+      }
+      .blog {
+        width: 425px;
+      }
+      #blogTitle {
+        font-weight: bold;
+        font-size: large;
+        margin-bottom: 5px;
+      }
+      .blogTagLine {
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+      .footer {
+        padding-top: 30px;
+        clear: both;
+        font-size: 85%;
+        text-align: center;
+      }
+      .reset {
+        position: absolute;
+        bottom: 20px;
+        right: 15px;
+        font-size: 85%;
+        text-align: center;
+      }
+      .reset a {
+        text-decoration: none;
+        color: white;
+      }
+      .reset img {
+        border: none;
+      }
+      .zoom {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .zoom img {
+        border: none;
+        margin: 0px 5px;
+      }
+      #more {
+        padding-top: 20px;
+        display: none;
+        text-align: center;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="content">
+
+      <div class="mapWrapper">
+        <div class="mapImages mapSize">
+          <div id="map" class="mapSize"></div>
+          <!-- edge fade offset = 94 -->
+          <img style="position: absolute; width: 650px; height: 75px; top: 0px; left: 0px;" src="mapEdgeCircleGreenTop.png">
+          <img style="position: absolute; width: 650px; height: 75px; bottom: 0px; left: 0px;" src="mapEdgeCircleGreenBottom.png">
+          <img style="position: absolute; width: 75px; height: 550px; top: 0px; left: 0px;" src="mapEdgeCircleGreenLeft.png">
+          <img style="position: absolute; width: 75px; height: 550px; top: 0px; right: 0px;" src="mapEdgeCircleGreenRight.png">
+          <img style="position: absolute; width: 50px; height: 50px; top: 75px; left: 75px;" src="mapEdgeCircleGreenTopLeft.png">
+          <img style="position: absolute; width: 50px; height: 50px; top: 75px; right: 75px;" src="mapEdgeCircleGreenTopRight.png">
+          <img style="position: absolute; width: 50px; height: 50px; bottom: 75px; left: 75px;" src="mapEdgeCircleGreenBottomLeft.png">
+          <img style="position: absolute; width: 50px; height: 50px; bottom: 75px; right: 75px;" src="mapEdgeCircleGreenBottomRight.png">
+          <div class="reset">
+            <a href="#" onclick="Reset();"><img src="reset.png" title="Reset map"><br><span style="font-weight: bold;">Reset map</span></a>
+          </div>
+          <div class="zoom">
+            <a href="#" onclick="map.zoomOut();"><img src="minus.png" title="Zoom out"></a>
+            <a href="#" onclick="map.zoomIn();"><img src="plus.png" title="Zoom in"></a>
+          </div>
+        </div>
+        <div id="more">
+          Click on the tandem icons to see our other posts ...
+        </div>
+      </div>
+  
+      <div class="title">
+        Iceland By Tandem
+      </div>
+
+      <div class="blog">
+        <div id="blogTitle"></div>
+        <div class="blogTagLine">
+          <span id="blogLocation"></span>
+          <span id="blogDate"></span>
+        </div>
+        <div id="blogText"></div>
+      </div>
+
+      <div class="footer"> Steve Block & Stephanie Waterman, 2008 </div>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,31 @@
+<lines>
+  <line width="3" colour="black" name="Ring Road" defaultMarkerImage="smallMarkerRed.png">
+    <point lat="63.974718" lng="-22.58626" location="Keflavik" />
+    <point lat="64.133" lng="-21.933" location="Reykjavik" />
+    <point lat="63.936" lng="-21.003" location="Selfoss" />
+    <point lat="63.416" lng="-18.998" location="Vik" />
+    <point lat="64.256" lng="-15.207" location="Hofn" />
+    <point lat="64.657" lng="-14.299" location="Djupivogur" />
+    <point lat="65.283" lng="-14.383" location="Egilsstadir" />
+    <point lat="65.641" lng="-16.905" location="Myvatn" />
+    <point lat="65.683" lng="-18.100" location="Akureyri" />
+    <point lat="65.659" lng="-20.279" location="Blonduos" />
+    <point lat="65.396" lng="-20.940" location="Hvammstangi" />
+    <point lat="64.544" lng="-21.910" location="Borgarnes" />
+    <point lat="64.133" lng="-21.933" location="Reykjavik" />
+  </line>
+<!--
+  <line width="0" name="Top 10 Cities" defaultMarkerImage="standardMarkerRed.png">
+    <point lat="64.133" lng="-21.933" location="Reykjavik" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.117" lng="-21.767" location="Kopavogur" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.067" lng="-21.950" location="Hafnarfjordur" clickHandler="ShowCityInfo('')"/>
+    <point lat="65.683" lng="-18.100" location="Akureyri" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.067" lng="-21.095" location="Reykjanesbaer" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.033" lng="-22.050" location="Garoabaer" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.067" lng="-21.951" location="Mosfellsbaer" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.067" lng="-21.952" location="Arborg" clickHandler="ShowCityInfo('')"/>
+    <point lat="64.319" lng="-22.080" location="Akranes" clickHandler="ShowCityInfo('')"/>
+    <point lat="65.148" lng="-13.682" location="Fjardabyggd / Neskaupstadur" clickHandler="ShowCityInfo('')"/>
+  </line>
+-->
+</lines>
