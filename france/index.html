@@ -11,6 +11,7 @@
         }
       }
       var highlightedElement;
+      var largePhoto;
       function showLeg() {
         document.getElementById('grey').style.display = 'block';
         document.getElementById('content').style.opacity = 0.5;
@@ -19,16 +20,17 @@
         for (var i in this.childNodes) {
           var element = this.childNodes[i];
           if (element.className == 'photos') {
-            //var container = document.createElement('div');
-            //container.onclick = hideLeg;
-            //container.className = 'photosContainer';
-            //var photos = element.cloneNode(true);
-            //container.appendChild(photos);
-
             var photos = element.cloneNode(true);
-            photos.onclick = hideLeg;
-            photos.className = 'photosContainer';
-            document.body.appendChild(photos);
+            var wrapper = document.createElement('div');
+            wrapper.onclick = hideLeg;
+            wrapper.id = 'photosContainer';
+            wrapper.appendChild(photos);
+            document.body.appendChild(wrapper);
+            for (var j in photos.childNodes) {
+              photos.childNodes[j].onmouseover = photoMouseOver;
+              photos.childNodes[j].onclick = photoClick;
+              photos.childNodes[j].onmouseout = photoMouseOut;
+            }
             break;
           }
         }
@@ -38,6 +40,42 @@
         document.body.removeChild(this);
         document.getElementById('content').style.opacity = 1.0;
         document.getElementById('grey').style.display = 'none';
+        stop = false;
+      }
+      var stop = false;
+      function photoMouseOver(e) {
+        console.log('photoMouseOver');
+        if (stop)
+            return;
+        this.onclick = function(e) { console.log('a'); stop = true; e.stopPropagation(); };
+        showLarge(this);
+      }
+      function showLarge(node) {
+        console.log('showLarge');
+        largePhoto = node.cloneNode(true);
+        largePhoto.className = 'largePhoto';
+        document.getElementById('photosContainer').appendChild(largePhoto);
+      }
+      function photoMouseOut(e) {
+        console.log('photoMouseOut');
+        this.onclick = photoClick;
+        if (stop)
+            return;
+        hideLarge(this);
+      }
+      function hideLarge() {
+        console.log('hideLarge');
+        // TODO
+        if (!document.getElementById('photosContainer'))
+            return;
+        document.getElementById('photosContainer').removeChild(largePhoto);
+      }
+      function photoClick(e) {
+        console.log('photoClick');
+        stop = true;
+        hideLarge();
+        showLarge(this);
+        e.stopPropagation();
       }
     </script>
     <style type="text/css">
@@ -110,7 +148,7 @@
         opacity: 1.9;
         display: none;
       }
-      div.photosContainer {
+      div#photosContainer {
         position: fixed;
         width: 100%;
         height: 100%;
@@ -118,17 +156,21 @@
         left: 0px;
         cursor: pointer;
       }
-      div.photosContainer div {
-        margin: 50px auto;
-        position: relative;
-        background-color: white;
-        width: 800px;
-        height: 550px;
-      }
-      /*div.photosContainer div img {*/
-      div.photosContainer img {
+      div#photosContainer div {
         position: absolute;
-        width: 150px;
+        bottom: 20px;
+        /* border: 1px solid red; */
+        width: 100%;
+        text-align: center;
+        vertical-align: bottom;
+      }
+      div#photosContainer div img {
+        width: 120px;
+        margin: 10px 20px 0px 20px;
+      }
+      div#photosContainer img.largePhoto {
+        margin: 100px auto;
+        display: block;
       }
       div.home {
         background-color: #DDDDDD;
@@ -372,10 +414,10 @@
             <div class="altitude">1600m</div>
           </div>
           <div class="photos">
-            <img src="photos/turini1.jpg" style="top:100px; left:050px;">
-            <img src="photos/turini2.jpg" style="top:200px; left:300px;">
-            <img src="photos/turini3.jpg" style="top:300px; left:300px;">
-            <img src="photos/turini4.jpg" style="top:400px; left:300px;">
+            <img src="photos/turini1.jpg">
+            <img src="photos/turini2.jpg">
+            <img src="photos/turini3.jpg">
+            <img src="photos/turini4.jpg">
           </div>
         </a>
         <a class="leg" style="left:835px; width:25px; height:75px;">
@@ -404,9 +446,11 @@
         </a>
       </div>
       </div>
+      <!--
       <div class="home">
         Part of <a href="www.adventuresbytandem.com">adventuresbytandem.com</a>
       </div>
+      -->
     </div>  <!-- content -->
   </body>
 </html>
