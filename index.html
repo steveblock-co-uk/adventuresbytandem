@@ -27,7 +27,7 @@
         padding: 0px;
       }
       div#content {
-        width: 1000px;
+        width: 1340px;
         margin: auto;
       }
       div.photoGroup {
@@ -53,15 +53,15 @@
       a.image#iceland {
         background-image: url('iceland-mono.jpg');
         top: 0px;
-        left: 680px;
+        right: 340px;
       }
       a.image#iceland:hover {
         background-image: url('iceland.jpg');
       }
       a.image#france {
         background-image: url('france-mono.jpg');
-        top: 260px;
-        left: 0px;
+        top: 0px;
+        right: 0px;
       }
       a.image#france:hover {
         background-image: url('france.jpg');
@@ -69,7 +69,7 @@
       a.image#newzealand {
         background-image: url('newzealand-mono.jpg');
         top: 260px;
-        left: 340px;
+        left: 170px;
       }
       a.image#newzealand:hover {
         background-image: url('newzealand.jpg');
@@ -77,13 +77,21 @@
       a.image#chile {
         background-image: url('chile-mono.jpg');
         top: 260px;
-        left: 680px;
+        left: 510px;
       }
       a.image#chile:hover {
         background-image: url('chile.jpg');
       }
+      a.image#china {
+        background-image: url('china-mono.jpg');
+        top: 260px;
+        right: 170px;
+      }
+      a.image#china:hover {
+        background-image: url('china.jpg');
+      }
       div#status {
-        padding-top: 20px;
+        padding-top: 50px;
         height: 30px;
         text-align: center;
       }
@@ -115,6 +123,7 @@
     <img class="preload" src="france.jpg">
     <img class="preload" src="newzealand.jpg">
     <img class="preload" src="chile.jpg">
+    <img class="preload" src="china.jpg">
 
     <div id="content">
       <h1 style="text-align:center; margin:50px 0px">Adventures By Tandem</h1>
@@ -126,6 +135,7 @@
         <a class="image" id="france" href="france" onmouseover="Display('France');" onmouseout="Clear();"></a>
         <a class="image" id="newzealand" href="newzealand" onmouseover="Display('New Zealand');" onmouseout="Clear();"></a>
         <a class="image" id="chile" href="chile" onmouseover="Display('Chile');" onmouseout="Clear();"></a>
+        <a class="image" id="china" href="china" onmouseover="Display('China');" onmouseout="Clear();"></a>
       </div>
       <div id="status">.</div>
     </div>
