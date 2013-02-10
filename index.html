@@ -19,10 +19,20 @@
         position: absolute;
         left: -1000px;
       }
+      @-webkit-keyframes highlight {
+        /* TODO: Use CSS calc to get right size increase?
+                 Or just hardcode everything */
+        to { background-size: 300px 300px; width: 300px; }
+      }
       a.image {
         position: absolute;
         display: block;
         padding: 0px;
+      }
+      /* a.image:hover { */
+      a.foo {
+        -webkit-animation: highlight 1s;
+        -webkit-animation-fill-mode: forwards;
       }
       h1 {
         text-align: center;
@@ -88,6 +98,7 @@
 
     <script type="text/javascript">
       function arrangeInCircle(boundingElement) {
+        // TODO: Put the width and height in CSS?
         var width = 210;
         var height = width * 3 / 4;
         var count = boundingElement.getElementsByClassName('image').length;
@@ -152,13 +163,13 @@
 
     <div id="photoGroup">
       <div id="status"></div>
-      <a class="image" id="canada" href="canada" onmouseover="Display('Canada');" onmouseout="Clear();"></a>
-      <a class="image" id="britain" href="britain" onmouseover="Display('Britain');" onmouseout="Clear();"></a>
-      <a class="image" id="iceland" href="iceland" onmouseover="Display('Iceland');" onmouseout="Clear();"></a>
-      <a class="image" id="france" href="france" onmouseover="Display('France');" onmouseout="Clear();"></a>
-      <a class="image" id="newzealand" href="newzealand" onmouseover="Display('New Zealand');" onmouseout="Clear();"></a>
-      <a class="image" id="chile" href="chile" onmouseover="Display('Chile');" onmouseout="Clear();"></a>
-      <a class="image" id="china" href="china" onmouseover="Display('China');" onmouseout="Clear();"></a>
+      <a class="image" id="canada" href="canada" onmouseover="Display('Canada \'06');" onmouseout="Clear();"></a>
+      <a class="image" id="britain" href="britain" onmouseover="Display('Britain \'07');" onmouseout="Clear();"></a>
+      <a class="image" id="iceland" href="iceland" onmouseover="Display('Iceland\'08');" onmouseout="Clear();"></a>
+      <a class="image" id="france" href="france" onmouseover="Display('France \'09');" onmouseout="Clear();"></a>
+      <a class="image" id="newzealand" href="newzealand" onmouseover="Display('New Zealand \'10');" onmouseout="Clear();"></a>
+      <a class="image" id="chile" href="chile" onmouseover="Display('Chile \'11');" onmouseout="Clear();"></a>
+      <a class="image" id="china" href="china" onmouseover="Display('China \'12');" onmouseout="Clear();"></a>
     </div>
 
     <img class="preload" src="canada.jpg">
