@@ -7,129 +7,86 @@
     <title>Adventures By Tandem</title>
 
     <style>
-      body {
-        background: #CCCCCC;
-        font-family: Verdana, sans-serif;
-        color: #444444;
-      }
-      a {
-        color: #444444;
-      }
       img.preload {
-        position: absolute;
-        left: -1000px;
+        display: none;
       }
-      a.image {
-        position: absolute;
-        display: block;
-        width: 320px;
-        height: 240px;
-        padding: 0px;
-      }
-      div#content {
-        width: 1000px;
-        margin: auto;
-      }
-      div.photoGroup {
+      #map_container {
         position: relative;
-        height: 500px;
       }
-      a.image#canada {
-        background-image: url('canada-mono.jpg');
-        top: 0px;
-        left: 0px;
+      a.country {
+        display: block;
+        position: absolute;
+        /* border: 1px solid red; */
+        padding-top: -1000px;
+        font-size: 0px;
       }
-      a.image#canada:hover {
-        background-image: url('canada.jpg');
+      a.country:hover {
+        border: none;
+        font-size: 10px;
       }
-      a.image#britain {
-        background-image: url('britain-mono.jpg');
-        top: 0px;
-        left: 340px;
+      a#canada {
+        top: 60px;
+        left: 60px;
+        width: 180px;
+        height: 100px;
       }
-      a.image#britain:hover {
-        background-image: url('britain.jpg');
+      a#canada:hover {
+        background-image: url('canada.png');
+        background-position: -60px -60px;
       }
-      a.image#iceland {
-        background-image: url('iceland-mono.jpg');
-        top: 0px;
-        left: 680px;
+      a#britain {
+        top: 110px;
+        left: 300px;
+        width: 30px;
+        height: 40px;
       }
-      a.image#iceland:hover {
-        background-image: url('iceland.jpg');
+      a#britain:hover {
+        background-image: url('britain.png');
+        background-position: -300px -110px;
       }
-      a.image#france {
-        background-image: url('france-mono.jpg');
-        top: 260px;
-        left: 0px;
-      }
-      a.image#france:hover {
-        background-image: url('france.jpg');
-      }
-      a.image#newzealand {
-        background-image: url('newzealand-mono.jpg');
-        top: 260px;
-        left: 340px;
-      }
-      a.image#newzealand:hover {
-        background-image: url('newzealand.jpg');
-      }
-      a.image#chile {
-        background-image: url('chile-mono.jpg');
-        top: 260px;
-        left: 680px;
-      }
-      a.image#chile:hover {
-        background-image: url('chile.jpg');
-      }
-      div#status {
-        padding-top: 20px;
+      a#iceland {
+        top: 80px;
+        left: 270px;
+        width: 30px;
         height: 30px;
-        text-align: center;
+      }
+      a#iceland:hover {
+        background-image: url('iceland.png');
+        background-position: -270px -80px;
       }
     </style>
 
     <script type="text/javascript">
-      function SetText(element, text) {
-        if (typeof element.textContent == 'string') {
-          element.textContent = text;
-        } else if (typeof element.innerText == 'string') {
-          element.innerText = text;
-        }
-      }
-      function Display(text) {
-        SetText(document.getElementById('status'), text);
+      var data = {};
+      data['canada']  = {title: 'Canada By Tandem'};
+      data['britain'] = {title: 'Britain By Tandem'};
+      data['iceland'] = {title: 'Iceland By Tandem'};
+      function Display(country) {
+        document.getElementById('status').innerHTML = data[country].title;
       }
       function Clear() {
-        SetText(document.getElementById('status'), '');
+        document.getElementById('status').innerHTML = '';
       }
     </script>
-
   </head>
 
   <body>
-    
-    <img class="preload" src="canada.jpg">
-    <img class="preload" src="britain.jpg">
-    <img class="preload" src="iceland.jpg">
-    <img class="preload" src="france.jpg">
-    <img class="preload" src="newzealand.jpg">
-    <img class="preload" src="chile.jpg">
 
-    <div id="content">
-      <h1 style="text-align:center; margin:50px 0px">Adventures By Tandem</h1>
+    <h2>Adventures By Tandem</h2>
 
-      <div class="photoGroup">
-        <a class="image" id="canada" href="canada" onmouseover="Display('Canada');" onmouseout="Clear();"></a>
-        <a class="image" id="britain" href="britain" onmouseover="Display('Britain');" onmouseout="Clear();"></a>
-        <a class="image" id="iceland" href="iceland" onmouseover="Display('Iceland');" onmouseout="Clear();"></a>
-        <a class="image" id="france" href="france" onmouseover="Display('France');" onmouseout="Clear();"></a>
-        <a class="image" id="newzealand" href="newzealand" onmouseover="Display('New Zealand');" onmouseout="Clear();"></a>
-        <a class="image" id="chile" href="chile" onmouseover="Display('Chile');" onmouseout="Clear();"></a>
-      </div>
-      <div id="status">.</div>
+    <img class="preload" src="canada.png">
+    <img class="preload" src="britain.png">
+    <img class="preload" src="iceland.png">
+
+    <div id="map_container">
+      <img src="world_highlighted.png">
+
+      <a class="country" id="canada"  href="http://www.canadabytandem.com"  onmouseover="Display('canada');"  onmouseout="Clear();"></a>
+      <a class="country" id="britain" href="http://www.britainbytandem.com" onmouseover="Display('britain');" onmouseout="Clear();"></a>
+      <a class="country" id="iceland" href="http://www.icelandbytandem.com" onmouseover="Display('iceland');" onmouseout="Clear();"></a>
     </div>
 
+    <div id="status"></div>
 
   </body>
 
