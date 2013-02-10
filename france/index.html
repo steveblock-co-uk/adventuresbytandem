@@ -1,0 +1,412 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function addOnClickHandlers() {
+        var profile = document.getElementById('profile');
+        for (var i in profile.childNodes) {
+          var element = profile.childNodes[i];
+          if (element.className == 'leg') {
+            element.onclick = showLeg;
+          }
+        }
+      }
+      var highlightedElement;
+      function showLeg() {
+        document.getElementById('grey').style.display = 'block';
+        document.getElementById('content').style.opacity = 0.5;
+        this.className = 'leg hover';
+        highlightedElement = this;
+        for (var i in this.childNodes) {
+          var element = this.childNodes[i];
+          if (element.className == 'photos') {
+            //var container = document.createElement('div');
+            //container.onclick = hideLeg;
+            //container.className = 'photosContainer';
+            //var photos = element.cloneNode(true);
+            //container.appendChild(photos);
+
+            var photos = element.cloneNode(true);
+            photos.onclick = hideLeg;
+            photos.className = 'photosContainer';
+            document.body.appendChild(photos);
+            break;
+          }
+        }
+      }
+      function hideLeg() {
+        highlightedElement.className = 'leg';
+        document.body.removeChild(this);
+        document.getElementById('content').style.opacity = 1.0;
+        document.getElementById('grey').style.display = 'none';
+      }
+    </script>
+    <style type="text/css">
+      body {
+        font-family: sans-serif;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 25px;
+      }
+      div.profileWrapper {
+        margin: 75px auto 150px auto;
+        width: 970px;
+      }
+      div#profile {
+        font-size: small;
+        /* border: 1px solid blue; */
+        width: 930px;
+        height: 275px;
+        position: relative;
+        background-image: url('profile.png');
+        margin: auto;
+        background-repeat: no-repeat;
+        background-position: 0px 75px;
+      }
+      div#profile a.leg {
+        /* border: 1px solid red; */
+        position: absolute;
+        cursor: pointer;
+        display: block;
+        bottom: 0px;
+      }
+      div#profile a.leg div.highlight {
+        display: none;
+        height: 100%;
+      }
+      div#profile a.leg:hover div.highlight {
+        display: block;
+      }
+      /* Rule to simulate hover from JS */
+      div#profile a.hover div.highlight {
+        display: block;
+      }
+      div#profile a.leg div.info {
+        position: absolute;
+        display: none;
+        /* border: 1px solid green; */
+        width: 150px;
+      }
+      div#profile a.leg:hover div.info {
+        display: block;
+      }
+      /* Rule to simulate hover from JS */
+      div#profile a.hover div.info {
+        display: block;
+      }
+      div#profile a.leg div.info div {
+        text-align: center;
+      }
+      div#profile a.leg div.photos {
+        display: none;
+      }
+      div#grey {
+        position: fixed;
+        background-color: #CCCCCC;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        opacity: 1.9;
+        display: none;
+      }
+      div.photosContainer {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        cursor: pointer;
+      }
+      div.photosContainer div {
+        margin: 50px auto;
+        position: relative;
+        background-color: white;
+        width: 800px;
+        height: 550px;
+      }
+      /*div.photosContainer div img {*/
+      div.photosContainer img {
+        position: absolute;
+        width: 150px;
+      }
+      div.home {
+        background-color: #DDDDDD;
+        border-top: 1px solid #999999;
+        text-align: center;
+        height: 30px;
+        padding-top: 10px;
+      }
+      div.home a {
+        color: black;
+        text-decoration: none;
+      }
+      div.home a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </body>
+  </head>
+  <body onload="addOnClickHandlers();">
+    <div id="grey"></div>
+    <div id="content">
+      <h1>France by Tandem</h1>
+      <div class="profileWrapper">
+      <div id="profile">
+        <a class="leg" style="left:0px; width:50px; height:50px;">
+          <div class="highlight" style="background-image:url('dover.png');"></div>
+          <div class="info" style="left:5px; bottom:100px;">
+            <div class="name" style="text-align:left;">London to Dover</div>
+          </div>
+          <div class="photos">
+            <img src="photos/dover1.jpg" style="top:200px; left:250px;">
+            <img src="photos/dover2.jpg" style="top:200px; left:600px;">
+          </div>
+        </a>
+        <a class="leg" style="left:50px; width:195px; height:75px;">
+          <div class="highlight" style="background-image:url('north_east_france.png');"></div>
+          <div class="info" style="left:65px; bottom:100px;">
+            <div class="name">North East France</div>
+          </div>
+          <div class="photos">
+            <img src="photos/north_east_france1.jpg" style="top:100px; left:050px;">
+            <img src="photos/north_east_france2.jpg" style="top:200px; left:050px;">
+            <img src="photos/north_east_france3.jpg" style="top:300px; left:050px;">
+            <img src="photos/north_east_france4.jpg" style="top:100px; left:300px;">
+            <img src="photos/north_east_france5.jpg" style="top:200px; left:300px;">
+            <img src="photos/north_east_france6.jpg" style="top:300px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:245px; width:55px; height:50px;">
+          <div class="highlight" style="background-image:url('lausanne.png');"></div>
+          <div class="info" style="left:-53px; bottom:125px;">
+            <div class="name">Lausanne</div>
+          </div>
+          <div class="photos">
+            <img src="photos/lausanne1.jpg" style="top:100px; left:050px;">
+          </div>
+        </a>
+        <a class="leg" style="left:300px; width:53px; height:100px;">
+          <div class="highlight" style="background-image:url('les_gets.png');"></div>
+          <div class="info" style="left:-48px; bottom:150px;">
+            <div class="name">Les Gets</div>
+            <div class="altitude">1150m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/les_gets1.jpg" style="top:100px; left:050px;">
+            <img src="photos/les_gets2.jpg" style="top:200px; left:300px;">
+            <img src="photos/les_gets3.jpg" style="top:300px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:353px; width:32px; height:125px;">
+          <div class="highlight" style="background-image:url('colombiere.png');"></div>
+          <div class="info" style="left:-55px; bottom:175px;">
+            <div class="name">Col de la Colombiere</div>
+            <div class="altitude">1600m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/colombiere1.jpg" style="top:100px; left:050px;">
+            <img src="photos/colombiere2.jpg" style="top:200px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:385px; width:18px; height:125px;">
+          <div class="highlight" style="background-image:url('aravis.png');"></div>
+          <div class="info" style="left:-66px; bottom:175px;">
+            <div class="name">Col des Aravis</div>
+            <div class="altitude">1498m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/aravis1.jpg" style="top:100px; left:050px;">
+            <img src="photos/aravis2.jpg" style="top:200px; left:300px;">
+            <img src="photos/aravis3.jpg" style="top:300px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:403px; width:28px; height:125px;">
+          <div class="highlight" style="background-image:url('saises.png');"></div>
+          <div class="info" style="left:-65px; bottom:175px;">
+            <div class="name">Col des Saises</div>
+            <div class="altitude">1650m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/saises1.jpg" style="top:100px; left:050px;">
+            <img src="photos/saises2.jpg" style="top:200px; left:300px;">
+            <img src="photos/saises3.jpg" style="top:300px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:431px; width:34px; height:150px;">
+          <div class="highlight" style="background-image:url('roseland.png');"></div>
+          <div class="info" style="left:-55px; bottom:200px;">
+            <div class="name">Col de Roseland</div>
+            <div class="altitude">1968m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/roseland1.jpg" style="top:100px; left:050px;">
+            <img src="photos/roseland2.jpg" style="top:200px; left:300px;">
+            <img src="photos/roseland3.jpg" style="top:300px; left:300px;">
+            <img src="photos/roseland4.jpg" style="top:400px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:465px; width:79px; height:200px;">
+          <div class="highlight" style="background-image:url('iseran.png');"></div>
+          <div class="info" style="left:-60px; bottom:225px;">
+            <div class="name">Col de l'Iseran</div>
+            <div class="altitude">2764m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/iseran1.jpg" style="top:100px; left:050px;">
+            <img src="photos/iseran2.jpg" style="top:200px; left:050px;">
+            <img src="photos/iseran3.jpg" style="top:300px; left:050px;">
+            <img src="photos/iseran4.jpg" style="top:400px; left:050px;">
+            <img src="photos/iseran5.jpg" style="top:500px; left:050px;">
+            <img src="photos/iseran6.jpg" style="top:100px; left:300px;">
+            <img src="photos/iseran7.jpg" style="top:200px; left:300px;">
+            <img src="photos/iseran8.jpg" style="top:300px; left:300px;">
+            <img src="photos/iseran9.jpg" style="top:400px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:544px; width:14px; height:125px;">
+          <div class="highlight" style="background-image:url('telegraphe.png');"></div>
+          <div class="info" style="left:-70px; bottom:225px;">
+            <div class="name">Col du Telegraphe</div>
+            <div class="altitude">1566m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/telegraphe1.jpg" style="top:100px; left:050px;">
+            <img src="photos/telegraphe2.jpg" style="top:200px; left:300px;">
+            <img src="photos/telegraphe3.jpg" style="top:300px; left:300px;">
+            <img src="photos/telegraphe4.jpg" style="top:400px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:558px; width:35px; height:200px;">
+          <div class="highlight" style="background-image:url('galibier.png');"></div>
+          <div class="info" style="left:-65px; bottom:225px;">
+            <div class="name">Col du Galibier</div>
+            <div class="altitude">2677m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/galibier1.jpg" style="top:100px; left:050px;">
+            <img src="photos/galibier2.jpg" style="top:200px; left:050px;">
+            <img src="photos/galibier3.jpg" style="top:300px; left:050px;">
+            <img src="photos/galibier4.jpg" style="top:400px; left:050px;">
+            <img src="photos/galibier5.jpg" style="top:100px; left:300px;">
+            <img src="photos/galibier6.jpg" style="top:200px; left:300px;">
+            <img src="photos/galibier7.jpg" style="top:300px; left:300px;">
+            <img src="photos/galibier8.jpg" style="top:400px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:593px; width:51px; height:200px;">
+          <div class="highlight" style="background-image:url('izoard.png');"></div>
+          <div class="info" style="left:-60px; bottom:225px;">
+            <div class="name">Col de l'Izoard</div>
+            <div class="altitude">2360m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/izoard1.jpg" style="top:100px; left:050px;">
+            <img src="photos/izoard2.jpg" style="top:200px; left:300px;">
+            <img src="photos/izoard3.jpg" style="top:300px; left:300px;">
+            <img src="photos/izoard4.jpg" style="top:400px; left:300px;">
+            <img src="photos/izoard5.jpg" style="top:500px; left:300px;">
+            <img src="photos/izoard6.jpg" style="top:600px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:644px; width:42px; height:175px;">
+          <div class="highlight" style="background-image:url('vars.png');"></div>
+          <div class="info" style="left:-60px; bottom:200px;">
+            <div class="name">Col de Vars</div>
+            <div class="altitude">2111m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/vars1.jpg" style="top:100px; left:050px;">
+            <img src="photos/vars2.jpg" style="top:200px; left:300px;">
+            <img src="photos/vars3.jpg" style="top:300px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:686px; width:45px; height:175px;">
+          <div class="highlight" style="background-image:url('cayolle.png');"></div>
+          <div class="info" style="left:-60px; bottom:200px;">
+            <div class="name">Col de la Cayolle</div>
+            <div class="altitude">2326m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/cayolle1.jpg" style="top:100px; left:050px;">
+            <img src="photos/cayolle2.jpg" style="top:200px; left:300px;">
+            <img src="photos/cayolle3.jpg" style="top:300px; left:050px;">
+            <img src="photos/cayolle4.jpg" style="top:400px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:731px; width:20px; height:150px;">
+          <div class="highlight" style="background-image:url('valberg.png');"></div>
+          <div class="info" style="left:-65px; bottom:175px;">
+            <div class="name">Col de Valberg</div>
+            <div class="altitude">1672m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/valberg1.jpg" style="top:100px; left:050px;">
+          </div>
+        </a>
+        <a class="leg" style="left:751px; width:20px; height:150px;">
+          <div class="highlight" style="background-image:url('couillole.png');"></div>
+          <div class="info" style="left:-70px; bottom:175px;">
+            <div class="name">Col de la Couillole</div>
+            <div class="altitude">1678m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/couillole1.jpg" style="top:100px; left:050px;">
+            <img src="photos/couillole2.jpg" style="top:200px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:771px; width:24px; height:125px;">
+          <div class="highlight" style="background-image:url('saint_martin.png');"></div>
+          <div class="info" style="left:-70px; bottom:175px;">
+            <div class="name">Col Saint Martin</div>
+            <div class="altitude">1500m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/saint_martin1.jpg" style="top:100px; left:050px;">
+          </div>
+        </a>
+        <a class="leg" style="left:795px; width:40px; height:125px;">
+          <div class="highlight" style="background-image:url('turini.png');"></div>
+          <div class="info" style="left:-55px; bottom:150px;">
+            <div class="name">Col de Turini</div>
+            <div class="altitude">1600m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/turini1.jpg" style="top:100px; left:050px;">
+            <img src="photos/turini2.jpg" style="top:200px; left:300px;">
+            <img src="photos/turini3.jpg" style="top:300px; left:300px;">
+            <img src="photos/turini4.jpg" style="top:400px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:835px; width:25px; height:75px;">
+          <div class="highlight" style="background-image:url('castillon.png');"></div>
+          <div class="info" style="left:-60px; bottom:125px;">
+            <div class="name">Col de Castillon</div>
+            <div class="altitude">707m</div>
+          </div>
+          <div class="photos">
+            <img src="photos/castillon1.jpg" style="top:100px; left:050px;">
+            <img src="photos/castillon2.jpg" style="top:200px; left:300px;">
+          </div>
+        </a>
+        <a class="leg" style="left:860px; width:70px; height:50px;">
+          <div class="highlight" style="background-image:url('monaco.png');"></div>
+          <div class="info" style="right:5px; bottom:100px;">
+            <div class="name" style="text-align:right;">Monaco</div>
+          </div>
+          <div class="photos">
+            <img src="photos/monaco1.jpg" style="top:100px; left:050px;">
+            <img src="photos/monaco2.jpg" style="top:200px; left:300px;">
+            <img src="photos/monaco3.jpg" style="top:300px; left:300px;">
+            <img src="photos/monaco4.jpg" style="top:400px; left:300px;">
+            <img src="photos/monaco5.jpg" style="top:500px; left:300px;">
+          </div>
+        </a>
+      </div>
+      </div>
+      <div class="home">
+        Part of <a href="www.adventuresbytandem.com">adventuresbytandem.com</a>
+      </div>
+    </div>  <!-- content -->
+  </body>
+</html>
