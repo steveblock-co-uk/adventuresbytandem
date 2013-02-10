@@ -53,13 +53,15 @@
         for (var i in node.childNodes) {
           var element = node.childNodes[i];
           if (element.className == 'photos') {
-            var photos = element.cloneNode(true);
-            photos.id = 'photosContainer';
-            photos.onclick = removeMask;
-            document.body.appendChild(photos);
-            for (var j in photos.childNodes) {
-              photos.childNodes[j].onmouseover = photoMouseOver;
-              photos.childNodes[j].onmouseout = photoMouseOut;
+            var photosContainer = element.cloneNode(true);
+            photosContainer.id = 'photosContainer';
+            photosContainer.onclick = removeMask;
+            document.body.appendChild(photosContainer);
+            for (var j in photosContainer.childNodes) {
+              if (photosContainer.childNodes[j].tagName == 'DIV') {
+                photosContainer.childNodes[j].onmouseover = photoMouseOver;
+                photosContainer.childNodes[j].onmouseout = photoMouseOut;
+              }
             }
             break;
           }
@@ -83,17 +85,26 @@
       var stop = false;
       function photoMouseOver() {
         //console.log('photoMouseOver');
-        var photo = this.cloneNode(true);
         largePhoto = document.createElement('div');
         largePhoto.className = 'largePhoto';
         var frame = document.createElement('div');
+        frame.className = 'frame';
+        var caption = this.getElementsByTagName('DIV')[0].cloneNode(true);
+        caption.className = 'caption';
+        var photo = this.getElementsByTagName('IMG')[0].cloneNode(true);
         if (photo.src.indexOf('north_east_france3.jpg') >= 0 || photo.src.indexOf('izoard3.jpg') >= 0 || photo.src.indexOf('monaco5.jpg') >= 0) {
-          frame.className = 'portrait';
+          frame.className += ' portraitWidth';
+          frame.className += ' portraitHeight';
+          caption.className += ' portraitWidth';
         } else if (photo.src.indexOf('izoard1.jpg') >= 0) {
-          frame.className = 'veryPortrait';
+          frame.className += ' veryPortraitWidth';
+          frame.className += ' veryPortraitHeight';
+          caption.className += ' veryPortraitWidth';
         }
+
         frame.appendChild(photo);
         largePhoto.appendChild(frame);
+        largePhoto.appendChild(caption);
         document.body.appendChild(largePhoto);
       }
       function photoMouseOut() {
@@ -105,6 +116,7 @@
     <style type="text/css">
       body {
         font-family: sans-serif;
+        color: #444444;
       }
       h1 {
         text-align: center;
@@ -181,9 +193,18 @@
         text-align: center;
         cursor: pointer;
       }
-      div#photosContainer img {
+      div#photosContainer div {
+        /* Should these be spans? */
+        display: inline;
+      }
+      div#photosContainer div div {
+        /* Hide caption */
+        display: none;
+      }
+      div#photosContainer div img {
         width: 120px;
         margin: 10px 20px 0px 20px;
+        border: 3px solid white;
       }
       div.largePhoto {
         position: fixed;
@@ -192,20 +213,32 @@
         left: 0px;
         width: 100%;
       }
-      div.largePhoto div {
+      div.largePhoto div.frame {
         position: relative;
         background: white;
         width: 480px;
         height: 360px;
-        margin: 20px auto;
+        margin: 20px auto 0px auto;
         padding: 10px;
       }
-      div.largePhoto div.portrait {
+      div.largePhoto div.caption {
+        font-size: small;
+        width: 480px;
+        margin: 0px auto;
+        text-align: center;
+        padding: 10px;
+        background-color: white;
+      }
+      div.largePhoto div.portraitWidth {
         width: 360px;
+      }
+      div.largePhoto div.portraitHeight {
         height: 480px;
       }
-      div.largePhoto div.veryPortrait {
+      div.largePhoto div.veryPortraitWidth {
         width: 320px;
+      }
+      div.largePhoto div.veryPortraitHeight {
         height: 480px;
       }
       div.home {
@@ -216,7 +249,6 @@
         padding-top: 10px;
       }
       div.home a {
-        color: black;
         text-decoration: none;
       }
       div.home a:hover {
@@ -236,8 +268,14 @@
             <div class="name" style="text-align:left;">London to Dover</div>
           </div>
           <div class="photos">
-            <img src="photos/dover1.jpg">
-            <img src="photos/dover2.jpg">
+            <div>
+              <img src="photos/dover2.jpg">
+              <div>37 Worfield Street, London:  A tandem trip that starts at our front door means no high-stake negotiations with airline personal this time round.</div>
+            </div>
+            <div>
+              <img src="photos/dover1.jpg">
+              <div>Canterbury Cathedral en route to Dover. A beautiful cathedral in beautiful sunshine.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:50px; width:195px; height:75px;">
@@ -246,13 +284,34 @@
             <div class="name">North East France</div>
           </div>
           <div class="photos">
-            <img src="photos/north_east_france1.jpg">
-            <img src="photos/north_east_france2.jpg">
-            <img src="photos/north_east_france3.jpg">
-            <img src="photos/north_east_france4.jpg">
-            <img src="photos/north_east_france5.jpg">
-            <img src="photos/north_east_france6.jpg">
-            <img src="photos/north_east_france7.jpg">
+            <div>
+              <img src="photos/north_east_france1.jpg">
+              <div>The countryside of north east France. Fields of wheat, potatoes, cabbage and sunflowers.  It is more rolling than pictured here.</div>
+            </div>
+            <div>
+              <img src="photos/north_east_france2.jpg">
+              <div>The Cathedral at Reim: Flying buttresses galore!</div>
+            </div>
+            <div>
+              <img src="photos/north_east_france3.jpg">
+              <div>The Cathedral at Reim II: Getting a clean.</div>
+            </div>
+            <div>
+              <img src="photos/north_east_france4.jpg">
+              <div>The canal leading to Ligny-en-Barrois. A welcome respite from the yellow roads on the map full of trucks too cheap to take the parallel motorway.</div>
+            </div>
+            <div>
+              <img src="photos/north_east_france5.jpg">
+              <div>A picturesque tree-lined road leaving Domremy.  We've just been to the birthplace of Joan of Arc and are feeling smug that our French was good enough to understand the children's film.</div>
+            </div>
+            <div>
+              <img src="photos/north_east_france6.jpg">
+              <div>Possibly the best thing about biking in France.  We often have breakfast, second breakfast, lunch and sometimes even second lunch at them.  A quiche and pain o chocolat is a breakfast for champions.</div>
+            </div>
+            <div>
+              <img src="photos/north_east_france7.jpg">
+              <div>Approaching Lousanne. The scenery is staring to feel a bit more mountainous.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:245px; width:55px; height:50px;">
@@ -261,7 +320,10 @@
             <div class="name">Lausanne</div>
           </div>
           <div class="photos">
-            <img src="photos/lausanne1.jpg">
+            <div>
+              <img src="photos/lausanne1.jpg">
+              <div>Crossing Lake Geneva to Evian.  Captain Birdseye takes us on a boat ride across the lake.  The Alps loom on the other side.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:300px; width:53px; height:100px;">
@@ -271,9 +333,18 @@
             <div class="altitude">1150m</div>
           </div>
           <div class="photos">
-            <img src="photos/les_gets1.jpg">
-            <img src="photos/les_gets2.jpg">
-            <img src="photos/les_gets3.jpg">
+            <div>
+              <img src="photos/les_gets1.jpg">
+              <div>The first climb up to Les Gets.  The gentle gradient lures Stephanie into a false sense of security.</div>
+            </div>
+            <div>
+              <img src="photos/les_gets2.jpg">
+              <div>We're following the Route des Grands Alpes, the bumpy route between Lake Geneva and the French Riviera.</div>
+            </div>
+            <div>
+              <img src="photos/les_gets3.jpg">
+              <div>The top of the first pass at Les Gets: The mandatory photo. One down, 15 to go.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:353px; width:32px; height:125px;">
@@ -283,8 +354,14 @@
             <div class="altitude">1600m</div>
           </div>
           <div class="photos">
-            <img src="photos/colombiere1.jpg">
-            <img src="photos/colombiere2.jpg">
+            <div>
+              <img src="photos/colombiere1.jpg">
+              <div>The top of the second pass, the Col de la Colombiere.  1100 m up in 15 km, done, by the end when it was wicked steep, in 50 m bursts.  Pretty tough.  Stephanie is smiling but inside she has some doubts about whether this is a good idea.</div>
+            </div>
+            <div>
+              <img src="photos/colombiere2.jpg">
+              <div>The impressive decent into Le Grand Bornand.  What goes up, must come down.  Weeee!</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:385px; width:18px; height:125px;">
@@ -294,9 +371,18 @@
             <div class="altitude">1498m</div>
           </div>
           <div class="photos">
-            <img src="photos/aravis1.jpg">
-            <img src="photos/aravis2.jpg">
-            <img src="photos/aravis3.jpg">
+            <div>
+              <img src="photos/aravis1.jpg">
+              <div>Starting the climb to the Col des Aravis. A sunny start to Day 2 on the Route and Climb 1 of 3 of the day.</div>
+            </div>
+            <div>
+              <img src="photos/aravis2.jpg">
+              <div>The top of the Col des Aravis. Well supplied with tourist services and loud-talking tourists.</div>
+            </div>
+            <div>
+              <img src="photos/aravis3.jpg">
+              <div>Decending from the Col des Aravis. Picturesque alpine scenary in glorious sunshine!</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:403px; width:28px; height:125px;">
@@ -306,9 +392,18 @@
             <div class="altitude">1650m</div>
           </div>
           <div class="photos">
-            <img src="photos/saises1.jpg">
-            <img src="photos/saises2.jpg">
-            <img src="photos/saises3.jpg">
+            <div>
+              <img src="photos/saises1.jpg">
+              <div>Ascending towards the Col des Saises. This one is steeper but we are motivated by the Tour de France signs every km counting up the altitude and preparing us for the gradient ahead.  The sun is still shining.</div>
+            </div>
+            <div>
+              <img src="photos/saises2.jpg">
+              <div>The top of the col.  All smiles as it is time for lunch.</div>
+            </div>
+            <div>
+              <img src="photos/saises3.jpg">
+              <div>Rolling down the other side.  Croque Monsieurs in our bellies and letting gravity work for us.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:431px; width:34px; height:150px;">
@@ -318,10 +413,22 @@
             <div class="altitude">1968m</div>
           </div>
           <div class="photos">
-            <img src="photos/roseland1.jpg">
-            <img src="photos/roseland2.jpg">
-            <img src="photos/roseland3.jpg">
-            <img src="photos/roseland4.jpg">
+            <div>
+              <img src="photos/roseland1.jpg">
+              <div>We're climbing again.  1250 m to the top.</div>
+            </div>
+            <div>
+              <img src="photos/roseland2.jpg">
+              <div>A break from the uphill gradient.  Not only is the lake pretty, it is also flat.</div>
+            </div>
+            <div>
+              <img src="photos/roseland3.jpg">
+              <div>The Col de Roseland  - the 3rd summit of the day.  20 km to dinner and it is all downhill!</div>
+            </div>
+            <div>
+              <img src="photos/roseland4.jpg">
+              <div>Decending to Bourg St. Maurice. Is that Stephanie piloting the tandem?!?</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:465px; width:79px; height:200px;">
@@ -331,15 +438,42 @@
             <div class="altitude">2764m</div>
           </div>
           <div class="photos">
-            <img src="photos/iseran1.jpg">
-            <img src="photos/iseran2.jpg">
-            <img src="photos/iseran3.jpg">
-            <img src="photos/iseran4.jpg">
-            <img src="photos/iseran5.jpg">
-            <img src="photos/iseran6.jpg">
-            <img src="photos/iseran7.jpg">
-            <img src="photos/iseran8.jpg">
-            <img src="photos/iseran9.jpg">
+            <div>
+              <img src="photos/iseran1.jpg">
+              <div>The mountains are looking bigger as we climb up to Tignes.  The sun is back out in its full glory.</div>
+            </div>
+            <div>
+              <img src="photos/iseran2.jpg">
+              <div>The climb continues after lunch. It is hot! hot! hot!</div>
+            </div>
+            <div>
+              <img src="photos/iseran3.jpg">
+              <div>Taking a break in the shade. It's still hot! hot! hot!</div>
+            </div>
+            <div>
+              <img src="photos/iseran4.jpg">
+              <div>En route to the Col d'Iseran: The scenery ain't bad.</div>
+            </div>
+            <div>
+              <img src="photos/iseran5.jpg">
+              <div>It's getting chilly now.</div>
+            </div>
+            <div>
+              <img src="photos/iseran6.jpg">
+              <div>The Col de L'iseran at 2770 m.  The tandem at the top of the highest pass in Europe.</div>
+            </div>
+            <div>
+              <img src="photos/iseran7.jpg">
+              <div>The start of a looong downhill.</div>
+            </div>
+            <div>
+              <img src="photos/iseran8.jpg">
+              <div>A pretty place to pause to let the wheel rims cool down.</div>
+            </div>
+            <div>
+              <img src="photos/iseran9.jpg">
+              <div>Lanslebourg in the valley.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:544px; width:14px; height:125px;">
@@ -349,10 +483,22 @@
             <div class="altitude">1566m</div>
           </div>
           <div class="photos">
-            <img src="photos/telegraphe1.jpg">
-            <img src="photos/telegraphe2.jpg">
-            <img src="photos/telegraphe3.jpg">
-            <img src="photos/telegraphe4.jpg">
+            <div>
+              <img src="photos/telegraphe1.jpg">
+              <div>The start of Day 12.  A cool hill fort en route to St Michel de Maurienne.</div>
+            </div>
+            <div>
+              <img src="photos/telegraphe2.jpg">
+              <div>Relaxing after conquering the climb to the Col de Telegraph.  This one we did on one shot!</div>
+            </div>
+            <div>
+              <img src="photos/telegraphe3.jpg">
+              <div>Proof that we were there.</div>
+            </div>
+            <div>
+              <img src="photos/telegraphe4.jpg">
+              <div>The weather gods are still smiling on us, as we head on up towards the Col du Galibier.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:558px; width:35px; height:200px;">
@@ -362,14 +508,38 @@
             <div class="altitude">2677m</div>
           </div>
           <div class="photos">
-            <img src="photos/galibier1.jpg">
-            <img src="photos/galibier2.jpg">
-            <img src="photos/galibier3.jpg">
-            <img src="photos/galibier4.jpg">
-            <img src="photos/galibier5.jpg">
-            <img src="photos/galibier6.jpg">
-            <img src="photos/galibier7.jpg">
-            <img src="photos/galibier8.jpg">
+            <div>
+              <img src="photos/galibier1.jpg">
+              <div>The start of the climb.  It is "melt your face off" hot.</div>
+            </div>
+            <div>
+              <img src="photos/galibier2.jpg">
+              <div>Tis easy to feel small in this landscape.</div>
+            </div>
+            <div>
+              <img src="photos/galibier3.jpg">
+              <div>The road we've traveled.</div>
+            </div>
+            <div>
+              <img src="photos/galibier4.jpg">
+              <div>Look!  Someone painted my name in the road to cheer me on.  It certainly did help me pedal harder.</div>
+            </div>
+            <div>
+              <img src="photos/galibier5.jpg">
+              <div>Steve's sweat stained gloves.  At least someone is working hard.</div>
+            </div>
+            <div>
+              <img src="photos/galibier6.jpg">
+              <div>Near the top.  The weather is perfect.</div>
+            </div>
+            <div>
+              <img src="photos/galibier7.jpg">
+              <div>Looking back at from where we've come.</div>
+            </div>
+            <div>
+              <img src="photos/galibier8.jpg">
+              <div>Another one down.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:593px; width:51px; height:200px;">
@@ -379,12 +549,30 @@
             <div class="altitude">2360m</div>
           </div>
           <div class="photos">
-            <img src="photos/izoard1.jpg">
-            <img src="photos/izoard2.jpg">
-            <img src="photos/izoard3.jpg">
-            <img src="photos/izoard4.jpg">
-            <img src="photos/izoard5.jpg">
-            <img src="photos/izoard6.jpg">
+            <div>
+              <img src="photos/izoard1.jpg">
+              <div>Another day, another climb.  Today is the first "last big day".  A portrait taken by a passer by who was kind enough to send it to us.  Thanks!</div>
+            </div>
+            <div>
+              <img src="photos/izoard2.jpg">
+              <div>The sweeping hairpins that carry you to the top.</div>
+            </div>
+            <div>
+              <img src="photos/izoard3.jpg">
+              <div>At the Col.  This one is particularly momentous.</div>
+            </div>
+            <div>
+              <img src="photos/izoard4.jpg">
+              <div>The start of the best descent of the trip.  It feels like we've left the alpine and entered the desert.</div>
+            </div>
+            <div>
+              <img src="photos/izoard5.jpg">
+              <div>Along a weaving road that hugs the canyon wall.  Very cool.</div>
+            </div>
+            <div>
+              <img src="photos/izoard6.jpg">
+              <div>Steve and the gorge on the downhill side of l'Izoard.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:644px; width:42px; height:175px;">
@@ -394,9 +582,18 @@
             <div class="altitude">2111m</div>
           </div>
           <div class="photos">
-            <img src="photos/vars1.jpg">
-            <img src="photos/vars2.jpg">
-            <img src="photos/vars3.jpg">
+            <div>
+              <img src="photos/vars1.jpg">
+              <div>It may not look it, but we're feeling a bit destroyed at the top of this one.  We have an emergency ration of chips and ice cream at the restaurant on the top.</div>
+            </div>
+            <div>
+              <img src="photos/vars2.jpg">
+              <div>Run sheep dog run!</div>
+            </div>
+            <div>
+              <img src="photos/vars3.jpg">
+              <div>A beautiful descent in beautiful evening light.  All the grumpiness from the uphill slog melts away.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:686px; width:45px; height:175px;">
@@ -406,10 +603,22 @@
             <div class="altitude">2326m</div>
           </div>
           <div class="photos">
-            <img src="photos/cayolle1.jpg">
-            <img src="photos/cayolle2.jpg">
-            <img src="photos/cayolle3.jpg">
-            <img src="photos/cayolle4.jpg">
+            <div>
+              <img src="photos/cayolle1.jpg">
+              <div>"Another big day but not as big as the last one".  Where have all the cyclists gone?</div>
+            </div>
+            <div>
+              <img src="photos/cayolle2.jpg">
+              <div>The last 2000m+ summit.</div>
+            </div>
+            <div>
+              <img src="photos/cayolle3.jpg">
+              <div>The mandatory summit shot.</div>
+            </div>
+            <div>
+              <img src="photos/cayolle4.jpg">
+              <div>Traffic problems on the decent.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:731px; width:20px; height:150px;">
@@ -419,7 +628,10 @@
             <div class="altitude">1672m</div>
           </div>
           <div class="photos">
-            <img src="photos/valberg1.jpg">
+            <div>
+              <img src="photos/valberg1.jpg">
+              <div>The top of a short little climb to Valberg.  Tonight we will feast here on pizza and Isle Flotant!</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:751px; width:20px; height:150px;">
@@ -429,8 +641,14 @@
             <div class="altitude">1678m</div>
           </div>
           <div class="photos">
-            <img src="photos/couillole1.jpg">
-            <img src="photos/couillole2.jpg">
+            <div>
+              <img src="photos/couillole1.jpg">
+              <div>The "big day after the last big day" starts with hiccup over the Col de la Couillole.  It felt harder than it should have.</div>
+            </div>
+            <div>
+              <img src="photos/couillole2.jpg">
+              <div>A fantastic hair-pinned descent.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:771px; width:24px; height:125px;">
@@ -440,7 +658,10 @@
             <div class="altitude">1500m</div>
           </div>
           <div class="photos">
-            <img src="photos/saint_martin1.jpg">
+            <div>
+              <img src="photos/saint_martin1.jpg">
+              <div>We tackled this one without stopping.  Nice gradient all the way.</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:795px; width:40px; height:125px;">
@@ -450,10 +671,22 @@
             <div class="altitude">1600m</div>
           </div>
           <div class="photos">
-            <img src="photos/turini1.jpg">
-            <img src="photos/turini2.jpg">
-            <img src="photos/turini3.jpg">
-            <img src="photos/turini4.jpg">
+            <div>
+              <img src="photos/turini1.jpg">
+              <div>The penultimate climb.  The forest is back.  The roads are quiet.</div>
+            </div>
+            <div>
+              <img src="photos/turini2.jpg">
+              <div>Road closed?!?  But we came all this way and it wasn't easy at times!</div>
+            </div>
+            <div>
+              <img src="photos/turini3.jpg">
+              <div>On the detour and doing some more unexpected climbing.  The views at least are inspiring.</div>
+            </div>
+            <div>
+              <img src="photos/turini4.jpg">
+              <div>The coolest hair-pinned road in the world!</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:835px; width:25px; height:75px;">
@@ -463,8 +696,14 @@
             <div class="altitude">707m</div>
           </div>
           <div class="photos">
-            <img src="photos/castillon1.jpg">
-            <img src="photos/castillon2.jpg">
+            <div>
+              <img src="photos/castillon1.jpg">
+              <div>The top of the last one!  I can smell the sea.</div>
+            </div>
+            <div>
+              <img src="photos/castillon2.jpg">
+              <div>There it is!</div>
+            </div>
           </div>
         </a>
         <a class="leg" style="left:860px; width:70px; height:50px;">
@@ -473,18 +712,33 @@
             <div class="name" style="text-align:right;">Monaco</div>
           </div>
           <div class="photos">
-            <img src="photos/monaco1.jpg">
-            <img src="photos/monaco2.jpg">
-            <img src="photos/monaco3.jpg">
-            <img src="photos/monaco4.jpg">
-            <img src="photos/monaco5.jpg">
+            <div>
+              <img src="photos/monaco1.jpg">
+              <div>The first Monaco road sign.  It is right around the corner!</div>
+            </div>
+            <div>
+              <img src="photos/monaco2.jpg">
+              <div>The French Riviera.  Nice indeed.</div>
+            </div>
+            <div>
+              <img src="photos/monaco3.jpg">
+              <div>Welcome to Monaco!</div>
+            </div>
+            <div>
+              <img src="photos/monaco4.jpg">
+              <div>A seaside boulevard.</div>
+            </div>
+            <div>
+              <img src="photos/monaco5.jpg">
+              <div>A celebratory sundae outside the Monte Carlo Casino.  Another tandem adventure done.</div>
+            </div>
           </div>
         </a>
       </div>
       </div>
       <!--
       <div class="home">
-        Part of <a href="www.adventuresbytandem.com">adventuresbytandem.com</a>
+        Part of <a href="../">adventuresbytandem.com</a>
       </div>
       -->
     </div>  <!-- content -->
