@@ -1,34 +1,53 @@
 <html>
   <head>
     <script type="text/javascript">
-      function addOnClickHandlers() {
+      function addLegHandlers() {
         var profile = document.getElementById('profile');
         for (var i in profile.childNodes) {
           var element = profile.childNodes[i];
-          if (element.className == 'leg') {
-            element.onclick = showLeg;
+          if (element.className == 'leg' || element.className == 'leg hover') {
+            element.onmouseover = function() { showLeg(this); };
+            element.onmouseout = hideLeg;
+            element.onclick = lockLeg;
+            element.title = 'Click to lock';
           }
         }
       }
+      function clearLegHandlers() {
+        var profile = document.getElementById('profile');
+        for (var i in profile.childNodes) {
+          var element = profile.childNodes[i];
+          if (element.className == 'leg' || element.className == 'leg hover') {
+            element.onmouseover = null;
+            element.onmouseout = null;
+          }
+        }
+      }
+      function removeMask() {
+        //console.log('removeMask');
+        document.getElementById('grey').style.display = 'none';
+        document.getElementById('mask').style.display = 'none';
+        document.getElementById('content').style.opacity = 1.0;
+        addLegHandlers();
+        hideLeg();
+        // TODO: Trigger showLeg for the leg we're in, if any
+      }
       var highlightedElement;
       var largePhoto;
-      function showLeg() {
-        document.getElementById('grey').style.display = 'block';
-        document.getElementById('content').style.opacity = 0.5;
-        this.className = 'leg hover';
-        highlightedElement = this;
-        for (var i in this.childNodes) {
-          var element = this.childNodes[i];
+      function showLeg(node) {
+        //console.log('showLeg');
+        node.className = 'leg hover';
+        highlightedElement = node;
+        for (var i in node.childNodes) {
+          var element = node.childNodes[i];
           if (element.className == 'photos') {
             var photos = element.cloneNode(true);
-            var wrapper = document.createElement('div');
-            wrapper.onclick = hideLeg;
-            wrapper.id = 'photosContainer';
-            wrapper.appendChild(photos);
-            document.body.appendChild(wrapper);
+            photos.id = 'photosContainer';
+            photos.onclick = removeMask;
+            photos.title = 'Click anywhere to return';
+            document.body.appendChild(photos);
             for (var j in photos.childNodes) {
               photos.childNodes[j].onmouseover = photoMouseOver;
-              photos.childNodes[j].onclick = photoClick;
               photos.childNodes[j].onmouseout = photoMouseOut;
             }
             break;
@@ -36,46 +55,33 @@
         }
       }
       function hideLeg() {
+        //console.log('hideLeg');
         highlightedElement.className = 'leg';
-        document.body.removeChild(this);
-        document.getElementById('content').style.opacity = 1.0;
-        document.getElementById('grey').style.display = 'none';
-        stop = false;
+        highlightedElement = null;
+        document.body.removeChild(document.getElementById('photosContainer'));
+      }
+      function lockLeg() {
+        //console.log('lockLeg');
+        clearLegHandlers();
+
+        document.getElementById('grey').style.display = 'block';
+        document.getElementById('mask').style.display = 'block';
+        document.getElementById('content').style.opacity = 0.2;
       }
       var stop = false;
-      function photoMouseOver(e) {
-        console.log('photoMouseOver');
-        if (stop)
-            return;
-        this.onclick = function(e) { console.log('a'); stop = true; e.stopPropagation(); };
-        showLarge(this);
-      }
-      function showLarge(node) {
-        console.log('showLarge');
-        largePhoto = node.cloneNode(true);
+      function photoMouseOver() {
+        //console.log('photoMouseOver');
+        var photo = this.cloneNode(true);
+        largePhoto = document.createElement('div');
         largePhoto.className = 'largePhoto';
-        document.getElementById('photosContainer').appendChild(largePhoto);
+        largePhoto.appendChild(photo);
+        largePhoto.onclick = removeMask;
+        largePhoto.title = 'Click anywhere to return';
+        document.body.appendChild(largePhoto);
       }
-      function photoMouseOut(e) {
-        console.log('photoMouseOut');
-        this.onclick = photoClick;
-        if (stop)
-            return;
-        hideLarge(this);
-      }
-      function hideLarge() {
-        console.log('hideLarge');
-        // TODO
-        if (!document.getElementById('photosContainer'))
-            return;
-        document.getElementById('photosContainer').removeChild(largePhoto);
-      }
-      function photoClick(e) {
-        console.log('photoClick');
-        stop = true;
-        hideLarge();
-        showLarge(this);
-        e.stopPropagation();
+      function photoMouseOut() {
+        //console.log('photoMouseOut');
+        document.body.removeChild(largePhoto);
       }
     </script>
     <style type="text/css">
@@ -138,9 +144,18 @@
       div#profile a.leg div.photos {
         display: none;
       }
+      div#mask {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        display: none;
+        cursor: pointer;
+      }
       div#grey {
         position: fixed;
-        background-color: #CCCCCC;
+        background-color: #BBBBBB;
         width: 100%;
         height: 100%;
         top: 0px;
@@ -151,25 +166,24 @@
       div#photosContainer {
         position: fixed;
         width: 100%;
-        height: 100%;
-        top: 0px;
+        bottom: 20px;
         left: 0px;
+        text-align: center;
         cursor: pointer;
       }
-      div#photosContainer div {
-        position: absolute;
-        bottom: 20px;
-        /* border: 1px solid red; */
-        width: 100%;
-        text-align: center;
-        vertical-align: bottom;
-      }
-      div#photosContainer div img {
+      div#photosContainer img {
         width: 120px;
         margin: 10px 20px 0px 20px;
       }
-      div#photosContainer img.largePhoto {
-        margin: 100px auto;
+      div.largePhoto {
+        position: fixed;
+        top: 0px;
+        bottom: 220px; /* To clear photosContainer */
+        left: 0px;
+        width: 100%;
+      }
+      div.largePhoto img {
+        margin: 50px auto;
         display: block;
       }
       div.home {
@@ -189,7 +203,7 @@
     </style>
   </body>
   </head>
-  <body onload="addOnClickHandlers();">
+  <body onload="addLegHandlers();">
     <div id="grey"></div>
     <div id="content">
       <h1>France by Tandem</h1>
@@ -201,8 +215,8 @@
             <div class="name" style="text-align:left;">London to Dover</div>
           </div>
           <div class="photos">
-            <img src="photos/dover1.jpg" style="top:200px; left:250px;">
-            <img src="photos/dover2.jpg" style="top:200px; left:600px;">
+            <img src="photos/dover1.jpg">
+            <img src="photos/dover2.jpg">
           </div>
         </a>
         <a class="leg" style="left:50px; width:195px; height:75px;">
@@ -211,12 +225,12 @@
             <div class="name">North East France</div>
           </div>
           <div class="photos">
-            <img src="photos/north_east_france1.jpg" style="top:100px; left:050px;">
-            <img src="photos/north_east_france2.jpg" style="top:200px; left:050px;">
-            <img src="photos/north_east_france3.jpg" style="top:300px; left:050px;">
-            <img src="photos/north_east_france4.jpg" style="top:100px; left:300px;">
-            <img src="photos/north_east_france5.jpg" style="top:200px; left:300px;">
-            <img src="photos/north_east_france6.jpg" style="top:300px; left:300px;">
+            <img src="photos/north_east_france1.jpg">
+            <img src="photos/north_east_france2.jpg">
+            <img src="photos/north_east_france3.jpg">
+            <img src="photos/north_east_france4.jpg">
+            <img src="photos/north_east_france5.jpg">
+            <img src="photos/north_east_france6.jpg">
           </div>
         </a>
         <a class="leg" style="left:245px; width:55px; height:50px;">
@@ -225,7 +239,7 @@
             <div class="name">Lausanne</div>
           </div>
           <div class="photos">
-            <img src="photos/lausanne1.jpg" style="top:100px; left:050px;">
+            <img src="photos/lausanne1.jpg">
           </div>
         </a>
         <a class="leg" style="left:300px; width:53px; height:100px;">
@@ -235,9 +249,9 @@
             <div class="altitude">1150m</div>
           </div>
           <div class="photos">
-            <img src="photos/les_gets1.jpg" style="top:100px; left:050px;">
-            <img src="photos/les_gets2.jpg" style="top:200px; left:300px;">
-            <img src="photos/les_gets3.jpg" style="top:300px; left:300px;">
+            <img src="photos/les_gets1.jpg">
+            <img src="photos/les_gets2.jpg">
+            <img src="photos/les_gets3.jpg">
           </div>
         </a>
         <a class="leg" style="left:353px; width:32px; height:125px;">
@@ -247,8 +261,8 @@
             <div class="altitude">1600m</div>
           </div>
           <div class="photos">
-            <img src="photos/colombiere1.jpg" style="top:100px; left:050px;">
-            <img src="photos/colombiere2.jpg" style="top:200px; left:300px;">
+            <img src="photos/colombiere1.jpg">
+            <img src="photos/colombiere2.jpg">
           </div>
         </a>
         <a class="leg" style="left:385px; width:18px; height:125px;">
@@ -258,9 +272,9 @@
             <div class="altitude">1498m</div>
           </div>
           <div class="photos">
-            <img src="photos/aravis1.jpg" style="top:100px; left:050px;">
-            <img src="photos/aravis2.jpg" style="top:200px; left:300px;">
-            <img src="photos/aravis3.jpg" style="top:300px; left:300px;">
+            <img src="photos/aravis1.jpg">
+            <img src="photos/aravis2.jpg">
+            <img src="photos/aravis3.jpg">
           </div>
         </a>
         <a class="leg" style="left:403px; width:28px; height:125px;">
@@ -270,9 +284,9 @@
             <div class="altitude">1650m</div>
           </div>
           <div class="photos">
-            <img src="photos/saises1.jpg" style="top:100px; left:050px;">
-            <img src="photos/saises2.jpg" style="top:200px; left:300px;">
-            <img src="photos/saises3.jpg" style="top:300px; left:300px;">
+            <img src="photos/saises1.jpg">
+            <img src="photos/saises2.jpg">
+            <img src="photos/saises3.jpg">
           </div>
         </a>
         <a class="leg" style="left:431px; width:34px; height:150px;">
@@ -282,10 +296,10 @@
             <div class="altitude">1968m</div>
           </div>
           <div class="photos">
-            <img src="photos/roseland1.jpg" style="top:100px; left:050px;">
-            <img src="photos/roseland2.jpg" style="top:200px; left:300px;">
-            <img src="photos/roseland3.jpg" style="top:300px; left:300px;">
-            <img src="photos/roseland4.jpg" style="top:400px; left:300px;">
+            <img src="photos/roseland1.jpg">
+            <img src="photos/roseland2.jpg">
+            <img src="photos/roseland3.jpg">
+            <img src="photos/roseland4.jpg">
           </div>
         </a>
         <a class="leg" style="left:465px; width:79px; height:200px;">
@@ -295,15 +309,15 @@
             <div class="altitude">2764m</div>
           </div>
           <div class="photos">
-            <img src="photos/iseran1.jpg" style="top:100px; left:050px;">
-            <img src="photos/iseran2.jpg" style="top:200px; left:050px;">
-            <img src="photos/iseran3.jpg" style="top:300px; left:050px;">
-            <img src="photos/iseran4.jpg" style="top:400px; left:050px;">
-            <img src="photos/iseran5.jpg" style="top:500px; left:050px;">
-            <img src="photos/iseran6.jpg" style="top:100px; left:300px;">
-            <img src="photos/iseran7.jpg" style="top:200px; left:300px;">
-            <img src="photos/iseran8.jpg" style="top:300px; left:300px;">
-            <img src="photos/iseran9.jpg" style="top:400px; left:300px;">
+            <img src="photos/iseran1.jpg">
+            <img src="photos/iseran2.jpg">
+            <img src="photos/iseran3.jpg">
+            <img src="photos/iseran4.jpg">
+            <img src="photos/iseran5.jpg">
+            <img src="photos/iseran6.jpg">
+            <img src="photos/iseran7.jpg">
+            <img src="photos/iseran8.jpg">
+            <img src="photos/iseran9.jpg">
           </div>
         </a>
         <a class="leg" style="left:544px; width:14px; height:125px;">
@@ -313,10 +327,10 @@
             <div class="altitude">1566m</div>
           </div>
           <div class="photos">
-            <img src="photos/telegraphe1.jpg" style="top:100px; left:050px;">
-            <img src="photos/telegraphe2.jpg" style="top:200px; left:300px;">
-            <img src="photos/telegraphe3.jpg" style="top:300px; left:300px;">
-            <img src="photos/telegraphe4.jpg" style="top:400px; left:300px;">
+            <img src="photos/telegraphe1.jpg">
+            <img src="photos/telegraphe2.jpg">
+            <img src="photos/telegraphe3.jpg">
+            <img src="photos/telegraphe4.jpg">
           </div>
         </a>
         <a class="leg" style="left:558px; width:35px; height:200px;">
@@ -326,14 +340,14 @@
             <div class="altitude">2677m</div>
           </div>
           <div class="photos">
-            <img src="photos/galibier1.jpg" style="top:100px; left:050px;">
-            <img src="photos/galibier2.jpg" style="top:200px; left:050px;">
-            <img src="photos/galibier3.jpg" style="top:300px; left:050px;">
-            <img src="photos/galibier4.jpg" style="top:400px; left:050px;">
-            <img src="photos/galibier5.jpg" style="top:100px; left:300px;">
-            <img src="photos/galibier6.jpg" style="top:200px; left:300px;">
-            <img src="photos/galibier7.jpg" style="top:300px; left:300px;">
-            <img src="photos/galibier8.jpg" style="top:400px; left:300px;">
+            <img src="photos/galibier1.jpg">
+            <img src="photos/galibier2.jpg">
+            <img src="photos/galibier3.jpg">
+            <img src="photos/galibier4.jpg">
+            <img src="photos/galibier5.jpg">
+            <img src="photos/galibier6.jpg">
+            <img src="photos/galibier7.jpg">
+            <img src="photos/galibier8.jpg">
           </div>
         </a>
         <a class="leg" style="left:593px; width:51px; height:200px;">
@@ -343,12 +357,12 @@
             <div class="altitude">2360m</div>
           </div>
           <div class="photos">
-            <img src="photos/izoard1.jpg" style="top:100px; left:050px;">
-            <img src="photos/izoard2.jpg" style="top:200px; left:300px;">
-            <img src="photos/izoard3.jpg" style="top:300px; left:300px;">
-            <img src="photos/izoard4.jpg" style="top:400px; left:300px;">
-            <img src="photos/izoard5.jpg" style="top:500px; left:300px;">
-            <img src="photos/izoard6.jpg" style="top:600px; left:300px;">
+            <img src="photos/izoard1.jpg">
+            <img src="photos/izoard2.jpg">
+            <img src="photos/izoard3.jpg">
+            <img src="photos/izoard4.jpg">
+            <img src="photos/izoard5.jpg">
+            <img src="photos/izoard6.jpg">
           </div>
         </a>
         <a class="leg" style="left:644px; width:42px; height:175px;">
@@ -358,9 +372,9 @@
             <div class="altitude">2111m</div>
           </div>
           <div class="photos">
-            <img src="photos/vars1.jpg" style="top:100px; left:050px;">
-            <img src="photos/vars2.jpg" style="top:200px; left:300px;">
-            <img src="photos/vars3.jpg" style="top:300px; left:300px;">
+            <img src="photos/vars1.jpg">
+            <img src="photos/vars2.jpg">
+            <img src="photos/vars3.jpg">
           </div>
         </a>
         <a class="leg" style="left:686px; width:45px; height:175px;">
@@ -370,10 +384,10 @@
             <div class="altitude">2326m</div>
           </div>
           <div class="photos">
-            <img src="photos/cayolle1.jpg" style="top:100px; left:050px;">
-            <img src="photos/cayolle2.jpg" style="top:200px; left:300px;">
-            <img src="photos/cayolle3.jpg" style="top:300px; left:050px;">
-            <img src="photos/cayolle4.jpg" style="top:400px; left:300px;">
+            <img src="photos/cayolle1.jpg">
+            <img src="photos/cayolle2.jpg">
+            <img src="photos/cayolle3.jpg">
+            <img src="photos/cayolle4.jpg">
           </div>
         </a>
         <a class="leg" style="left:731px; width:20px; height:150px;">
@@ -383,7 +397,7 @@
             <div class="altitude">1672m</div>
           </div>
           <div class="photos">
-            <img src="photos/valberg1.jpg" style="top:100px; left:050px;">
+            <img src="photos/valberg1.jpg">
           </div>
         </a>
         <a class="leg" style="left:751px; width:20px; height:150px;">
@@ -393,8 +407,8 @@
             <div class="altitude">1678m</div>
           </div>
           <div class="photos">
-            <img src="photos/couillole1.jpg" style="top:100px; left:050px;">
-            <img src="photos/couillole2.jpg" style="top:200px; left:300px;">
+            <img src="photos/couillole1.jpg">
+            <img src="photos/couillole2.jpg">
           </div>
         </a>
         <a class="leg" style="left:771px; width:24px; height:125px;">
@@ -404,7 +418,7 @@
             <div class="altitude">1500m</div>
           </div>
           <div class="photos">
-            <img src="photos/saint_martin1.jpg" style="top:100px; left:050px;">
+            <img src="photos/saint_martin1.jpg">
           </div>
         </a>
         <a class="leg" style="left:795px; width:40px; height:125px;">
@@ -427,8 +441,8 @@
             <div class="altitude">707m</div>
           </div>
           <div class="photos">
-            <img src="photos/castillon1.jpg" style="top:100px; left:050px;">
-            <img src="photos/castillon2.jpg" style="top:200px; left:300px;">
+            <img src="photos/castillon1.jpg">
+            <img src="photos/castillon2.jpg">
           </div>
         </a>
         <a class="leg" style="left:860px; width:70px; height:50px;">
@@ -437,11 +451,11 @@
             <div class="name" style="text-align:right;">Monaco</div>
           </div>
           <div class="photos">
-            <img src="photos/monaco1.jpg" style="top:100px; left:050px;">
-            <img src="photos/monaco2.jpg" style="top:200px; left:300px;">
-            <img src="photos/monaco3.jpg" style="top:300px; left:300px;">
-            <img src="photos/monaco4.jpg" style="top:400px; left:300px;">
-            <img src="photos/monaco5.jpg" style="top:500px; left:300px;">
+            <img src="photos/monaco1.jpg">
+            <img src="photos/monaco2.jpg">
+            <img src="photos/monaco3.jpg">
+            <img src="photos/monaco4.jpg">
+            <img src="photos/monaco5.jpg">
           </div>
         </a>
       </div>
@@ -452,5 +466,6 @@
       </div>
       -->
     </div>  <!-- content -->
+    <div id="mask" onclick="removeMask()" title="Click anywhere to return"></div>
   </body>
 </html>
