@@ -171,7 +171,7 @@ function CreateMarkerIcon( markerImage, shadowImage ) {
     alert( "Shadow image not supplied!" );
   }
   var icon = new GIcon();
-  var path = 'MapIcons/';
+  var path = pathToScripts + 'Scripts/MapIcons/';
   icon.image  = path + markerImage;
   icon.shadow = path + shadowImage;
   // TODO : Dirty hack
