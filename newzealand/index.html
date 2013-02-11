@@ -10,8 +10,8 @@
       div#map div#help {
         position: absolute;
         background: #FA3;
-        width: 110px;
-        height: 45px;
+        width: 175px;
+        height: 85px;
         border-radius: 15px;
         text-align: center;
         padding: 12px;
@@ -45,9 +45,11 @@
         height: 644px;
         width: 306px;
       }
-      div#map div.startEnd {
+      div#map div.text {
         position: absolute;
-        z-index: 10;
+        top: 30px;
+        width: 100%;
+        text-align: center;
       }
       p.defaultCaption {
         font-weight: bold;
@@ -67,6 +69,9 @@
       div.defaultRouteSegment {
         position: absolute;
         background-repeat: no-repeat;
+        text-align: center;
+        /* TODO: It would be good to set a unique padding for each segement, to align the tandem image better. */
+        padding: 0px;
       }
       div.defaultMainPhoto {
         display: none;
@@ -210,7 +215,6 @@
         this.selectedImageOffset_ = selectedImageOffset;
         this.highlightedImageName_ = highlightedImageName;
         this.highlightedImageOffset_ = highlightedImageOffset;
-        // TODO: Ugly!
         this.createElement(position, size, text);
         this.isSelected_ = false;
       }
@@ -246,12 +250,10 @@
         positionElement(this.element_, position);
         sizeElement(this.element_, size);
         document.getElementById('map').appendChild(this.element_);
-        // TODO: Ugly!
+        // We can't use a child div for the text because it isn't a drop/hover target.
+        // TODO: This is really ugly!
         if (text != undefined) {
-          t = document.createElement('div');
-          t.textContent = text;
-          t.className = 'text';
-          this.element_.appendChild(t);
+          this.element_.innerHTML = text + '<br>';
         }
         return this.element_;
       }
@@ -549,7 +551,7 @@
             new Entry(
                 new Caption(''),
                 new Description('At the end, it looks like the road is quite literally leading to the end of  land.  We have lots of company in our "end of the road" celebrations as the point is crawling with tourists.  Hopefully one of them will drive us back to Auckland...'),
-                new RouteSegment(new Pair(330, 10), new Pair(100, 50), 'blue_blurb.png', new Pair(0, 0), 'blue_blurb.png', new Pair(0, 0)),
+                new RouteSegment(new Pair(330, 10), new Pair(100, 50), 'blue_blurb.png', new Pair(0, 0), 'blue_blurb.png', new Pair(0, 0), 'end'),
                 [new Photo('IMGP5567.JPG', secondaryStyle, '[empty]'),
                  new MainPhoto('IMGP5570.JPG', 'Another tandem adventure done.'),
                  new Photo('IMGP5563.JPG', tertiaryStyle)])];
@@ -562,9 +564,7 @@
     <div id="title">New Zealand by Tandem</div>
     <div id="map">
       <div id="line"></div>
-      <div class="startEnd" style="top: 645px; left: 230px;">start</div>
-      <div class="startEnd" style="top: 40px; left: 368px;">end</div>
-      <div id="help" style="top: 540px; left: 255px;">Drag-and-drop us onto the red route line!</div>
+      <div id="help" style="top: 565px; left: 195px;">Drag-and-drop the tandem onto the red route line!</div>
     </div>
   </body>
 </html>
