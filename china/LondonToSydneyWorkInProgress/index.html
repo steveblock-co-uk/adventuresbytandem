@@ -3,12 +3,15 @@
   <head>
     <title>London To Sydney</title>
     <script type="text/javascript">
-      // TOOO
-      // - Add click handler to photo to show mask
+      // TODO:
+      // - Arroy highlights on mouseover
+      // - Shortcut arrow keys
 
       ////////////////////////////////////////////////////////////////////////////////
       var photos = [
         { filename: 'IMGP5975.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Lake' },
+        { filename: 'loadingSequence.jpg', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Mongolia' },
+        { filename: 'DSCN0804.JPG', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Mongolia' },
         { filename: 'IMG_20120820_131044.jpg', profilePosition: {x: 10, y: 10}, mapPosition: {x: 122, y: 563}, caption: 'Portrait' },
         { filename: 'IMGP5989.JPG', profilePosition: {x: 20, y: 10}, mapPosition: {x: 126, y: 540}, caption: 'Misty' },
         { filename: 'IMGP6016.JPG', profilePosition: {x: 30, y: 10}, mapPosition: {x: 126, y: 520}, caption: 'Deserted' },
@@ -43,7 +46,7 @@
       ////////////////////////////////////////////////////////////////////////////////
       // Can be new'ed up and thrown away - will take care of updating the
       // wrapper's contents when the image has loaded and then will just die.
-      function ScaledImage(wrapper, filename, clickHandler) {
+      function ScaledImage(wrapper, filename, clickHandler, dynamicResize) {
         console.log('ScaledImage.ScaledImage()');
         this.wrapper_ = wrapper;
         this.image_ = new Image();
@@ -53,12 +56,30 @@
         this.image_.style.margin = 'auto';
         this.image_.style.display = 'block';
         this.image_.onclick = clickHandler;
+        this.dynamicResize_ = dynamicResize;
       }
       ScaledImage.prototype.onload = function() {
         console.log('ScaledImage.onload()');
         this.resize();
         this.wrapper_.innerHTML = '';
         this.wrapper_.appendChild(this.image_);
+        if (this.dynamicResize_) {
+	  // TODO: Why doesn't this work?
+          //this.wrapper_.onresize = (function(me) { return function() {
+          //  me.resize();
+          //}; })(this);
+	  // Note that we can't use addEventListener (though that doesn't work
+	  // either, even on document.body), because we would need to later
+	  // remove the listener, but we don't want to keep a ref to this
+	  // ScaledImage.
+          // TODO: Why can't I set this at onload time?
+          // TODO: Why does this listener get removed sometimes?
+          document.body.onresize = (function(me) { return function() {
+            me.resize();
+            // TODO: This is ugly!
+            updateMaskArrowPositions();
+           }; })(this);
+         }
       }
       ScaledImage.prototype.resize = function() {
         console.log('ScaledImage.resize()');
@@ -71,7 +92,8 @@
 	// fixed position elements. We don't use fixed position because we want
 	// to use auto margins for horizontal centering, as above.
         // Note that image width is not updated until we insert it into the DOM?!
-        this.image_.style.marginTop = (this.wrapper_.clientHeight - height) / 2 + 'px';
+        this.image_.style.marginTop =
+            (this.wrapper_.clientHeight - height) / 2 + 'px';
       }
 
       ////////////////////////////////////////////////////////////////////////////////
@@ -107,51 +129,57 @@
         console.log('setup()');
         showPhoto(0);
       }
-      function dismissLargePhoto() {
-        console.log('dismissLargePhoto()');
-        document.getElementById('mask').className = 'hidden';
+      function dismissGallery() {
+        console.log('dismissGallery()');
+        document.getElementById('gallery').className = 'hidden';
       }
-      function showLargePhoto(file) {
+      function showLargePhoto(index) {
         console.log('showLargePhoto(): index=' + index);
-        document.getElementById('mask').className = '';
-        new ScaledImage(document.getElementById('largePhotoWrapper'),
+        document.getElementById('gallery').className = '';
+        new ScaledImage(document.getElementById('galleryPhotoWrapper'),
                         // TODO: Use a different file for the larger image?
-                        photo.filename);
-        // We can do this before the image loads
-        updateMaskArrows();
-        // TODO: Why can't I set this at onload time?
-        document.body.onresize = function() { updateLargePhoto(); updateMaskArrows(); };
+                        photos[index].filename,
+                        null,
+                        true);
+        updateMaskArrows(index);
+        updateMaskArrowPositions();
       }
-      function onLargePhotoLoaded() {
-        console.log('onLargePhotoLoaded()');
-	// TODO: Strictly, should remove updateLargePhoto from the body
-	// onresize handler while it's not loaded. Probably not important.
-        document.getElementById('largePhoto').className = '';
-        updateLargePhoto();
-      }
-      function updateLargePhoto() {
-        console.log('updateLargePhoto()');
-        // TODO: Get rid of the flicker before this is first called.
-        var wrapper = document.getElementById('largePhotoWrapper');
-        var photo = document.getElementById('largePhoto');
-        photo.width = widthToFitBoundingBox(photo.naturalWidth, photo.naturalHeight, wrapper.clientWidth, wrapper.clientHeight);
-        centerVertically(photo, wrapper.clientHeight);
+      function updateMaskArrows(index) {
+        console.log('updateMaskArrows(): index=' + index);
+        var arrowPrevious = document.getElementById('galleryArrowPrevious');
+        var arrowNext = document.getElementById('galleryArrowNext');
+        if (index > 0) {
+          arrowPrevious.style.display = 'block';
+          arrowPrevious.onclick = function(e) {
+            e.stopPropagation();
+            showLargePhoto(index - 1);
+            showPhoto(index - 1);
+           };
+        } else {
+          arrowPrevious.style.display = 'none';
+        }
+        if (index < photos.length - 1) {
+          arrowNext.style.display = 'block';
+          arrowNext.onclick = function(e) {
+            e.stopPropagation();
+            showLargePhoto(index + 1);
+            showPhoto(index + 1);
+           };
+        } else {
+          arrowNext.style.display = 'none';
+        }
       }
       function centerVertically(node, wrapperHeight) {
-	// TODO: It would be neater to use 'top' here, but we can't use this
-	// with the image, because it's not absolutely positioned. Making it
-	// absolutely positioned would mean we can't use text-align: center for
-	// horizontal positining, but for some reason, using margin: auto for
-	// horizontal centering doesn't work with an img.
-        node.style.marginTop = (wrapperHeight - node.clientHeight) / 2 + 'px';
+        node.style.top = (wrapperHeight - node.clientHeight) / 2 + 'px';
       }
-      function updateMaskArrows() {
-        console.log('updateMaskArrows()');
-        var wrapper = document.getElementById('maskArrowsWrapper');
-        centerVertically(document.getElementById('maskArrowPrevious'), wrapper.clientHeight);
-        centerVertically(document.getElementById('maskArrowNext'), wrapper.clientHeight);
+      function updateMaskArrowPositions() {
+        console.log('updateMaskArrowPositions()');
+        var wrapperHeight =
+            document.getElementById('galleryArrowsWrapper').clientHeight;
+        centerVertically(document.getElementById('galleryArrowPrevious'),
+                         wrapperHeight);
+        centerVertically(document.getElementById('galleryArrowNext'), wrapperHeight);
       }
-*/
     </script>
     <style type="text/css">
       body {
@@ -159,7 +187,7 @@
         font-family: Verdana;
       }
       div {
-        border: 1px solid red;
+        /* border: 1px solid red; */
       }
       /* The wrapper we use to set the minimum viewport size and within which
        * everything else is positioned.
@@ -187,6 +215,9 @@
         height: 350px;
         margin: auto;
       }
+      div#photoStuffWrapper div#photoWrapper img {
+        cursor: pointer;
+      }
       div#photoStuffWrapper div#caption {
         position: absolute;
         bottom: 0px;
@@ -199,6 +230,7 @@
         position: absolute;
         top: 150px;
         width: 25px;
+        cursor: pointer;
       }
       div#photoStuffWrapper img.arrow#arrowNext {
         right: 0px;
@@ -217,14 +249,14 @@
         left: 0px;
         width: 400px;
         height: 30px;
-        background-image: url("map.png");
+        background-image: url("profile.png");
       }
       .hidden {
         display: none;
       }
-      div#mask {
+      div#gallery {
 	/* Note that we rely on the main content of the page (that behind the
-         * mask) to provide a reasonable minimum viewport size.
+         * gallery) to provide a reasonable minimum viewport size.
          */
 	/* If we use position absolute here, the width is relative to that of
 	 * the enclosing block - the enclosing block with fixed position, which
@@ -234,14 +266,26 @@
         /* Easier than specifiying height = 100% - 2 * margin.  */
         right: 0px;
         bottom: 0px;
-        margin: 5%;
-        background-color: blue;
-        opacity: 0.9;
-        border-radius: 30px;
+        margin: 2%;
         /* No idea why these aren't the defaults. */
         top: 0px; left: 0px;
       }
-      div#mask div#largePhotoWrapper {
+      /* A separate div from the main gallery div as opacity is multiplicative
+       * to descendents, so the photo can't be a child of this div.
+       */
+      div#gallery div#galleryMask {
+        background-color: #222222;
+        opacity: 0.85;
+        height: 100%;
+        border-radius: 30px;
+      }
+      div#gallery img#galleryClose {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+      }
+      div#gallery div#galleryPhotoWrapper {
 	/* This needs to be absolutely positioned so we can force the size and
          * stop it trying to expand to fit the photo.
          */
@@ -249,23 +293,26 @@
         margin: 20px 60px;
         bottom: 0px;
         right: 0px;
-        /* TODO: text-align: center; */
         /* No idea why these aren't the defaults. */
         top: 0px; left: 0px;
       }
-      div#mask div#maskArrowsWrapper {
+      div#gallery div#galleryPhotoWrapper img {
+        border: 1px solid white;
+      }
+      div#gallery div#galleryArrowsWrapper {
         position: absolute;
         bottom: 0px;
         right: 0px;
         /* No idea why these aren't the defaults. */
         top: 0px; left: 0px;
       }
-      div#mask img.maskArrow {
+      div#gallery img.galleryArrow {
         position: absolute;
         display: none;
-        width: 25px;
+        width: 50px; /* TODO: Resize original */
+        cursor: pointer;
       }
-      div#mask div#maskArrowNext {
+      div#gallery img#galleryArrowNext {
         right: 0px;
       }
     </style>
@@ -286,12 +333,14 @@
         <img id="profileMarker" src="dot.png" class="hidden">
       </div>
     </div>
-    <div id="mask" onclick="dismissLargePhoto()" class="hidden">
-      <div id="largePhotoWrapper"></div>
-      <div id="maskArrowsWrapper">
-        <img class="maskArrow" id="maskArrowPrevious" src="arrowLeft.png">
-        <img class="maskArrow" id="maskArrowNext" src="arrowRight.png">
+    <div id="gallery" onclick="dismissGallery()" class="hidden">
+      <div id="galleryMask"></div>
+      <div id="galleryPhotoWrapper"></div>
+      <div id="galleryArrowsWrapper">
+        <img class="galleryArrow" id="galleryArrowPrevious" src="galleryArrowLeft.png">
+        <img class="galleryArrow" id="galleryArrowNext" src="galleryArrowRight.png">
       </div>
+      <img id="galleryClose" src="cross.png">
     </div>
   <body>
 </html>
