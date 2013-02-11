@@ -36,6 +36,11 @@
         height: 644px;
         width: 306px;
       }
+      div#map img.flag {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+      }
       p.defaultCaption {
         font-weight: bold;
         display: none;
@@ -327,7 +332,7 @@
           return this.element_;
         console.log('Photo.element()');
         this.element_ = document.createElement('img');
-        this.element_.src = this.fileName_;
+        this.element_.src = 'photos/' + this.fileName_;
         this.element_.className = 'defaultPhoto ' + this.style_;
         document.body.appendChild(this.element_);
         return this.element_;
@@ -345,7 +350,7 @@
           return this.element_;
         console.log('MainPhoto.element()');
         var image = document.createElement('img');
-        image.src = this.fileName_;
+        image.src = 'photos/' + this.fileName_;
         var caption = document.createElement('p');
         caption.innerText = this.caption_;
         this.element_ = document.createElement('div');
@@ -404,168 +409,162 @@
       function onLoad() {
         console.log('onLoad()');
         entries = [
-//            new Entry(
-//                new Caption('[empty]'),
-//                new Description('In March 2009, the tandem took a long airplane trip to the south coast of the South Island of New Zealand. For the next 19 days it inched its way north, fighting wind and rain on the west coast of the South Island, climbing up to volcanoes and over other cracks in the earth that let the steam out on the North Island, and finally out a 90 mile sand spit to the tip of Cape Reinga where the Pacific and Indian oceans meet.  Here we post some photos and extracts from the trip journal to remind us of the adventure.  Enjoy!'),
-//                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-//                 new MainPhoto('TODOfilename2', 'At the signpost at Bluff our journey begins.'),
-//                 new Photo('TODOfilename3', secondaryStyle)]),
+            new Entry(
+                new Caption(''),
+                new Description('In March 2009, the tandem took a long airplane trip to the south coast of the South Island of New Zealand. For the next 19 days it inched its way north, fighting wind and rain on the west coast of the South Island, climbing up to volcanoes and over other cracks in the earth that let the steam out on the North Island, and finally out a 90 mile sand spit to the tip of Cape Reinga where the Pacific and Indian oceans meet.  Here we post some photos and extracts from the trip journal to remind us of the adventure.  Enjoy!'),
+                new RouteSegment(new Pair(200, 615), new Pair(50, 50), '', new Pair(1, 2), 'flag_highlighted.png', new Pair(0, 0)),
+                [new MainPhoto('IMGP5186.JPG', 'At the signpost at Bluff our journey begins.')]),
             new Entry(
                 new Caption('Day 1: Bluff to Athol (141 km)'),
                 new Description('Wind. Sun. Rolling hills.  Houses with big windows. Next ATM: Queensland 100 km away.  Emergency meal for dinner on our 1st night!'),
                 new RouteSegment(new Pair(80, 607), new Pair(16, 57), 'line_1_selected.png', new Pair(1, 2), 'line_1_highlighted.png', new Pair(0, 0)),
-                [new Photo('http://lh5.googleusercontent.com/-LwIMiBrN1ZM/S98q-O8dfUI/AAAAAAAAS4c/4jhN-XQ9Ifo/s800/IMGP5187.JPG', tertiaryStyle, '[empty]'),
-                 new MainPhoto('http://lh5.googleusercontent.com/-LwIMiBrN1ZM/S98q-O8dfUI/AAAAAAAAS4c/4jhN-XQ9Ifo/s800/IMGP5187.JPG', 'The end of day one in lovely afternoon sun.'),
-                 new Photo('http://lh5.googleusercontent.com/-LwIMiBrN1ZM/S98q-O8dfUI/AAAAAAAAS4c/4jhN-XQ9Ifo/s800/IMGP5187.JPG', secondaryStyle)]),
+                [new Photo('IMGP5201.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5208.JPG', 'The end of day one in lovely afternoon sun.'),
+                 new Photo('IMGP5206.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 2: Athol to Wanaka (131 km)'),
                 new Description('Still windy!  We skirt the shores of a big, deep, cold-looking lake.'),
                 new RouteSegment(new Pair(93, 581), new Pair(11, 31), 'line_2_selected.png', new Pair(1, 0), 'line_2_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'Along side Lake Wakatipu.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5221.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5216.JPG', 'Along side Lake Wakatipu.'),
+                 new Photo('IMGP5214.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 2 cont.: Athol to Wanaka (131 km)'),
                 new Description('A short cut to Wanaka we were warned against, but went anyway.  Road topped out at 1072m.'),
                 new RouteSegment(new Pair(96, 560), new Pair(31, 30), 'line_3_selected.png', new Pair(0, 1), 'line_3_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'At the top of the highest sealed road in New Zealand.'),
-                 new MainPhoto('TODOfilename2', 'Lake Hayes in the background.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5231.JPG', secondaryStyle, 'At the top of the highest sealed road in New Zealand.'),
+                 new MainPhoto('IMGP5226.JPG', 'Lake Hayes in the background.'),
+                 new Photo('IMGP5223.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 3: Wanaka to Haast (140 km)'),
                 new Description('Wouldn\'t have thought it could be, but even windier.  Rolling hills.  Lakes.  "Windy Point" is aptly named.  Up and over Haast pass seems easy compared to cycling into the wind.  A big long decent through a massive river valley.  Buffet dinner!'),
                 new RouteSegment(new Pair(105, 521), new Pair(21, 41), 'line_4_selected.png', new Pair(1, 1), 'line_4_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'Climbing up into Mount Aspiring National Park.'),
-                 new MainPhoto('TODOfilename2', 'The shores of Lake Hawea.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5255.JPG', secondaryStyle, 'Climbing up into Mount Aspiring National Park.'),
+                 new MainPhoto('IMGP5242.JPG', 'The shores of Lake Hawea.'),
+                 new Photo('IMGP5254.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 4: Haast to Franz Joseph (144 km)'),
                 new Description('No wind today but very, very, very wet.  Bugs !!!  A stint up the coast.  Ramen for lunch.  Free wheel failure 8 km outside Fox Glacier.  Steve saves the day.  3 climbs in dramatic scenery.  Dinner in a tourist mecca.'),
                 new RouteSegment(new Pair(106, 492), new Pair(46, 32), 'line_5_selected.png', new Pair(0, 0), 'line_5_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'Westland National Park.'),
-                 new MainPhoto('TODOfilename2', 'The west coast north of Haast.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5283.JPG', secondaryStyle, 'Westland National Park.'),
+                 new MainPhoto('IMGP5273.JPG', 'The west coast north of Haast.'),
+                 new Photo('IMGP5262.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 5: Franz Joseph to Hari Hari (62 km)'),
                 new Description('A tourist trip to see the Glacier while Dan fixes our free wheel for a price.  No wind and not tired = fast!  3500 year old whale bone in Maori art shop.'),
                 new RouteSegment(new Pair(146, 480), new Pair(18, 15), 'line_6_selected.png', new Pair(4, 2), 'line_6_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'The Franz Josef Glacier.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5306.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5297.JPG', 'The Franz Josef Glacier.'),
+                 new Photo('IMGP5316.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 6: Hari Hari to Punakaiki (152 km)'),
                 new Description('Forest and floodplain.  A gold mining town. The coast always just out of view.  More free-wheel problems and a fading faith in Dan.  Alien rock formations rise up from the sea.'),
                 new RouteSegment(new Pair(162, 430), new Pair(33, 53), 'line_7_selected.png', new Pair(2, 0), 'line_7_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'Along the shore south of Greymouth.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5332.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5328.JPG', 'Along the shore south of Greymouth.'),
+                 new Photo('IMGP5323.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 7: Punakaiki to Murchison (140 km)'),
                 new Description('Very, very, very wet.  Early detour to see the famous pancake rocks but our awe is diminished in the wind and downpour.  30 km down the road we are wet and broken and paying way too much money for eggs on toast.   We limp on.'),
                 new RouteSegment(new Pair(188, 405), new Pair(42, 24), 'line_8_selected.png', new Pair(1, 1), 'line_8_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'A beautiful day for sight-seeing.'),
-                 new MainPhoto('TODOfilename2', 'Turning inland outside Westport.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5343.JPG', secondaryStyle, 'A beautiful day for sight-seeing.'),
+                 new MainPhoto('IMGP5355.JPG', 'Turning inland outside Westport.'),
+                 new Photo('IMGP5345.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 8: Murchison to Nelson (124 km)'),
                 new Description('An up and down day through forests then vineyards and fruit farms.  A friendly encounter with a convoy of VW vans.  Sore bums!'),
                 new RouteSegment(new Pair(229, 382), new Pair(36, 28), 'line_9_selected.png', new Pair(1, 1), 'line_9_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'Showing off the baguette holder.'),
-                 new MainPhoto('TODOfilename2', '???'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5369.JPG', secondaryStyle, 'Showing off the baguette holder.'),
+                 new MainPhoto('IMGP5365.JPG', '???')]),
             new Entry(
                 new Caption('Day 9:  Nelson to Picton (129 km) to Wellington (by ferry)'),
                 new Description('Wicked early start.  Up and down and up and down through logging country.  Then along the edge of the tranquil Marlbourough Sounds at the top of the South Island.  Delicious homemade goodness in Carluke.  A boat ride to the big city in the fog.'),
                 new RouteSegment(new Pair(264, 373), new Pair(29, 16), 'line_10_selected.png', new Pair(1, 1), 'line_10_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'Overlooking Picton harbour.'),
-                 new MainPhoto('TODOfilename2', 'The Marlborough Sounds.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5393.JPG', secondaryStyle, 'Overlooking Picton harbour.'),
+                 new MainPhoto('IMGP5381.JPG', 'The Marlborough Sounds.')]),
             new Entry(
                 new Caption('Day 11: Wellington to Bulls (146 km)'),
                 new Description('An exit from town with the morning bike commuters.  Sunshine and the wind at our backs.  The best plum Steve has ever had at a roadside road stand.  After days of chain headaches, the tandem gets an expensive new cassette in Levins and we get a new low gear.  A night in a town that gets a lot of mileage out of its name.'),
                 new RouteSegment(new Pair(320, 327), new Pair(33, 61), 'line_11_selected.png', new Pair(1, 0), 'line_11_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'First encounters with North Island landscapes.'),
-                 new MainPhoto('TODOfilename2', 'Black lava beaches on the west coast north of Wellington.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5405.JPG', secondaryStyle, 'First encounters with North Island landscapes.'),
+                 new MainPhoto('IMGP5401.JPG', 'Black lava beaches on the west coast north of Wellington.'),
+                 new Photo('IMGP5396.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 12: Bulls to Turangi (169 km)'),
                 new Description('Frosty morning.  Hard slow slog.  Ridiculously hilly.  Hot.  We climb high onto a desert plateau and it nearly breaks us.  Volcanoes start popping up on the horizon.'),
                 new RouteSegment(new Pair(345, 285), new Pair(27, 39), 'line_12_selected.png', new Pair(1, 1), 'line_12_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'Rolling hills approaching the Rangipo Desert.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5422.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5427.JPG', 'Rolling hills approaching the Rangipo Desert.'),
+                 new Photo('IMGP5448.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 12 cont.: Bulls to Turangi (169 km)'),
                 new Description('[empty]'),
                 new RouteSegment(new Pair(357, 265), new Pair(13, 23), 'line_13_selected.png', new Pair(1, 0), 'line_13_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'Desert Road Summit, 1074 m.'),
-                 new MainPhoto('TODOfilename2', 'The "Desert Road" stretch of State Highway 1.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5439.JPG', secondaryStyle, 'Desert Road Summit, 1074 m.'),
+                 new MainPhoto('IMGP5437.JPG', 'The "Desert Road" stretch of State Highway 1.'),
+                 new Photo('IMGP5452.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 13: Turangi to Rotorua (130 km)'),
                 new Description('A glorious sunny day.  Along the shores of Lake Taupo and onto Rotorua.  Steam is coming out of the ground.  An evening in a Polynesian Spa.'),
                 new RouteSegment(new Pair(366, 217), new Pair(22, 47), 'line_14_selected.png', new Pair(1, 2), 'line_14_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'The shores of Lake Taupo, formed by a volcanic super-erruption.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
-            new Entry(
-                new Caption('Day 14: A rest day in Rotorua'),
-                new Description('A bus tour to Waiotapu Thermal Wonderland: geysers, bubbling mud pools, chemical spill coloured pools of yellow, green and orange.  A tour of the Maori village of Whakarewarewa atop boiling thermal pools.'),
-                new RouteSegment(new Pair(339, 187), new Pair(46, 34), 'line_15_selected.png', new Pair(1, 1), 'line_15_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, 'The Lady Knox Geyser.'),
-                 new MainPhoto('TODOfilename2', 'Wai-O-Tapu Thermal Wonderland.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5464.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5456.JPG', 'The shores of Lake Taupo, formed by a volcanic super-erruption.'),
+                 new Photo('IMGP5462.JPG', tertiaryStyle)]),
+//            new Entry(
+//                new Caption('Day 14: A rest day in Rotorua'),
+//                new Description('A bus tour to Waiotapu Thermal Wonderland: geysers, bubbling mud pools, chemical spill coloured pools of yellow, green and orange.  A tour of the Maori village of Whakarewarewa atop boiling thermal pools.'),
+//                [new Photo('IMGP5473.JPG', secondaryStyle, 'The Lady Knox Geyser.'),
+//                 new MainPhoto('IMGP5501.JPG', 'Wai-O-Tapu Thermal Wonderland.'),
+//                 new Photo('IMGP5516.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 15: Rotorua to Huntly (141 km)'),
                 new Description('Monstrous down to flat as a pancake farmland.  A race through roadworks.  An evening spent in a town in decline.'),
-                new RouteSegment(new Pair(320, 151), new Pair(24, 39), 'line_16_selected.png', new Pair(3, 2), 'line_16_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'A pretty spot to camp outside Huntly.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                new RouteSegment(new Pair(339, 187), new Pair(46, 34), 'line_15_selected.png', new Pair(1, 1), 'line_15_highlighted.png', new Pair(0, 0)),
+                [new MainPhoto('IMGP5519.JPG', 'A pretty spot to camp outside Huntly.')]),
             new Entry(
                 new Caption('Day 16: Huntly to Helensville (150 km)'),
                 new Description('The Bombay hills take us for surprise.  We spend eternity navigating around the Auckland sprawl.  50 km stretch of stoplights.  We thought we\'d never emerge.'),
-                new RouteSegment(new Pair(314, 143), new Pair(11, 11), 'line_17_selected.png', new Pair(0, 2), 'line_17_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'As close as we came to downtown Auckland.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                new RouteSegment(new Pair(313, 143), new Pair(30, 47), 'line_16_selected.png', new Pair(0, 1), 'line_16_highlighted.png', new Pair(0, 0)),
+                [new MainPhoto('IMGP5520.JPG', 'As close as we came to downtown Auckland.')]),
             new Entry(
                 new Caption('Day 17: Helensville to Whangarei (137 km)'),
                 new Description('The weather gods continue to smile on us but the New Zealand road builders are laughing at our expense.  A bumpy route.  We climb to the highest point in sight several times.  The direction of the wind plays with our emotions.'),
                 new RouteSegment(new Pair(305, 95), new Pair(16, 49), 'line_18_selected.png', new Pair(0, 0), 'line_18_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', 'Hilly bits north of Auckland en route to Whangarei.'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5524.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5526.JPG', 'Hilly bits north of Auckland en route to Whangarei.'),
+                 new Photo('IMGP5530.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 18: Whangerei to Mangonui (139 km)'),
                 new Description('The hills continue.  Serious railway envy.  We gamble on route choices.  Maybe its a good thing that you never know if you win or loose.  Big ups.  Big downs.  We get our first view of this side of the Pacific Ocean since day 1!  We set the alarm for 4:40a for a dawn start.'),
                 new RouteSegment(new Pair(279, 56), new Pair(32, 37), 'line_19_selected.png', new Pair(0, 0), 'line_19_highlighted.png', new Pair(0, 0)),
-                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-                 new MainPhoto('TODOfilename2', '???'),
-                 new Photo('TODOfilename3', secondaryStyle)]),
+                [new Photo('IMGP5533.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5532.JPG', '???')]),
             new Entry(
                 new Caption('Day 19: Mangonui to Cape Reinga (132 km)'),
                 new Description('A start before dawn.  The tandem is making some bad noises...  we hope it will hang on.  We make the right turn onto the Peninsula.  By half way, we have 4 broken spokes on the real wheel and are in some desperate need for some tools.  A wrench from a wind-swept golf club and Steve save the day.  Wind and rain try to defeat us in our final push.'),
                 new RouteSegment(new Pair(237, 24), new Pair(42, 38), 'line_20_selected.png', new Pair(2, 1), 'line_20_highlighted.png', new Pair(0, 0)),
-                [new Photo('http://lh5.googleusercontent.com/-LwIMiBrN1ZM/S98q-O8dfUI/AAAAAAAAS4c/4jhN-XQ9Ifo/s800/IMGP5187.JPG', tertiaryStyle, '[empty]'),
-                 new MainPhoto('http://lh5.googleusercontent.com/-LwIMiBrN1ZM/S98q-O8dfUI/AAAAAAAAS4c/4jhN-XQ9Ifo/s800/IMGP5187.JPG', 'The end of the road: Cape Reinga.'),
-                 new Photo('http://lh5.googleusercontent.com/-LwIMiBrN1ZM/S98q-O8dfUI/AAAAAAAAS4c/4jhN-XQ9Ifo/s800/IMGP5187.JPG', secondaryStyle)])];
-//            new Entry(
-//                new Caption('[empty]'),
-//                new Description('At the end, it looks like the road is quite literally leading to the end of  land.  We have lots of company in our "end of the road" celebrations as the point is crawling with tourists.  Hopefully one of them will drive us back to Auckland...'),
-//                [new Photo('TODOfilename', tertiaryStyle, '[empty]'),
-//                 new MainPhoto('TODOfilename2', 'Another tandem adventure done.'),
-//                 new Photo('TODOfilename3', secondaryStyle)])];
+                [new Photo('IMGP5553.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5557.JPG', 'The end of the road: Cape Reinga.'),
+                 new Photo('IMGP5537.JPG', tertiaryStyle)]),
+            new Entry(
+                new Caption(''),
+                new Description('At the end, it looks like the road is quite literally leading to the end of  land.  We have lots of company in our "end of the road" celebrations as the point is crawling with tourists.  Hopefully one of them will drive us back to Auckland...'),
+                new RouteSegment(new Pair(330, 10), new Pair(50, 50), '', new Pair(1, 2), 'flag_highlighted.png', new Pair(0, 0)),
+                [new Photo('IMGP5567.JPG', secondaryStyle, '[empty]'),
+                 new MainPhoto('IMGP5570.JPG', 'Another tandem adventure done.'),
+                 new Photo('IMGP5563.JPG', tertiaryStyle)])];
         entries[currentEntry].show(new Tandem());
         console.log('onLoad(): Done');
       }
     </script>
   </head>
   <body onload="onLoad()">
-    <!--<a href="#" onclick="previousEntry()">previous</a> | <a href="#" onclick="nextEntry()">next</a>-->
+    <a href="#" onclick="previousEntry()">previous</a> | <a href="#" onclick="nextEntry()">next</a>
     <div id="title">New Zealand by Tandem</div>
     <div id="map">
-      <div id="line"</div>
+      <div id="line"></div>
+      <img src="flag.png" class="flag" style="top: 615px; left: 200px;">
+      <img src="flag.png" class="flag" style="top: 10px; left: 330px;">
     </div>
   </body>
 </html>
