@@ -7,6 +7,15 @@
         font-family: "Courier", Serif;
         font-size: 12px;
       }
+      div#map div#help {
+        position: absolute;
+        background: #FA3;
+        width: 110px;
+        height: 45px;
+        border-radius: 15px;
+        text-align: center;
+        padding: 12px;
+      }
       img#tandem {
         position: absolute; /* required to be clickable outside parent */
         z-index: 10;
@@ -36,10 +45,9 @@
         height: 644px;
         width: 306px;
       }
-      div#map img.flag {
+      div#map div.startEnd {
         position: absolute;
-        width: 50px;
-        height: 50px;
+        z-index: 10;
       }
       p.defaultCaption {
         font-weight: bold;
@@ -93,24 +101,7 @@
     </style>
 
     <script type="text/javascript">
-      // TODO: This should go away
-      var currentEntry = 0;
       var entries;
-
-      // Temp
-      function previousEntry() {
-        if (currentEntry > 0) {
-          tandem = entries[currentEntry--].hide();
-          entries[currentEntry].show(tandem);
-        }
-      }
-      function nextEntry() {
-        console.log('nextEntry(): currentEntry=' + currentEntry);
-        if (currentEntry < entries.length - 1) {
-          tandem = entries[currentEntry++].hide();
-          entries[currentEntry].show(tandem);
-        }
-      }
 
       function showElement(e) {
         e.style.display = 'block';
@@ -213,15 +204,14 @@
         return this.element_;
       }
 
-      function RouteSegment(position, size, selectedImageName, selectedImageOffset, highlightedImageName, highlightedImageOffset) {
+      function RouteSegment(position, size, selectedImageName, selectedImageOffset, highlightedImageName, highlightedImageOffset, text) {
         console.log('RouteSegment()');
         this.selectedImageName_ = selectedImageName;
         this.selectedImageOffset_ = selectedImageOffset;
-        //this.selectedImageName_ = highlightedImageName;
-        //this.selectedImageOffset_ = highlightedImageOffset;
         this.highlightedImageName_ = highlightedImageName;
         this.highlightedImageOffset_ = highlightedImageOffset;
-        this.createElement(position, size);
+        // TODO: Ugly!
+        this.createElement(position, size, text);
         this.isSelected_ = false;
       }
       RouteSegment.prototype.setEntry = function(entry) {
@@ -245,7 +235,7 @@
         this.isSelected_ = false;
       }
       // Need to create RouteSegment for entire line at start up
-      RouteSegment.prototype.createElement = function(position, size) {
+      RouteSegment.prototype.createElement = function(position, size, text) {
         console.log('RouteSegment.createElement()');
         this.element_ = document.createElement('div');
         this.element_.className = 'defaultRouteSegment';
@@ -256,6 +246,13 @@
         positionElement(this.element_, position);
         sizeElement(this.element_, size);
         document.getElementById('map').appendChild(this.element_);
+        // TODO: Ugly!
+        if (text != undefined) {
+          t = document.createElement('div');
+          t.textContent = text;
+          t.className = 'text';
+          this.element_.appendChild(t);
+        }
         return this.element_;
       }
       RouteSegment.prototype.tandem = function() {
@@ -305,6 +302,8 @@
         console.log('RouteSegment.onDrop(): event.target.id=' + event.target.id + ', previousId=' + previousId);
         tandem = idToEntry(id).hide();
         this.entry_.show(tandem); 
+        // Remove the help bubble.
+        document.getElementById('help').style.display = 'none';
       }
 
       // TODO: Use getEntry(index) global to avoid need for this.
@@ -412,7 +411,7 @@
             new Entry(
                 new Caption(''),
                 new Description('In March 2009, the tandem took a long airplane trip to the south coast of the South Island of New Zealand. For the next 19 days it inched its way north, fighting wind and rain on the west coast of the South Island, climbing up to volcanoes and over other cracks in the earth that let the steam out on the North Island, and finally out a 90 mile sand spit to the tip of Cape Reinga where the Pacific and Indian oceans meet.  Here we post some photos and extracts from the trip journal to remind us of the adventure.  Enjoy!'),
-                new RouteSegment(new Pair(200, 615), new Pair(50, 50), '', new Pair(1, 2), 'flag_highlighted.png', new Pair(0, 0)),
+                new RouteSegment(new Pair(200, 615), new Pair(100, 50), 'blue_blurb.png', new Pair(0, 0), 'blue_blurb.png', new Pair(0, 0), 'start'),
                 [new MainPhoto('IMGP5186.JPG', 'At the signpost at Bluff our journey begins.')]),
             new Entry(
                 new Caption('Day 1: Bluff to Athol (141 km)'),
@@ -472,10 +471,10 @@
                  new Photo('IMGP5345.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 8: Murchison to Nelson (124 km)'),
-                new Description('An up and down day through forests then vineyards and fruit farms.  A friendly encounter with a convoy of VW vans.  Sore bums!'),
+                new Description('An up and down day through forests then vineyards and fruit farms.  We are starting to get the feeling that whoever built the roads in this country liked viewpoints and didn\'t ride a bike.  A friendly encounter with a convoy of VW vans.  Sore bums!'),
                 new RouteSegment(new Pair(229, 382), new Pair(36, 28), 'line_9_selected.png', new Pair(1, 1), 'line_9_highlighted.png', new Pair(0, 0)),
                 [new Photo('IMGP5369.JPG', secondaryStyle, 'Showing off the baguette holder.'),
-                 new MainPhoto('IMGP5365.JPG', '???')]),
+                 new MainPhoto('IMGP5365.JPG', 'Another climb to the highest point around, this time on Highway 6.')]),
             new Entry(
                 new Caption('Day 9:  Nelson to Picton (129 km) to Wellington (by ferry)'),
                 new Description('Wicked early start.  Up and down and up and down through logging country.  Then along the edge of the tranquil Marlbourough Sounds at the top of the South Island.  Delicious homemade goodness in Carluke.  A boat ride to the big city in the fog.'),
@@ -498,7 +497,7 @@
                  new Photo('IMGP5448.JPG', tertiaryStyle)]),
             new Entry(
                 new Caption('Day 12 cont.: Bulls to Turangi (169 km)'),
-                new Description('[empty]'),
+                new Description('From the summit it\'s mostly downhill along a roller-coaster of a road of twists and turns and little ups and downs.  Everything is glowing in late afternoon sunlight.  It\'s easy to forget the trials and tribulations thus far, and hard not to be loving it now.'),
                 new RouteSegment(new Pair(357, 265), new Pair(13, 23), 'line_13_selected.png', new Pair(1, 0), 'line_13_highlighted.png', new Pair(0, 0)),
                 [new Photo('IMGP5439.JPG', secondaryStyle, 'Desert Road Summit, 1074 m.'),
                  new MainPhoto('IMGP5437.JPG', 'The "Desert Road" stretch of State Highway 1.'),
@@ -510,6 +509,7 @@
                 [new Photo('IMGP5464.JPG', secondaryStyle, '[empty]'),
                  new MainPhoto('IMGP5456.JPG', 'The shores of Lake Taupo, formed by a volcanic super-erruption.'),
                  new Photo('IMGP5462.JPG', tertiaryStyle)]),
+            // TODO: Include me!
 //            new Entry(
 //                new Caption('Day 14: A rest day in Rotorua'),
 //                new Description('A bus tour to Waiotapu Thermal Wonderland: geysers, bubbling mud pools, chemical spill coloured pools of yellow, green and orange.  A tour of the Maori village of Whakarewarewa atop boiling thermal pools.'),
@@ -538,7 +538,7 @@
                 new Description('The hills continue.  Serious railway envy.  We gamble on route choices.  Maybe its a good thing that you never know if you win or loose.  Big ups.  Big downs.  We get our first view of this side of the Pacific Ocean since day 1!  We set the alarm for 4:40a for a dawn start.'),
                 new RouteSegment(new Pair(279, 56), new Pair(32, 37), 'line_19_selected.png', new Pair(0, 0), 'line_19_highlighted.png', new Pair(0, 0)),
                 [new Photo('IMGP5533.JPG', secondaryStyle, '[empty]'),
-                 new MainPhoto('IMGP5532.JPG', '???')]),
+                 new MainPhoto('IMGP5532.JPG', 'Our first view of the Pacific and the Bay of Islands ahead.')]),
             new Entry(
                 new Caption('Day 19: Mangonui to Cape Reinga (132 km)'),
                 new Description('A start before dawn.  The tandem is making some bad noises...  we hope it will hang on.  We make the right turn onto the Peninsula.  By half way, we have 4 broken spokes on the real wheel and are in some desperate need for some tools.  A wrench from a wind-swept golf club and Steve save the day.  Wind and rain try to defeat us in our final push.'),
@@ -549,22 +549,22 @@
             new Entry(
                 new Caption(''),
                 new Description('At the end, it looks like the road is quite literally leading to the end of  land.  We have lots of company in our "end of the road" celebrations as the point is crawling with tourists.  Hopefully one of them will drive us back to Auckland...'),
-                new RouteSegment(new Pair(330, 10), new Pair(50, 50), '', new Pair(1, 2), 'flag_highlighted.png', new Pair(0, 0)),
+                new RouteSegment(new Pair(330, 10), new Pair(100, 50), 'blue_blurb.png', new Pair(0, 0), 'blue_blurb.png', new Pair(0, 0)),
                 [new Photo('IMGP5567.JPG', secondaryStyle, '[empty]'),
                  new MainPhoto('IMGP5570.JPG', 'Another tandem adventure done.'),
                  new Photo('IMGP5563.JPG', tertiaryStyle)])];
-        entries[currentEntry].show(new Tandem());
+        entries[0].show(new Tandem());
         console.log('onLoad(): Done');
       }
     </script>
   </head>
   <body onload="onLoad()">
-    <a href="#" onclick="previousEntry()">previous</a> | <a href="#" onclick="nextEntry()">next</a>
     <div id="title">New Zealand by Tandem</div>
     <div id="map">
       <div id="line"></div>
-      <img src="flag.png" class="flag" style="top: 615px; left: 200px;">
-      <img src="flag.png" class="flag" style="top: 10px; left: 330px;">
+      <div class="startEnd" style="top: 645px; left: 230px;">start</div>
+      <div class="startEnd" style="top: 40px; left: 368px;">end</div>
+      <div id="help" style="top: 540px; left: 255px;">Drag-and-drop us onto the red route line!</div>
     </div>
   </body>
 </html>
