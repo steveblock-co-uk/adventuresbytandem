@@ -56,10 +56,6 @@ function OnResize() {
   ResizeMap( windowSize );
 }
 
-function OnUnload() {
-  GUnload(); // from Google maps
-}
-
 function OnLoad() {
   // Gets called after the document body has been loaded
   bodyLoaded = true;

@@ -9,8 +9,13 @@ var map = null;
 // param; the args specified in the xml file, as a string.
 var clickHandlers = new Array();
 
-function LoadGoogleMaps() {
+function LoadGoogleMaps(mapId, onLoadHandler) {
   google.load( 'maps', '2' );
+  google.setOnLoadCallback(function() {
+    document.onunload = GUnload;
+    CreateMap(mapId);
+    onLoadHandler();
+  });
 }
 
 function CreateMap( divID ) {

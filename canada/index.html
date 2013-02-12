@@ -232,7 +232,7 @@
 
     <script type="text/javascript">
       var pathToScripts = "../";
-      LoadGoogleMaps();
+      LoadGoogleMaps('map', OnLoad);
 
       var tabImageWidth = 10;
       var tabWidth = 120;
@@ -585,7 +585,6 @@ var routeNovaScotia =
         }
         ProcessDates();
         SetSizes();
-        CreateMap( 'map' );  // From googleMaps.js
         map.disableScrollWheelZoom();
         LoadMapData('route.xml');
         WriteTabs();
@@ -593,18 +592,11 @@ var routeNovaScotia =
         map.setMapType( G_HYBRID_MAP );
       };
 
-      function OnUnload() {
-        GUnload(); // From googleMaps.js
-      }
-
       function Enter() {
         document.getElementById('welcome').style.display = 'none';
         document.body.className = 'backgroundWhite';
         ShowPhotosView();
       }
-
-      window.onload = OnLoad;
-      window.onunload = OnUnload;
 
     </script>
 

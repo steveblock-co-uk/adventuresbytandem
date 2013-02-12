@@ -5,12 +5,10 @@ clickHandlers['ShowDay'] = function(args) {
 };
 
 function ConfigureMap() {
-  CreateMap( 'map' );
   LoadMapData( 'map.xml' );
   // Must call set center to display map
   // Can't set map type until we've done this
   ResetMap();
-  // map.setMapType( G_HYBRID_MAP );
 }
 
 function MoveMap( index ) {
