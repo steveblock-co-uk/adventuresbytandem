@@ -1,5 +1,3 @@
-// script for the blog component of PBM.js
-
 var blogID = '422819841918559779';
 
 function ShowBlog( index ) {

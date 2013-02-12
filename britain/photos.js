@@ -1,5 +1,3 @@
-// script for the photos component of PBM.html
-
 var picasaUserID = 'steve.a.block';
 var album = 'LEJOG';
 var imageSize = 640;

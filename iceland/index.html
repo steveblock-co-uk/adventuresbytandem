@@ -31,7 +31,7 @@
         LoadBlogData();
       }
       function Reset() {
-        map.setCenter( new GLatLng( 65.1, -19.0 ), 6, G_SATELLITE_MAP);
+        map.setCenter(new GLatLng(65.1, -19.0), 6, G_SATELLITE_MAP);
       }
     </script>
 
@@ -130,20 +130,31 @@
         <div class="mapImages mapSize">
           <div id="map" class="mapSize"></div>
           <!-- edge fade offset = 94 -->
-          <img style="position: absolute; width: 650px; height: 75px; top: 0px; left: 0px;" src="mapEdgeCircleGreenTop.png">
-          <img style="position: absolute; width: 650px; height: 75px; bottom: 0px; left: 0px;" src="mapEdgeCircleGreenBottom.png">
-          <img style="position: absolute; width: 75px; height: 550px; top: 0px; left: 0px;" src="mapEdgeCircleGreenLeft.png">
-          <img style="position: absolute; width: 75px; height: 550px; top: 0px; right: 0px;" src="mapEdgeCircleGreenRight.png">
-          <img style="position: absolute; width: 50px; height: 50px; top: 75px; left: 75px;" src="mapEdgeCircleGreenTopLeft.png">
-          <img style="position: absolute; width: 50px; height: 50px; top: 75px; right: 75px;" src="mapEdgeCircleGreenTopRight.png">
-          <img style="position: absolute; width: 50px; height: 50px; bottom: 75px; left: 75px;" src="mapEdgeCircleGreenBottomLeft.png">
-          <img style="position: absolute; width: 50px; height: 50px; bottom: 75px; right: 75px;" src="mapEdgeCircleGreenBottomRight.png">
+	  <img style="position: absolute; width: 650px; height: 75px;
+              top: 0px; left: 0px;" src="mapEdgeCircleGreenTop.png">
+          <img style="position: absolute; width: 650px; height: 75px;
+              bottom: 0px; left: 0px;" src="mapEdgeCircleGreenBottom.png">
+          <img style="position: absolute; width: 75px; height: 550px;
+              top: 0px; left: 0px;" src="mapEdgeCircleGreenLeft.png">
+          <img style="position: absolute; width: 75px; height: 550px;
+              top: 0px; right: 0px;" src="mapEdgeCircleGreenRight.png">
+          <img style="position: absolute; width: 50px; height: 50px;
+              top: 75px; left: 75px;" src="mapEdgeCircleGreenTopLeft.png">
+          <img style="position: absolute; width: 50px; height: 50px;
+              top: 75px; right: 75px;" src="mapEdgeCircleGreenTopRight.png">
+          <img style="position: absolute; width: 50px; height: 50px;
+              bottom: 75px; left: 75px;" src="mapEdgeCircleGreenBottomLeft.png">
+          <img style="position: absolute; width: 50px; height: 50px;
+              bottom: 75px; right: 75px;" src="mapEdgeCircleGreenBottomRight.png">
           <div class="reset">
-            <a href="#" onclick="Reset();"><img src="reset.png" title="Reset map"><br><span style="font-weight: bold;">Reset map</span></a>
+            <a href="#" onclick="Reset();"><img src="reset.png" title="Reset map">
+                <br><span style="font-weight: bold;">Reset map</span></a>
           </div>
           <div class="zoom">
-            <a href="#" onclick="map.zoomOut();"><img src="minus.png" title="Zoom out"></a>
-            <a href="#" onclick="map.zoomIn();"><img src="plus.png" title="Zoom in"></a>
+            <a href="#" onclick="map.zoomOut();"
+                ><img src="minus.png" title="Zoom out"></a>
+            <a href="#" onclick="map.zoomIn();"
+                ><img src="plus.png" title="Zoom in"></a>
           </div>
         </div>
         <div id="more">

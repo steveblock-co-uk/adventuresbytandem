@@ -7,7 +7,8 @@
 
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="description" content="Canada by Tandem - Vancouver to Halifax">
-    <meta name="keywords" content="Canada, tandem, Steve Block, Stephanie Waterman">
+    <meta name="keywords"
+        content="Canada, tandem, Steve Block, Stephanie Waterman">
 
     <title>Canada By Tandem</title>
 
@@ -15,10 +16,11 @@
     <style type="text/css">
       .main {
         padding: 20px;
-        /* This fails if wrapped in IE hidden comments !! */
-        /* But it's ignored by FF */
-        /* width: expression( document.body.clientWidth < 1150 ? "1100px" : "auto" ); */
-        width: expression( document.body.clientWidth < sections.length * tabWidth + 2 * tabImageWidth + 2 * 20 + 1 ? (sections.length * tabWidth + 2 * tabImageWidth) + 'px' : 'auto' );
+        /* This fails if wrapped in IE hidden comments !!
+         * But it's ignored by FF
+         */
+        /* width: expression(document.body.clientWidth < 1150 ? "1100px" : "auto"); */
+        width: expression(document.body.clientWidth < sections.length * tabWidth + 2 * tabImageWidth + 2 * 20 + 1 ? (sections.length * tabWidth + 2 * tabImageWidth) + 'px' : 'auto');
       }
       .status {
         -moz-opacity: 0.7;
@@ -47,7 +49,10 @@
       }
       .footer {
         text-align: center;
-        clear: both;  /* To make sure the page extends as low as all floated elements on the page */
+	/* To make sure the page extends as low as all floated elements on the
+         * page.
+         */
+        clear: both;
         padding-bottom: 10px;
         /* border: 1px solid red; */
       }
@@ -100,7 +105,8 @@
       }
       .page {
         /* border: 1px solid black; margin -1px; */
-        position: relative;  /* We position the switchView div absolutely inside the view div */
+	/* We position the switchView div absolutely inside the view div */
+        position: relative;
       }
       .heading {
         padding-left: 20px;
@@ -173,10 +179,13 @@
         vertical-align: middle;
       }
       .mapBox {
-        /* We can't use display: none to hide the map box, else it doesn't get initialised properly */
-        /* Instead, use position: absolute and move it off screen */
+	/* We can't use display: none to hide the map box, else it doesn't get
+	 * initialised properly. Instead, use position: absolute and move it
+	 * off screen.
+         */
         /* display: none;  */ /* default value */
-        /* position: relative;  */ /* reset button is postioned absolute inside this div */
+        /* reset button is postioned absolute inside this div */
+        /* position: relative; */
         /* float: left; */
         /* margin: 20px; */
         /* margin-top: 50px; */
@@ -242,77 +251,139 @@
       var sectionPhotos = new Array();
       var currentSection;
 
-var routeRockiesI =
-'Day 1  - To Harrison Mills, BC - 132km <br>' +
-'Day 2  - To Merritt, BC - 184km <br>' +
-'Day 3  - To Chase, BC - 171km <br>' +
-'Day 4  - To Revelstoke, BC -162km';
+      var routeRockiesI =
+          'Day 1  - To Harrison Mills, BC - 132km <br>' +
+          'Day 2  - To Merritt, BC - 184km <br>' +
+          'Day 3  - To Chase, BC - 171km <br>' +
+          'Day 4  - To Revelstoke, BC -162km';
  
-var routeRockiesII =
-'Day 5  - To Golden, BC - 150 km <br>' +
-'Day 6  - To Lake Louise, AB - 85 km <br>' +
-'Day 7  - To Hwy 1, Exit 161, AB - 178 km <br>' +
-'Day 8  - To Calgary, AB - 35 km';
+      var routeRockiesII =
+          'Day 5  - To Golden, BC - 150 km <br>' +
+          'Day 6  - To Lake Louise, AB - 85 km <br>' +
+          'Day 7  - To Hwy 1, Exit 161, AB - 178 km <br>' +
+          'Day 8  - To Calgary, AB - 35 km';
  
-var routePrairies =
-'Day 9  - To Brooks, AB - 215km <br>' +
-'Day 10 - To Medicine Hat, AB - 109km <br>' +
-'Day 11 - To Gull Lake, SK - 176km <br>' +
-'Day 12 - To Swift Current, SK - 62km <br>' +
-'Day 13 - To Moose Jaw, SK - 181km <br>' +
-'Day 14 - To Weyburn, SK - 154km <br>' +
-'Day 15 - To Saskatchewan / Manitoba border - 188km<br>' +
-'Day 16 - To Holland, MB - 203km<br>' +
-'Day 17 - To Winnipeg, MB - 144km <br>' +
-'Day 18 - Rest day in Winnipeg, MB';
+      var routePrairies =
+          'Day 9  - To Brooks, AB - 215km <br>' +
+          'Day 10 - To Medicine Hat, AB - 109km <br>' +
+          'Day 11 - To Gull Lake, SK - 176km <br>' +
+          'Day 12 - To Swift Current, SK - 62km <br>' +
+          'Day 13 - To Moose Jaw, SK - 181km <br>' +
+          'Day 14 - To Weyburn, SK - 154km <br>' +
+          'Day 15 - To Saskatchewan / Manitoba border - 188km<br>' +
+          'Day 16 - To Holland, MB - 203km<br>' +
+          'Day 17 - To Winnipeg, MB - 144km <br>' +
+          'Day 18 - Rest day in Winnipeg, MB';
 
-var routeShield =
-'Day 19 - To West Hawk Lake, MB - 162km <br>' +
-'Day 20 - To Dryden, ON - 201km <br>' +
-'Day 21 - To Ignace, ON - 109km <br>' +
-'Day 22 - To Sistonens Corners, ON - 204km <br>' +
-'Day 23 - To Nipigon, ON - 141km <br>' +
-'Day 24 - To Neys Provincial Park, ON - 167km <br>' +
-'Day 25 - To Obatanga Provincial Park, ON - 147km <br>' +
-'Day 26 - To Montreal River, ON - 173km <br>' +
-'Day 27 - To Sault Ste. Marie, ON - 128km';
+      var routeShield =
+          'Day 19 - To West Hawk Lake, MB - 162km <br>' +
+          'Day 20 - To Dryden, ON - 201km <br>' +
+          'Day 21 - To Ignace, ON - 109km <br>' +
+          'Day 22 - To Sistonens Corners, ON - 204km <br>' +
+          'Day 23 - To Nipigon, ON - 141km <br>' +
+          'Day 24 - To Neys Provincial Park, ON - 167km <br>' +
+          'Day 25 - To Obatanga Provincial Park, ON - 147km <br>' +
+          'Day 26 - To Montreal River, ON - 173km <br>' +
+          'Day 27 - To Sault Ste. Marie, ON - 128km';
 
-var routeOttawa =
-'Day 28 - To Thessalon, ON - 84km <br>' +
-'Day 29 - To Lively, ON - 215km <br>' +
-'Day 30 - To Samuel de Champlain Provinicial Park, ON - 203km <br>' +
-'Day 31 - To Petawawa, ON - 158km <br>' +
-'Day 32 - To Ottawa, ON - 172km <br>' +
-'Day 33 - Rest day in Ottawa, ON';
+      var routeOttawa =
+          'Day 28 - To Thessalon, ON - 84km <br>' +
+          'Day 29 - To Lively, ON - 215km <br>' +
+          'Day 30 - To Samuel de Champlain Provinicial Park, ON - 203km <br>' +
+          'Day 31 - To Petawawa, ON - 158km <br>' +
+          'Day 32 - To Ottawa, ON - 172km <br>' +
+          'Day 33 - Rest day in Ottawa, ON';
 
-var routeEast =
-'Day 34 - To Montebello, QC - 76km <br>' +
-'Day 35 - To Berthierville, QC - 174km <br>' +
-'Day 36 - To Ste. Croix, QC - 146km <br>' +
-'Day 37 - To St. Jean Port Joli, QC - 157km <br>' +
-'Day 38 - To Cabano, QC - 156km <br>' +
-'Day 39 - To Perth-Andover, NB - 170km <br>' +
-'Day 40 - To Mactaquac, NB - 143km <br>' +
-'Day 41 - To Saint John, NB - 141km';
+      var routeEast =
+          'Day 34 - To Montebello, QC - 76km <br>' +
+          'Day 35 - To Berthierville, QC - 174km <br>' +
+          'Day 36 - To Ste. Croix, QC - 146km <br>' +
+          'Day 37 - To St. Jean Port Joli, QC - 157km <br>' +
+          'Day 38 - To Cabano, QC - 156km <br>' +
+          'Day 39 - To Perth-Andover, NB - 170km <br>' +
+          'Day 40 - To Mactaquac, NB - 143km <br>' +
+          'Day 41 - To Saint John, NB - 141km';
 
-var routeNovaScotia =
-'Day 42 - To Kempt, NS - 99km<br>' +
-'Day 43 - To Halifax, NS - 187km';
+      var routeNovaScotia =
+          'Day 42 - To Kempt, NS - 99km<br>' +
+          'Day 43 - To Halifax, NS - 187km';
 
       // Note that times are UTC !
       var sections = [
-        { name:'Pre Departure',  blogDate:'2006-09-09', startDate:'Sep 08 2006 00:00:00', endDate:'Sep 09 2006 12:14:59', distance:'Vancouver, BC to Halifax, NS - 6242km', mapCentre:{lat:50, lng:-93, zoom:4} },
-        { name:'The Rockies I',  blogDate:'2006-09-13', startDate:'Sep 09 2006 12:15:00', endDate:'Sep 12 2006 23:59:59', distance:'Vancouver, BC to Revelstoke BC - 649 km', route:routeRockiesI, mapCentre:{lat:49.5, lng:-121.5, zoom:6} },
-        { name:'The Rockies II', blogDate:'2006-09-16', startDate:'Sep 13 2006 00:00:00', endDate:'Sep 15 2006 23:59:59', distance:'Revelstoke, BC to Calgary, AB - 448 km', route:routeRockiesII, mapCentre:{lat:50.5, lng:-118.0, zoom:6} },
-        { name:'The Praries',    blogDate:'2006-09-26', startDate:'Sep 17 2006 00:00:00', endDate:'Sep 25 2006 23:59:59', distance:'Calgary, AB to Winnipeg, MB - 1432 km', route:routePrairies, mapCentre:{lat:50.5, lng:-106.5, zoom:5} },
-        { name:'The Shield',     blogDate:'2006-10-06', startDate:'Sep 27 2006 00:00:00', endDate:'Oct 05 2006 23:59:59', distance:'Winnipeg, MB to Sault Ste. Marie, ON - 1432km', route:routeShield, mapCentre:{lat:48.5, lng:-90.5, zoom:6} },
-        { name:'To Ottawa',      blogDate:'2006-10-12', startDate:'Oct 06 2006 00:00:00', endDate:'Oct 10 2006 23:59:59', distance:'Sault Ste. Marie, ON to Ottawa, ON - 832 km', route:routeOttawa, mapCentre:{lat:46.0, lng:-80.0, zoom:6} },
-        { name:'Eastern Canada', blogDate:'2006-10-20', startDate:'Oct 13 2006 00:00:00', endDate:'Oct 18 2006 23:59:59', distance:'Ottawa, ON to Saint John, NB - 1163 km', route:routeEast, mapCentre:{lat:46.5, lng:-71.0, zoom:6} },
-        { name:'Nova Scotia',    blogDate:'2006-10-22', startDate:'Oct 20 2006 00:00:00', endDate:'Oct 21 2006 23:59:59', distance:'Saint John, NB to Halifax, NS - 286 km', route:routeNovaScotia, mapCentre:{lat:45.0, lng:-65.0, zoom:6} },
-        { name:'Aftermath',      blogDate:'2007-04-16', startDate:'Aug 27 2007 00:00:00', endDate:'Sep 20 2007 23:59:59', distance:'Vancouver, BC to Halifax, NS - 6242km', mapCentre:{lat:50, lng:-93, zoom:4} }  // Photo timestamp seems to be messed up?!
+        {
+          name:'Pre Departure',
+          blogDate:'2006-09-09',
+          startDate:'Sep 08 2006 00:00:00',
+          endDate:'Sep 09 2006 12:14:59',
+          distance:'Vancouver, BC to Halifax, NS - 6242km',
+          mapCentre:{lat:50, lng:-93, zoom:4}
+        }, {
+          name:'The Rockies I',
+          blogDate:'2006-09-13',
+          startDate:'Sep 09 2006 12:15:00',
+          endDate:'Sep 12 2006 23:59:59',
+          distance:'Vancouver, BC to Revelstoke BC - 649 km',
+          route:routeRockiesI,
+          mapCentre:{lat:49.5, lng:-121.5, zoom:6}
+        }, {
+          name:'The Rockies II',
+          blogDate:'2006-09-16',
+          startDate:'Sep 13 2006 00:00:00',
+          endDate:'Sep 15 2006 23:59:59',
+          distance:'Revelstoke, BC to Calgary, AB - 448 km',
+          route:routeRockiesII,
+          mapCentre:{lat:50.5, lng:-118.0, zoom:6}
+        }, {
+          name:'The Praries',
+          blogDate:'2006-09-26',
+          startDate:'Sep 17 2006 00:00:00',
+          endDate:'Sep 25 2006 23:59:59',
+          distance:'Calgary, AB to Winnipeg, MB - 1432 km',
+          route:routePrairies,
+          mapCentre:{lat:50.5, lng:-106.5, zoom:5}
+        }, {
+          name:'The Shield',
+          blogDate:'2006-10-06',
+          startDate:'Sep 27 2006 00:00:00',
+          endDate:'Oct 05 2006 23:59:59',
+          distance:'Winnipeg, MB to Sault Ste. Marie, ON - 1432km',
+          route:routeShield,
+          mapCentre:{lat:48.5, lng:-90.5, zoom:6}
+        }, {
+          name:'To Ottawa',
+          blogDate:'2006-10-12',
+          startDate:'Oct 06 2006 00:00:00',
+          endDate:'Oct 10 2006 23:59:59',
+          distance:'Sault Ste. Marie, ON to Ottawa, ON - 832 km',
+          route:routeOttawa,
+          mapCentre:{lat:46.0, lng:-80.0, zoom:6}
+        }, {
+          name:'Eastern Canada',
+          blogDate:'2006-10-20',
+          startDate:'Oct 13 2006 00:00:00',
+          endDate:'Oct 18 2006 23:59:59',
+          distance:'Ottawa, ON to Saint John, NB - 1163 km',
+          route:routeEast,
+          mapCentre:{lat:46.5, lng:-71.0, zoom:6}
+        }, {
+          name:'Nova Scotia',
+          blogDate:'2006-10-22',
+          startDate:'Oct 20 2006 00:00:00',
+          endDate:'Oct 21 2006 23:59:59',
+          distance:'Saint John, NB to Halifax, NS - 286 km',
+          route:routeNovaScotia,
+          mapCentre:{lat:45.0, lng:-65.0, zoom:6}
+        }, {
+          name:'Aftermath',
+          blogDate:'2007-04-16',
+          startDate:'Aug 27 2007 00:00:00',
+          endDate:'Sep 20 2007 23:59:59',
+          distance:'Vancouver, BC to Halifax, NS - 6242km',
+          mapCentre:{lat:50, lng:-93, zoom:4}
+        }  // Photo timestamp seems to be messed up?!
       ];
 
-      function Size( width, height ) {
+      function Size(width, height) {
         this.width=width;
         this.height=height;
       }
@@ -327,19 +398,19 @@ var routeNovaScotia =
 
       // Function to fit an object to a given box
       function FitToBoundingBox(box, objectAR) {
-        var boxAR    = box.AspectRatio();
+        var boxAR = box.AspectRatio();
         var resized = null;
-        if( objectAR > boxAR ) { // width limits
-          resized = new Size( box.width, box.width / objectAR );
+        if(objectAR > boxAR) { // width limits
+          resized = new Size(box.width, box.width / objectAR);
         } else { // height limits
-          resized = new Size( box.height * objectAR, box.height );
+          resized = new Size(box.height * objectAR, box.height);
         }
         return resized;
       }
 
       function ResetMap(sectionIndex) {
         var centre = sections[sectionIndex].mapCentre;
-        map.setCenter(new GLatLng(centre.lat, centre.lng), centre.zoom);
+	map.setCenter(new GLatLng(centre.lat, centre.lng), centre.zoom);
       }
 
       function MakeJsonRequest(url) {
@@ -351,38 +422,47 @@ var routeNovaScotia =
 
       function UpdateBlogEntry(sectionIndex) {
         document.getElementById('blogStatus').style.display = 'block';
-        MakeJsonRequest('http://www.blogger.com/feeds/4267813968727256461/posts/default?published-min=' +
-                        sections[sectionIndex].blogDate +
-                        'T00:00:00&published-max=' +
-                        sections[sectionIndex].blogDate +
-                        'T23:59:59&alt=json-in-script&callback=OnFetchedBlogEntry' );
+        MakeJsonRequest(
+	    'http://www.blogger.com/feeds/4267813968727256461/posts/default?' +
+            'published-min=' +
+            sections[sectionIndex].blogDate +
+            'T00:00:00&published-max=' +
+            sections[sectionIndex].blogDate +
+            'T23:59:59&alt=json-in-script&callback=OnFetchedBlogEntry');
       }
 
       function OnFetchedBlogEntry(jsonRootNode) {
         document.getElementById('blogStatus').style.display = 'none';
         var feed = jsonRootNode.feed;
         var hits = feed.openSearch$totalResults.$t;
-        if (hits > 0 ) {
+        if (hits > 0) {
           var entry = feed.entry[0];
-          document.getElementById('blogTitle').innerHTML = entry.title.$t;
-          var dateString = entry.published.$t;
-          document.getElementById('blogDate').innerHTML = dateString.substr(0, dateString.indexOf('T'));
-          document.getElementById('blogEntry').innerHTML = entry.content.$t;
+	  document.getElementById('blogTitle').innerHTML = entry.title.$t;
+	  var dateString = entry.published.$t;
+          document.getElementById('blogDate').innerHTML =
+              dateString.substr(0, dateString.indexOf('T'));
+	  document.getElementById('blogEntry').innerHTML = entry.content.$t;
         } else {
           document.getElementById('blogTitle').innerHTML = '';
           document.getElementById('blogDate').innerHTML = '';
-          document.getElementById('blogEntry').innerHTML = 'No blog entry found';
+          document.getElementById('blogEntry').innerHTML =
+              'No blog entry found';
         }
       }
 
       function UpdatePhotos(sectionIndex) {
-        document.getElementById('photosStatus').style.display = 'block';
-        MakeJsonRequest('http://picasaweb.google.com/data/feed/api/user/steve.a.block/album/CanadaByTandem2?imgmax=' + photoMaxDimension + '&alt=json-in-script&callback=OnFetchedPhotos' );
+	document.getElementById('photosStatus').style.display = 'block';
+        MakeJsonRequest(
+	    'http://picasaweb.google.com/data/feed/api/user/steve.a.block/' +
+            'album/CanadaByTandem2?imgmax=' +
+            photoMaxDimension +
+            '&alt=json-in-script&callback=OnFetchedPhotos');
       }
 
       function OnFetchedPhotos(jsonRootNode) {
         document.getElementById('photosStatus').style.display = 'none';
-        // Useful properties : photo.title.$t, photo.published.$t, photo.updated.$ti, photo.gphoto$timestamp.$t, photo.content.src
+	// Useful properties : photo.title.$t, photo.published.$t,
+	// photo.updated.$ti, photo.gphoto$timestamp.$t, photo.content.src
         var feed = jsonRootNode.feed;
         sectionPhotos = new Array();
         var text = '';
@@ -390,13 +470,21 @@ var routeNovaScotia =
         for (var i=0; i<feed.openSearch$totalResults.$t; ++i) {
           var photo = feed.entry[i];
           var timestamp = parseInt(photo.gphoto$timestamp.$t);
-          if (timestamp >= sections[currentSection].startTimestamp && timestamp <= sections[currentSection].endTimestamp) { 
+          if (timestamp >= sections[currentSection].startTimestamp &&
+              timestamp <= sections[currentSection].endTimestamp) {
             var image = photo.media$group.media$content[0];
-            sectionPhotos.push( { url:image.url, caption:photo.summary.$t, height:image.height } );
-            var thumbSize = FitToBoundingBox(new Size(thumbNailSize, thumbNailSize), image.width/image.height);
-            text += '<a href="#" onclick="ShowPhoto(' + hits + '); return false;">' + 
-                      '<img id="thumbNail' + hits + '" class="thumbNail" style="width:' + thumbSize.width + 'px; height=' + thumbSize.height + 'px;" src="' + image.url + '" />' +
-                     '</a>';
+            sectionPhotos.push({
+              url:image.url,
+              caption:photo.summary.$t,
+              height:image.height
+            });
+            var thumbSize = FitToBoundingBox(
+                new Size(thumbNailSize, thumbNailSize), image.width/image.height);
+            text += '<a href="#" onclick="ShowPhoto(' + hits +
+                '); return false;">' + '<img id="thumbNail' + hits +
+                '" class="thumbNail" style="width:' + thumbSize.width +
+		'px; height=' + thumbSize.height + 'px;" src="' + image.url +
+                '" /></a>';
             hits++;
           }
         }
@@ -410,28 +498,35 @@ var routeNovaScotia =
           if (i == photoIndex) {
             document.getElementById(id).style.border = '1px solid black';
           } else {
-            document.getElementById(id).style.border = '1px solid #D0D0D0';
+	    document.getElementById(id).style.border = '1px solid #D0D0D0';
           }
         }
         if (photoIndex >= 0 && photoIndex < sectionPhotos.length) {
-          document.getElementById('photo').src = sectionPhotos[photoIndex].url;
-          document.getElementById('photo').style.marginTop = (photoMaxDimension - sectionPhotos[photoIndex].height) / 2 + 'px';
+	  document.getElementById('photo').src = sectionPhotos[photoIndex].url;
+          document.getElementById('photo').style.marginTop =
+              (photoMaxDimension - sectionPhotos[photoIndex].height) / 2 +
+              'px';
           var index = sectionPhotos[photoIndex].caption.indexOf(':');
-          var tag = '<span class="tag">' + sectionPhotos[photoIndex].caption.substr(0, index) + '</span><br>';
-          document.getElementById('caption').innerHTML = tag + sectionPhotos[photoIndex].caption.substr(index+1);
+          var tag = '<span class="tag">' +
+	      sectionPhotos[photoIndex].caption.substr(0, index) +
+              '</span><br>';
+          document.getElementById('caption').innerHTML =
+              tag + sectionPhotos[photoIndex].caption.substr(index+1);
         } else {
           document.getElementById('photo').src = '';
-          document.getElementById('caption').innerHTML = 'No photos found';
+	  document.getElementById('caption').innerHTML = 'No photos found';
         }
-        if (photoIndex > 0 ) {
+        if (photoIndex > 0) {
           document.getElementById('arrowLeft').style.display = 'block';
-          document.getElementById('arrowLeft').onclick = function(){ ShowPhoto(photoIndex-1); return false; };
+          document.getElementById('arrowLeft').onclick =
+              function() { ShowPhoto(photoIndex-1); return false; };
         } else {
           document.getElementById('arrowLeft').style.display = 'none';
         }
-        if (photoIndex < sectionPhotos.length - 1 ) {
+        if (photoIndex < sectionPhotos.length - 1) {
           document.getElementById('arrowRight').style.display = 'block';
-          document.getElementById('arrowRight').onclick = function(){ ShowPhoto(photoIndex+1); return false; };
+          document.getElementById('arrowRight').onclick =
+              function() { ShowPhoto(photoIndex+1); return false; };
         } else {
           document.getElementById('arrowRight').style.display = 'none';
         }
@@ -440,16 +535,19 @@ var routeNovaScotia =
       function SetSizes() {
         var elem = document.getElementById('main');
         if (typeof elem.style.minWidth != 'undefined') {
-          elem.style.minWidth = (sections.length * tabWidth + 2 * tabImageWidth) + 'px';
+          elem.style.minWidth =
+              (sections.length * tabWidth + 2 * tabImageWidth) + 'px';
         }
-        document.getElementById('photoBox').style.width = photoMaxDimension + 'px';
-        document.getElementById('photoDiv').style.height = photoMaxDimension + 'px';
+        document.getElementById('photoBox').style.width =
+            photoMaxDimension + 'px';
+        document.getElementById('photoDiv').style.height =
+            photoMaxDimension + 'px';
       }
 
       function ProcessDates() {
         for (var i=0; i<sections.length; ++i) {
           sections[i].startTimestamp = Date.parse(sections[i].startDate);
-          sections[i].endTimestamp   = Date.parse(sections[i].endDate);
+          sections[i].endTimestamp = Date.parse(sections[i].endDate);
         }
       }
 
@@ -457,17 +555,20 @@ var routeNovaScotia =
         // innerHTML closes tags automatically!
         var text = '';
         for (var i=0; i<sections.length; ++i) {
-          text += '<a href="" id="tab' + i + '" class="tab" onclick="ShowSection(' + i + '); return false;" style="width:' + tabWidth + 'px;">' +
-                  '<img id="tab' + i + 'Left" class="tab floatLeft" src="" /><img id="tab' + i + 'Right" class="tab floatRight" src="" />' +
-                  sections[i].name +
-                  '</a>';
+          text += '<a href="" id="tab' + i +
+              '" class="tab" onclick="ShowSection(' + i +
+              '); return false;" style="width:' + tabWidth + 'px;">' +
+              '<img id="tab' + i +
+              'Left" class="tab floatLeft" src="" /><img id="tab' + i +
+	      'Right" class="tab floatRight" src="" />' + sections[i].name +
+              '</a>';
         }
         document.getElementById('tabsInner').innerHTML = text;
       }
 
       function UpdateTabs(sectionIndex) {
         if (sectionIndex == 0) {
-          document.getElementById('endTabLeft').src = 'endTabSelectedLeft.bmp';
+	  document.getElementById('endTabLeft').src = 'endTabSelectedLeft.bmp';
         } else {
           document.getElementById('endTabLeft').src = 'endTabLeft.bmp';
         }
@@ -476,39 +577,46 @@ var routeNovaScotia =
           if (i == sectionIndex) {
             document.getElementById('tab' + i).style.fontWeight = 'bold';
             document.getElementById('tab' + i).className = 'tab gray';
-            document.getElementById('tab' + i + 'Left').src  = 'tabSelectedLeft.bmp';
-            document.getElementById('tab' + i + 'Right').src = 'tabSelectedRight.bmp';
+	    document.getElementById('tab' + i + 'Left').src =
+                'tabSelectedLeft.bmp';
+	    document.getElementById('tab' + i + 'Right').src =
+                'tabSelectedRight.bmp';
           } else {
             document.getElementById('tab' + i).style.fontWeight = 'normal';
             document.getElementById('tab' + i).className = 'tab darkGray';
             if (i == sectionIndex + 1) {
-              document.getElementById('tab' + i + 'Left').src  = 'tabNeighbourSelectedLeft.bmp';
+              document.getElementById('tab' + i + 'Left').src =
+                  'tabNeighbourSelectedLeft.bmp';
             } else {
-              document.getElementById('tab' + i + 'Left').src  = 'tabLeft.bmp';
+              document.getElementById('tab' + i + 'Left').src = 'tabLeft.bmp';
             }
             if (i == sectionIndex - 1) {
-              document.getElementById('tab' + i + 'Right').src = 'tabNeighbourSelectedRight.bmp';
+              document.getElementById('tab' + i + 'Right').src =
+                  'tabNeighbourSelectedRight.bmp';
             } else {
               if (i == sections.length - 1) {
-                document.getElementById('tab' + i + 'Right').src = 'tabEndRight.bmp';
+                document.getElementById('tab' + i + 'Right').src =
+                    'tabEndRight.bmp';
               } else {
-                document.getElementById('tab' + i + 'Right').src = 'tabRight.bmp';
+                document.getElementById('tab' + i + 'Right').src =
+                    'tabRight.bmp';
               }
             }
           }
         }
         if (sectionIndex == sections.length - 1) {
-          document.getElementById('endTabRight').src = 'endTabSelectedRight.bmp';
+	  document.getElementById('endTabRight').src =
+              'endTabSelectedRight.bmp';
         } else {
-          document.getElementById('endTabRight').src = 'endTabRight.bmp';
+	  document.getElementById('endTabRight').src = 'endTabRight.bmp';
         }
       }
 
       function UpdateMap(sectionIndex) {
         // mapOverlays may not yet be populated.
         if (mapOverlays.length == 7) {
-          // There are fewer overlays than sections
-          // This is hard-coded in a sketchy fashion!
+	  // There are fewer overlays than sections. This is hard-coded in a
+	  // sketchy fashion!
           var overlayIndex = -1;
           if (sectionIndex > 0 && sectionIndex < 8) {
             var overlayIndex = sectionIndex -  1;
@@ -551,9 +659,11 @@ var routeNovaScotia =
         document.getElementById('routeBox').style.display = 'none';
         document.getElementById('switchView').style.left = null;
         document.getElementById('switchView').style.right = '620px';
-        document.getElementById('switchViewLink').onclick = function() { ShowMapView(); return false; };
+        document.getElementById('switchViewLink').onclick =
+            function() { ShowMapView(); return false; };
         document.getElementById('switchViewImage').src = 'map.jpg';
-        document.getElementById('switchViewText').innerHTML = '<br>Switch to<br>map<br>view';
+        document.getElementById('switchViewText').innerHTML =
+            '<br>Switch to<br>map<br>view';
       }
 
       function ShowMapView() {
@@ -564,9 +674,11 @@ var routeNovaScotia =
         document.getElementById('blogBox').style.display = 'none';
         document.getElementById('switchView').style.left = '670px';
         document.getElementById('switchView').style.lright = null;
-        document.getElementById('switchViewLink').onclick = function() { ShowPhotosView(); return false; };
+        document.getElementById('switchViewLink').onclick =
+            function() { ShowPhotosView(); return false; };
         document.getElementById('switchViewImage').src = 'bike.jpg';
-        document.getElementById('switchViewText').innerHTML = '<br>Switch to<br>photos<br>view';
+        document.getElementById('switchViewText').innerHTML =
+            '<br>Switch to<br>photos<br>view';
       }
 
       function ShowSection(sectionIndex) {
@@ -579,9 +691,10 @@ var routeNovaScotia =
       }
 
       function OnLoad(){
-        var mapInstructions = document.getElementById('mapInstructions');
-        if (typeof mapInstructions.style.minWidth == 'undefined') {
-          mapInstructions.innerHTML += ' (If markers aren\'t visible, use Firefox!)';  // IE
+	var mapInstructions = document.getElementById('mapInstructions');
+	if (typeof mapInstructions.style.minWidth == 'undefined') {
+          mapInstructions.innerHTML +=
+              ' (If markers aren\'t visible, use Firefox!)';  // IE
         }
         ProcessDates();
         SetSizes();
@@ -589,7 +702,7 @@ var routeNovaScotia =
         LoadMapData('route.xml');
         WriteTabs();
         ShowSection(0);
-        map.setMapType( G_HYBRID_MAP );
+        map.setMapType(G_HYBRID_MAP);
       };
 
       function Enter() {
@@ -604,7 +717,8 @@ var routeNovaScotia =
 
   <body class="gray">
 
-    <!-- A div to force the window to include the space around the 'page' div -->
+    <!-- A div to force the window to include the space around the 'page' div.
+    -->
     <div id="main" class="main">
 
       <div id="tabs" class="tabs">
@@ -659,9 +773,11 @@ var routeNovaScotia =
 
     </div>
 
-    <!-- This is the welcome screen. We show it with position: absolute over everything else when we first load.
-         At this point, we have yet to call ShowPhotos or ShowMap, so the only elements on screen are the tabs, heading and switchView.
-         These cause no problems for vertical spacing, and only slightly odd scrollbar behaviour for horizontal! -->
+    <!-- This is the welcome screen. We show it with position: absolute over
+	 everything else when we first load. At this point, we have yet to call
+	 ShowPhotos or ShowMap, so the only elements on screen are the tabs,
+	 heading and switchView. These cause no problems for vertical spacing,
+         and only slightly odd scrollbar behaviour for horizontal! -->
     <div id="welcome" class="welcome gray">
       <h1 style="margin-top: 50px;"> Canada By Tandem </h1>
       <div style="font-weight: bold;"> Vancouver to Halifax </div>
