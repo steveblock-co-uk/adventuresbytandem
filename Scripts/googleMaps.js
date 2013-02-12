@@ -9,16 +9,16 @@ var map = null;
 // param; the args specified in the xml file, as a string.
 var clickHandlers = new Array();
 
-function LoadGoogleMaps(mapId, onLoadHandler) {
+function LoadGoogleMaps(mapId, onLoadHandler, addControls) {
   google.load( 'maps', '2' );
   google.setOnLoadCallback(function() {
     document.onunload = GUnload;
-    CreateMap(mapId);
+    CreateMap(mapId, addControls);
     onLoadHandler();
   });
 }
 
-function CreateMap( divID ) {
+function CreateMap( divID, addControls ) {
   // This method sets up the Google Maps object
   // We can't configure the Google Maps object until the map object in the HTML has been created.
   if( !GBrowserIsCompatible() ) {
@@ -26,9 +26,11 @@ function CreateMap( divID ) {
     return;
   }
   map = new GMap2(document.getElementById(divID));
-  map.addControl( new GLargeMapControl() );
-  map.addControl( new GMapTypeControl() );
-  map.addControl( new GScaleControl() );
+  if( addControls === undefined || addControls) {
+    map.addControl( new GLargeMapControl() );
+    map.addControl( new GMapTypeControl() );
+    map.addControl( new GScaleControl() );
+  }
   map.enableScrollWheelZoom();
 }
 
@@ -170,6 +172,11 @@ function CreateMarkerIcon( markerImage, shadowImage ) {
     icon.shadowSize = new GSize( 0, 0 );
     icon.iconAnchor = new GPoint( 5, 5 );
     icon.infoWindowAnchor = new GPoint( 5, 5 );
+  } else if (markerImage == "tandem.png") {
+    icon.iconSize = new GSize( 51, 61 );
+    icon.shadowSize = new GSize( 0, 0 );
+    icon.iconAnchor = new GPoint( 26, 61 );
+    icon.infoWindowAnchor = new GPoint( 6, 20 );
   } else {
     icon.iconSize = new GSize( 12, 20 );
     icon.shadowSize = new GSize( 22, 20 );

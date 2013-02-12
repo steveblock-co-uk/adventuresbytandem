@@ -8,7 +8,7 @@
     <title> Iceland By Tandem </title>
 
     <script src="../Scripts/utils.js" type="text/javascript"></script>
-    <script src="googleMaps.js" type="text/javascript"></script>
+    <script src="../Scripts/googleMaps.js" type="text/javascript"></script>
     <script src="blog.js" type="text/javascript"></script>
 
     <!-- good for web.mit.edu/snw/www -->
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       pathToScripts = '../';
 
-      LoadGoogleMaps('map', OnLoad);
+      LoadGoogleMaps('map', OnLoad, false);
 
       function OnLoad() {
         Reset();
