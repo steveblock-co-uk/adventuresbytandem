@@ -140,8 +140,6 @@ function AddMarker( coords, theIcon, location, description, clickHandler ) {
   var marker = new GMarker( coords, options );
 
   if( options.clickable ) {
-    // This doesn't work - need extra level of indirection
-    // GEvent.addListener( marker, 'click', func(args) ); 
     GEvent.addListener( marker, 'click', function(point) { func( marker, point, args ); } ); 
   }
   map.addOverlay(marker);
