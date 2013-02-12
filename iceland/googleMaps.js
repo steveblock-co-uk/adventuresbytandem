@@ -28,17 +28,28 @@ function CreateMap( divID ) {
   map.enableScrollWheelZoom();
 }
 
-function LoadMapData( mapData ) {
-  var lines = mapData.lines;
+function LoadMapData( filename ) {
+  var request = GXmlHttp.create();
+  request.open("GET", filename, true);
+  request.onreadystatechange = function() {
+    if (request.readyState == 4) {
+      ProcessXML(request.responseXML);
+    }
+  };
+  request.send(null);
+}
+
+function ProcessXML(xmlDoc) {
+  var lines = xmlDoc.documentElement.getElementsByTagName("line");
   for (var a = 0; a < lines.length; a++) {
 
     // get line attributes
-    var colour              = lines[a].colour;
-    var width               = lines[a].width;
-    var name                = lines[a].name;
-    var defaultMarkerImage  = lines[a].defaultMarkerImage;
-    var defaultShadowImage  = lines[a].defaultShadowImage;
-    var clickHandler        = lines[a].clickHandler;
+    var colour              = lines[a].getAttribute("colour");
+    var width               = lines[a].getAttribute("width");
+    var name                = lines[a].getAttribute("name");
+    var defaultMarkerImage  = lines[a].getAttribute("defaultMarkerImage");
+    var defaultShadowImage  = lines[a].getAttribute("defaultShadowImage");
+    var clickHandler        = lines[a].getAttribute("clickHandler");
     // Set defaults
     if( colour == null) { colour = "#0000FF"; }
     if( width == null ) { width = 2; } else { width = parseFloat( width ); }
@@ -48,29 +59,28 @@ function LoadMapData( mapData ) {
     //alert( 'Read line: ' + name + ', ' + width + 'px, ' + colour + ', ' + defaultMarkerImage + ', ' + defaultShadowImage );
 
     // read each point on that line
-    var points = lines[a].points;
+    var points = lines[a].getElementsByTagName("point");
     var pts = [];
     for (var i = 0; i < points.length; i++) {
       // Read marker properties
-      var lat                = points[i].lat;
-      var lng                = points[i].lng;
-      var location           = points[i].location;
-      var description        = points[i].description;
-      var markerImage        = points[i].markerImage;
-      var shadowImage        = points[i].shadowImage;
-      var markerClickHandler = points[i].clickHandler;
-      
+      var lat                = parseFloat(points[i].getAttribute("lat"));
+      var lng                = parseFloat(points[i].getAttribute("lng"));
+      var location           = points[i].getAttribute("location");
+      var description        = points[i].getAttribute("description");
+      var markerImage        = points[i].getAttribute("markerImage");
+      var shadowImage        = points[i].getAttribute("shadowImage");
+
       var point = new GLatLng(lat,lng);
       pts[i] = point;
 
       // Apply defaults
       if( markerImage == null ) { markerImage = defaultMarkerImage; }
       if( shadowImage == null ) { shadowImage = defaultShadowImage; }
-      // alert( 'Read marker: ' + point + ', ' + location + ', ' + description + ', ' + clickHandler + ', ' + markerImage + ', ' + shadowImage );
+      // alert( 'Read marker: ' + point + ', ' + location + ', ' + description + ', ' + markerImage + ', ' + shadowImage );
 
       // Add marker if marker image is not "none"
       if( markerImage != "none" ) {
-        AddMarker( point, CreateMarkerIcon( markerImage, shadowImage ), location, description, markerClickHandler );
+        AddMarker( point, CreateMarkerIcon( markerImage, shadowImage ), location, description );
       }
     }
     // Add line unless width is zero
