@@ -5,12 +5,11 @@ var map = null;
 
 // Need to work out a way to be able to pass Google Maps constants to this function.
 // Problem is they're not defined until we get the onload callback.
-function LoadGoogleMaps(mapId, mapStatus, onLoadHandler) {
+function LoadGoogleMaps(mapId, onLoadHandler) {
   google.load( 'maps', '2' );
   google.setOnLoadCallback(function() {
     document.onunload = GUnload;
     CreateMap(mapId);
-    map.setCenter( new GLatLng(mapStatus.latitude, mapStatus.longitude), mapStatus.zoom /*, mapStatus.type*/);
     onLoadHandler();
   });
 }

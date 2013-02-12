@@ -22,14 +22,9 @@
     <script src="http://www.google.com/jsapi?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs" type="text/javascript"></script>
 
     <script type="text/javascript">
-      var mapStatus = {
-        latitude: 65.1,
-        longitude:  -19.0,
-        zoom: 6
-      };
       pathToScripts = '../';
 
-      LoadGoogleMaps('map', mapStatus, OnLoad);
+      LoadGoogleMaps('map', OnLoad);
 
       function OnLoad() {
         Reset();
@@ -37,7 +32,7 @@
         LoadBlogData();
       }
       function Reset() {
-        map.setCenter( new GLatLng( mapStatus.latitude, mapStatus.longitude ), mapStatus.zoom, G_SATELLITE_MAP);
+        map.setCenter( new GLatLng( 65.1, -19.0 ), 6, G_SATELLITE_MAP);
       }
     </script>
 

@@ -17,13 +17,7 @@
     <script src="http://www.google.com/jsapi?key=AIzaSyBUBI5vyEr5JMs-AsQqQgmHI2MhYyH3aOs" type="text/javascript"></script>
 
     <script type="text/javascript">
-      var mapStatus = {
-        latitude: 65.1,
-        longitude:  -19.0,
-        zoom: 6
-      };
-
-      LoadGoogleMaps('map', mapStatus, OnLoad);
+      LoadGoogleMaps('map', OnLoad);
 
       function OnLoad() {
         GetPhotos('http://picasaweb.google.com/data/feed/api/user/steve.a.block/album/Iceland');
@@ -43,7 +37,7 @@
           numLevels: 18}));
       }
       function Reset() {
-        map.setCenter( new GLatLng( mapStatus.latitude, mapStatus.longitude ), mapStatus.zoom, G_SATELLITE_MAP);
+        map.setCenter(new GLatLng(65.1, -19.0), 6, G_SATELLITE_MAP);
       }
 
       function GetPhotos(feedUrl) {

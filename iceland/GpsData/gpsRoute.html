@@ -17,14 +17,9 @@
     <script src="http://www.google.com/jsapi?key=AIzaSyBUBI5vyEr5JMs-AsQqQgmHI2MhYyH3aOs" type="text/javascript"></script>
 
     <script type="text/javascript">
-      var mapStatus = {
-        latitude: 65.1,
-        longitude: -19.0,
-        zoom: 7
-      };
       pathToScripts = '../../';
 
-      LoadGoogleMaps('map', mapStatus, OnLoad);
+      LoadGoogleMaps('map', OnLoad);
 
       function OnLoad() {
         Reset();
@@ -42,7 +37,7 @@
                                                numLevels: 18 }));
       }
       function Reset() {
-        map.setCenter( new GLatLng( mapStatus.latitude, mapStatus.longitude ), mapStatus.zoom, G_SATELLITE_MAP);
+        map.setCenter(new GLatLng(65.1, -19.0), 7, G_SATELLITE_MAP);
       }
     </script>
 
