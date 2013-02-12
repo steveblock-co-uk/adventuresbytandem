@@ -8,7 +8,7 @@ var map = null;
 function LoadGoogleMaps(mapId, mapStatus, onLoadHandler) {
   google.load( 'maps', '2' );
   google.setOnLoadCallback(function() {
-    document.onload = GUnload;
+    document.onunload = GUnload;
     CreateMap(mapId);
     map.setCenter( new GLatLng(mapStatus.latitude, mapStatus.longitude), mapStatus.zoom /*, mapStatus.type*/);
     onLoadHandler();
