@@ -82,7 +82,7 @@ function LoadMapData( mapData ) {
 
 // Need to use a function to add listener, so that variables we pass to GEvent are locals and won't be changed
 function AddLine( pts, colour, width, clickHandler ) {
-  var polyline = new GPolyline(pts,colour,width,0.7);
+  var polyline = new GPolyline(pts,colour,width);
   // if there's a valid click handler, make the line clickable
   if( clickHandler != null ) {
     var x = clickHandler.indexOf( '(' );
