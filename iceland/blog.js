@@ -48,12 +48,12 @@ function OnFetchedBlog(root) {
     }
     // Show last post by default
     if (i == 0) {
-      ShowBlog(null, null, argsArray); 
+      ShowBlog(argsArray); 
     }
   }
 }
 
-function ShowBlog(marker, point, argsArray) {
+function ShowBlog(argsArray) {
   var blogText = argsArray[1];
   var blogTitleElement = document.getElementById('blogTitle');
   if (blogTitleElement) {

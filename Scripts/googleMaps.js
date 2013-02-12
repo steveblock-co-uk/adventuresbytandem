@@ -3,14 +3,11 @@
 // Global map object
 var map = null;
 
-// This is a map containing all of the ClickHandler methods referenced in the XML file
-// Functions are written as functionName(arg1,arg2,...)
-// It should be populated by the page that calls this script
-// Each function takes 3 params
-// - the marker clicked (if any)
-// - the point clicked (if not a marker)
-// - the args specified in the xml file, as a string
-var googleMapsClickHandler = new Array();
+// This is a map containing all of the click handler methods referenced in the
+// XML file. Functions are written as functionName(arg1,arg2,...). It should be
+// populated by the page that calls this script. Each function takes a single 
+// param; the args specified in the xml file, as a string.
+var clickHandlers = new Array();
 
 function LoadGoogleMaps() {
   google.load( 'maps', '2' );
@@ -83,34 +80,45 @@ function ProcessXML(xmlDoc) {
 
       // Add marker if marker image is not "none"
       if( markerImage != "none" ) {
-        AddMarker( point, CreateMarkerIcon( markerImage, shadowImage ), location, description, markerClickHandler );
+        var funcAndArgs = parseClickHandler(markerClickHandler);
+        AddMarker( point, CreateMarkerIcon( markerImage, shadowImage ), location, description, funcAndArgs.func, funcAndArgs.args );
       }
     }
     // Add line unless width is zero
     if( points.length > 1 && width > 0 ) {
-      AddLine( pts, colour, width, clickHandler );
+      var funcAndArgs = parseClickHandler(clickHandler);
+      AddLine( pts, colour, width, funcAndArgs.func, funcAndArgs.args );
     }
   } // end loop over lines
 }
 
+function parseClickHandler(clickHandler) {
+  var func = null;
+  var args = null;
+  if (clickHandler != null) {
+    var x = clickHandler.indexOf('(');
+    var y = clickHandler.indexOf(')');
+    var functionName = clickHandler.substring(0, x);
+    args = clickHandler.substring(x + 1, y);
+    func = clickHandlers[functionName];
+  }
+  return {func: func, args: args};
+}
+
 // Need to use a function to add listener, so that variables we pass to GEvent are locals and won't be changed
-function AddLine( pts, colour, width, clickHandler ) {
+function AddLine( pts, colour, width, clickHandler, clickHandlerArgs ) {
   var polyline = new GPolyline(pts,colour,width);
-  // if there's a valid click handler, make the line clickable
-  if( clickHandler != null ) {
-    var x = clickHandler.indexOf( '(' );
-    var y = clickHandler.indexOf( ')' );
-    var functionName = clickHandler.substring( 0, x );
-    var args = clickHandler.substring( x+1, y );
-    var func = googleMapsClickHandler[ functionName ];
-    if( func != null ) {
-      GEvent.addListener( polyline, 'click', function(point) { func( null, point, args ); } ); 
-    }
+  if (clickHandler != null) {
+    GEvent.addListener(polyline, 'click', function(point) {
+      clickHandler(clickHandlerArgs);
+    }); 
   }
   map.addOverlay( polyline );
 }
 
-function AddMarker( coords, theIcon, location, description, clickHandler ) {
+// Note that clickHandlerArgs may be of any type, as this function can be used
+// directly, as well as when parsing an XML route file.
+function AddMarker( coords, theIcon, location, description, clickHandler, clickHandlerArgs ) {
   var options = { icon: theIcon };
 
   // If there's a location, add a tooltip
@@ -123,24 +131,17 @@ function AddMarker( coords, theIcon, location, description, clickHandler ) {
   }
 
   // if there's a valid click handler, make the marker clickable
-  var func = null;
-  var args = null;
   options.clickable = false;
   if( clickHandler != null ) {
-    var x = clickHandler.indexOf( '(' );
-    var y = clickHandler.indexOf( ')' );
-    var functionName = clickHandler.substring( 0, x );
-    args = clickHandler.substring( x+1, y );
-    func = googleMapsClickHandler[ functionName ];
-    if( func != null ) {
       options.clickable = true;
-    }
   }
 
   var marker = new GMarker( coords, options );
 
-  if( options.clickable ) {
-    GEvent.addListener( marker, 'click', function(point) { func( marker, point, args ); } ); 
+  if (options.clickable) {
+    GEvent.addListener(marker, 'click', function(point) {
+      clickHandler(clickHandlerArgs);
+    }); 
   }
   map.addOverlay(marker);
 }

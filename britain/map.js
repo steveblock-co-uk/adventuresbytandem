@@ -1,17 +1,7 @@
-// script for the map component of PBM.html
-
-// This is a map containing all of the ClickHandler methods referenced in the XML file
-// Functions are written as functionName(arg1,arg2,...)
-// It should be populated by the page that calls this script
-// Each function takes 3 params
-// - the marker clicked (if any)
-// - the point clicked (if not a marker)
-// - the args specified in the xml file, as a string
-// Here, the args is just the ID of the day to show
-googleMapsClickHandler[ 'ShowDay' ] = function( marker, point, index ){ 
-  // The arguments gets passed as strings
+// Here, args is just the ID of the day to show
+clickHandlers['ShowDay'] = function(args) {
   // Convert index to integer to make thigs work properly
-  ShowDay( parseFloat( index ), false );
+  ShowDay( parseFloat( args ), false );
 };
 
 function ConfigureMap() {
