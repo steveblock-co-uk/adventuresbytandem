@@ -1,6 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C/DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-micorsoft-com:vml">
+<!DOCTYPE html>
 
 <html>
 
@@ -11,27 +9,23 @@
     <script src="../Scripts/googleMaps.js" type="text/javascript"></script>
     <script src="blog.js" type="text/javascript"></script>
 
-    <!-- good for web.mit.edu/snw/www -->
-    <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAA_Xocq18Wh01DYjhDo3vEbxQww4B36n1MWJcqWT3ccjTYRRSVWRQWr3G6zUsMyWbZ8HtxYPIlTK9GSg" type="text/javascript"></script> -->
-    <!-- good for personal.soton.ac.uk -->
-    <!--<script src="http://www.google.com/jsapi?key=ABQIAAAAclCz4bThIvpXLvyO5UlroxRHLZmsFQiB8ZRO_dTNdmH17ck2WxRrAIXMOO5yx06c5i--1k1fv8p9Cw" type="text/javascript"></script> -->
-    <!-- good for steveblock.co.uk -->
-    <!-- <script src="http://www.google.com/jsapi?key=AIzaSyBUBI5vyEr5JMs-AsQqQgmHI2MhYyH3aOs" type="text/javascript"></script> -->
-    <!-- good for adventuresbytandem.com -->
-    <script src="http://www.google.com/jsapi?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs" type="text/javascript"></script>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs&sensor=false">
+    </script>
 
     <script type="text/javascript">
       pathToScripts = '../';
 
-      LoadGoogleMaps('map', OnLoad, false);
-
       function OnLoad() {
+        CreateMap('map', false);
+        map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
         Reset();
         LoadMapData('route.xml');
         LoadBlogData();
       }
       function Reset() {
-        map.setCenter(new GLatLng(65.1, -19.0), 6, G_SATELLITE_MAP);
+        map.setCenter(new google.maps.LatLng(65.1, -19.0));
+        map.setZoom(6);
       }
     </script>
 
@@ -122,7 +116,7 @@
 
   </head>
 
-  <body>
+  <body onload="OnLoad()">
 
     <div class="content">
 

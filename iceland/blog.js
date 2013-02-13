@@ -37,10 +37,10 @@ function OnFetchedBlog(root) {
       var lng = locationElements[0].getAttribute('lng');
       var date = locationElements[0].getAttribute('date');
       //alert(name + lat + lng);
-      var point = new GLatLng(lat,lng);
+      var point = new google.maps.LatLng(lat,lng);
       var argsArray = [title, location, date, content];
       AddMarker(point,
-                CreateMarkerIcon('tandem.png'),
+                CreateMarker('tandem.png'),
                 location,
                 null,
                 ShowBlog,

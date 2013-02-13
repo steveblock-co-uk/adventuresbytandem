@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 
 <!-- the page to display the photos, blog and map -->
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<html>
 
   <head>
 
@@ -16,17 +16,8 @@
     <script src="blog.js" type="text/javascript"></script>
     <script src="map.js" type="text/javascript"></script>
 
-    <!-- this key is good for web.mit.edu/snw/www -->
-    <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAA_Xocq18Wh01DYjhDo3vEbxQww4B36n1MWJcqWT3ccjTYRRSVWRQWr3G6zUsMyWbZ8HtxYPIlTK9GSg" type="text/javascript"></script> -->
-    <!-- this key is good for personal.soton.ac.uk -->
-    <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAAclCz4bThIvpXLvyO5UlroxRHLZmsFQiB8ZRO_dTNdmH17ck2WxRrAIXMOO5yx06c5i--1k1fv8p9Cw" type="text/javascript"></script> -->
-    <!-- good for steveblock.co.uk -->
-    <!-- <script src="http://www.google.com/jsapi?key=AIzaSyBUBI5vyEr5JMs-AsQqQgmHI2MhYyH3aOs" type="text/javascript"></script> -->
-    <!-- good for adventuresbytandem.com -->
-    <script src="http://www.google.com/jsapi?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs" type="text/javascript"></script>
-
-    <script type="text/javascript">
-      LoadGoogleMaps('map', OnLoad);
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs&sensor=false">
     </script>
 
     <!-- CSS -->
@@ -37,7 +28,7 @@
 
   </head>
 
-  <body>
+  <body onload="OnLoad()">
 
     <!-- header -->
     <div class="header">

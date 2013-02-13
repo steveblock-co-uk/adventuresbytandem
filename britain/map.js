@@ -27,12 +27,14 @@ function MoveMap(index) {
     } else if (z < MIN_ZOOM_LEVEL) {
       map.setZoom(MIN_ZOOM_LEVEL);
     }
-    map.panTo(new GLatLng(lat, lng));
+    map.panTo(new google.maps.LatLng(lat, lng));
   }
 }
 
 function ResetMap() {
-  map.setCenter(new GLatLng(54.8, -4.0), 5);
+  map.setCenter(new google.maps.LatLng(54.8, -4.0));
+  map.setZoom(5);
+  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
 }
 
 function ResizeMap(windowSize) {

@@ -55,8 +55,8 @@ function OnResize() {
 }
 
 function OnLoad() {
-  // Gets called after the document body has been loaded
   bodyLoaded = true;
+  CreateMap('map');
   ConfigureMap();
   ConfigurePhotos();
   OnResize();

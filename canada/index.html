@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<!DOCTYPE html>
 
 <html>
 
@@ -230,18 +229,12 @@
     <script src="../Scripts/googleMaps.js" type="text/javascript"></script>
     <script src="googleMapsOverrides.js" type="text/javascript"></script>
 
-    <!-- this key is good for web.mit.edu/snw/www -->
-    <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAA_Xocq18Wh01DYjhDo3vEbxQww4B36n1MWJcqWT3ccjTYRRSVWRQWr3G6zUsMyWbZ8HtxYPIlTK9GSg" type="text/javascript"></script> -->
-    <!-- this key is good for personal.soton.ac.uk -->
-    <!-- <script src="http://www.google.com/jsapi?key=ABQIAAAAclCz4bThIvpXLvyO5UlroxRHLZmsFQiB8ZRO_dTNdmH17ck2WxRrAIXMOO5yx06c5i--1k1fv8p9Cw" type="text/javascript"></script> -->
-    <!-- good for steveblock.co.uk -->
-    <!-- <script src="http://www.google.com/jsapi?key=AIzaSyBUBI5vyEr5JMs-AsQqQgmHI2MhYyH3aOs" type="text/javascript"></script> -->
-    <!-- good for adventuresbytandem.com -->
-    <script src="http://www.google.com/jsapi?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs" type="text/javascript"></script>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC2m1ZuGuWZswlxQdGB2BQXNoGo4aTNKNs&sensor=false">
+    </script>
 
     <script type="text/javascript">
       var pathToScripts = "../";
-      LoadGoogleMaps('map', OnLoad);
 
       var tabImageWidth = 10;
       var tabWidth = 120;
@@ -410,7 +403,8 @@
 
       function ResetMap(sectionIndex) {
         var centre = sections[sectionIndex].mapCentre;
-	map.setCenter(new GLatLng(centre.lat, centre.lng), centre.zoom);
+        map.setCenter(new google.maps.LatLng(centre.lat, centre.lng));
+        map.setZoom(centre.zoom);
       }
 
       function MakeJsonRequest(url) {
@@ -555,7 +549,7 @@
         // innerHTML closes tags automatically!
         var text = '';
         for (var i=0; i<sections.length; ++i) {
-          text += '<a href="" id="tab' + i +
+          text += '<a href="#" id="tab' + i +
               '" class="tab" onclick="ShowSection(' + i +
               '); return false;" style="width:' + tabWidth + 'px;">' +
               '<img id="tab' + i +
@@ -622,13 +616,8 @@
             var overlayIndex = sectionIndex -  1;
           }
           for (var i=0; i<mapOverlays.length; ++i) {
-            if (i == overlayIndex) {
-              mapOverlays[i].blueLine.hide();
-              mapOverlays[i].redLine.show();
-            } else {
-              mapOverlays[i].blueLine.show();
-              mapOverlays[i].redLine.hide();
-            }
+            mapOverlays[i].blueLine.setVisible(i !== overlayIndex);
+            mapOverlays[i].redLine.setVisible(i === overlayIndex);
           }
         }
         ResetMap(sectionIndex);
@@ -691,6 +680,7 @@
       }
 
       function OnLoad(){
+        CreateMap('map');
 	var mapInstructions = document.getElementById('mapInstructions');
 	if (typeof mapInstructions.style.minWidth == 'undefined') {
           mapInstructions.innerHTML +=
@@ -698,11 +688,13 @@
         }
         ProcessDates();
         SetSizes();
-        map.disableScrollWheelZoom();
+        map.setOptions({
+          mapTypeId: google.maps.MapTypeId.HYBRID,
+          scrollwheel: false,
+        });
         LoadMapData('route.xml');
         WriteTabs();
         ShowSection(0);
-        map.setMapType(G_HYBRID_MAP);
       };
 
       function Enter() {
@@ -715,7 +707,7 @@
 
   </head>
 
-  <body class="gray">
+  <body class="gray" onload="OnLoad()">
 
     <!-- A div to force the window to include the space around the 'page' div.
     -->

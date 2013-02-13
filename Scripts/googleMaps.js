@@ -9,34 +9,23 @@ var map = null;
 // param; the args specified in the xml file, as a string.
 var clickHandlers = new Array();
 
-function LoadGoogleMaps(mapId, onLoadHandler, addControls) {
-  google.load('maps', '2');
-  google.setOnLoadCallback(function() {
-    document.onunload = GUnload;
-    CreateMap(mapId, addControls);
-    onLoadHandler();
-  });
-}
-
 function CreateMap(divID, addControls) {
   // This method sets up the Google Maps object. We can't configure the Google
   // Maps object until the map object in the HTML has been created.
-  if (!GBrowserIsCompatible()) {
-    document.getElementById(divID).innerHTML =
-        'Browser not compatible with Google Maps!';
-    return;
-  }
-  map = new GMap2(document.getElementById(divID));
+  var mapOptions = {};
   if (addControls === undefined || addControls) {
-    map.addControl(new GLargeMapControl());
-    map.addControl(new GMapTypeControl());
-    map.addControl(new GScaleControl());
+    mapOptions.zoomControl = true;
+    mapOptions.panControl = true;
+    mapOptions.mapTypeControl = true;
+    mapOptions.scaleControl = true;
+  } else {
+    mapOptions.disableDefaultUI = true;
   }
-  map.enableScrollWheelZoom();
+  map = new google.maps.Map(document.getElementById(divID), mapOptions);
 }
 
 function LoadMapData(filename) {
-  var request = GXmlHttp.create();
+  var request = new XMLHttpRequest;
   request.open('GET', filename, true);
   request.onreadystatechange = function() {
     if (request.readyState == 4) {
@@ -84,7 +73,7 @@ function ProcessXML(xmlDoc) {
       var shadowImage = points[i].getAttribute('shadowImage');
       var markerClickHandler = points[i].getAttribute('clickHandler');
       
-      var point = new GLatLng(lat,lng);
+      var point = new google.maps.LatLng(lat,lng);
       pts[i] = point;
 
       // Apply defaults.
@@ -101,7 +90,7 @@ function ProcessXML(xmlDoc) {
       // Add marker if marker image is not 'none'.
       if (markerImage != 'none') {
         var funcAndArgs = parseClickHandler(markerClickHandler);
-	AddMarker(point, CreateMarkerIcon(markerImage, shadowImage), location,
+	AddMarker(point, CreateMarker(markerImage, shadowImage), location,
             description, funcAndArgs.func, funcAndArgs.args);
       }
     }
@@ -128,72 +117,80 @@ function parseClickHandler(clickHandler) {
 
 // Need to use a function to add listener to bind args.
 function AddLine(pts, colour, width, clickHandler, clickHandlerArgs) {
-  var polyline = new GPolyline(pts,colour,width);
+  var polyline = new google.maps.Polyline({
+    path: pts,
+    strokeColor: colour,
+    strokeWeight: width,
+    strokeOpacity: 0.5,
+    map: map,
+  });
   if (clickHandler != null) {
-    GEvent.addListener(polyline, 'click', function(point) {
+    polyline.addListener('click', function() {
       clickHandler(clickHandlerArgs);
     }); 
   }
-  map.addOverlay(polyline);
 }
 
 // Note that clickHandlerArgs may be of any type, as this function can be used
 // directly, as well as when parsing an XML route file.
-function AddMarker(coords, theIcon, location, description, clickHandler,
+function AddMarker(coords, marker, location, description, clickHandler,
     clickHandlerArgs) {
-  var options = {icon: theIcon};
+  marker.setPosition(coords);
 
   // If there's a location, add a tooltip. If there's a description, add it to
   // the tooltip.
   if (location) {
-    options.title = location;
+    var title = location;
     if (description) {
-      options.title += ' : ' + description;
+      title += ' : ' + description;
     }
+    marker.setTitle(title);
   }
 
   // If there's a valid click handler, make the marker clickable.
-  options.clickable = false;
   if (clickHandler != null) {
-    options.clickable = true;
-  }
-
-  var marker = new GMarker(coords, options);
-
-  if (options.clickable) {
-    GEvent.addListener(marker, 'click', function(point) {
+    marker.setClickable(true);
+    marker.addListener('click', function() {
       clickHandler(clickHandlerArgs);
     }); 
   }
-  map.addOverlay(marker);
+
+  marker.setMap(map);
 }
 
-function CreateMarkerIcon(markerImage, shadowImage) {
+function CreateMarker(markerImage, shadowImage) {
   if (!markerImage) {
     throw new Error('Marker image not supplied!');
   }
-  var icon = new GIcon();
+  var icon = new google.maps.MarkerImage();
   var path = pathToScripts + 'Scripts/MapIcons/';
-  icon.image = path + markerImage;
+  icon.url = path + markerImage;
+
   // TODO : Dirty hack
   if (markerImage == 'endOfLine.png' || markerImage == 'smallMarkerRed.png') {
-    icon.iconSize = new GSize(9, 9);
-    icon.iconAnchor = new GPoint(5, 5);
-    icon.infoWindowAnchor = new GPoint(5, 5);
+    icon.size = new google.maps.Size(9, 9);
+    icon.anchor = new google.maps.Point(5, 5);
+    var anchorPoint = new google.maps.Point(5, 5);
   } else if (markerImage == 'tandem.png') {
-    icon.iconSize = new GSize(51, 61);
-    icon.iconAnchor = new GPoint(26, 61);
-    icon.infoWindowAnchor = new GPoint(6, 20);
+    icon.size = new google.maps.Size(51, 61);
+    icon.anchor = new google.maps.Point(26, 61);
+    var anchorPoint = new google.maps.Point(6, 20);
   } else {
-    icon.iconSize = new GSize(12, 20);
-    icon.iconAnchor = new GPoint(6, 20);
-    icon.infoWindowAnchor = new GPoint(6, 20);
+    icon.size = new google.maps.Size(12, 20);
+    icon.anchor = new google.maps.Point(6, 20);
+    var anchorPoint = new google.maps.Point(6, 20);
     if (shadowImage) {
-      icon.shadow = path + shadowImage;
-      icon.shadowSize = new GSize(22, 20);
+      var shadow = {};
+      shadow.url = path + shadowImage;
+      shadow.anchor = new google.maps.Point(6, 20);
+      shadow.size = new google.maps.Size(22, 20);
     }
   }
-  return icon;
+  var options = {icon: icon, anchorPoint: anchorPoint};
+  if (shadowImage) {
+    options.shadow = shadow;
+  }
+  return new google.maps.Marker(options);
 }
 // Adds geocoding stuff for Google maps
 
