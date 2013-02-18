@@ -172,29 +172,26 @@ function CreateMarkerIcon(markerImage, shadowImage) {
   if (!markerImage) {
     throw new Error('Marker image not supplied!');
   }
-  if (!shadowImage) {
-    throw new Error('Shadow image not supplied!');
-  }
   var icon = new GIcon();
   var path = pathToScripts + 'Scripts/MapIcons/';
   icon.image = path + markerImage;
-  icon.shadow = path + shadowImage;
   // TODO : Dirty hack
   if (markerImage == 'endOfLine.png' || markerImage == 'smallMarkerRed.png') {
     icon.iconSize = new GSize(9, 9);
-    icon.shadowSize = new GSize(0, 0);
     icon.iconAnchor = new GPoint(5, 5);
     icon.infoWindowAnchor = new GPoint(5, 5);
   } else if (markerImage == 'tandem.png') {
     icon.iconSize = new GSize(51, 61);
-    icon.shadowSize = new GSize(0, 0);
     icon.iconAnchor = new GPoint(26, 61);
     icon.infoWindowAnchor = new GPoint(6, 20);
   } else {
     icon.iconSize = new GSize(12, 20);
-    icon.shadowSize = new GSize(22, 20);
     icon.iconAnchor = new GPoint(6, 20);
     icon.infoWindowAnchor = new GPoint(6, 20);
+    if (shadowImage) {
+      icon.shadow = path + shadowImage;
+      icon.shadowSize = new GSize(22, 20);
+    }
   }
   return icon;
 }

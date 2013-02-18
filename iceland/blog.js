@@ -40,7 +40,7 @@ function OnFetchedBlog(root) {
       var point = new GLatLng(lat,lng);
       var argsArray = [title, location, date, content];
       AddMarker(point,
-                CreateMarkerIcon('tandem.png', 'standardShadow.png'),
+                CreateMarkerIcon('tandem.png'),
                 location,
                 null,
                 ShowBlog,
