@@ -102,56 +102,33 @@
         var width = 210;
         var height = width * 3 / 4;
         var count = boundingElement.getElementsByClassName('image').length;
-        log(count)
 	// Find the maximum circle diameter assuming the elements are arranged
 	// synmetrically horizontally, with a gap always at the bottom.
         var leftmostIndex = Math.ceil(count / 4);  // 1-based index of leftmost element
-        log(leftmostIndex);
         var topmostIndex = Math.ceil(count / 2);  // 1-based index of topmost element
-        log(topmostIndex);
         var W = boundingElement.clientWidth;
         var H = boundingElement.clientHeight;
-        log(W);
-        log(H);
         var rFromWidth = (W - width) / (2 * Math.sin((2 * leftmostIndex - 1) * Math.PI / count));
-        log(rFromWidth);
         var yLower = Math.cos(Math.PI / count);
         var yUpper = - Math.cos((2 * topmostIndex - 1) * Math.PI / count);
         var rFromHeight = (H - height) / (yLower + yUpper);
-        log(rFromHeight);
         var r = Math.min(rFromWidth, rFromHeight);
-        log(r);
         var yOffset = r * (yUpper - yLower) / 2;
-        log(yOffset);
         for (var i = 1; i <= count; i++) {
           var element = boundingElement.getElementsByClassName('image')[i - 1];
-          log(element);
           var angle = (2 * i - 1) * Math.PI / count;
-          log(angle);
           element.style.left = W / 2 - r * Math.sin(angle) - width / 2 + 'px';
           element.style.top = H / 2 + r * Math.cos(angle) - height / 2 + yOffset + 'px';
-          log(element.style.left);
-          log(element.style.top);
           element.style.width = width + 'px';
           element.style.height = height + 'px';
           element.style.backgroundSize = width + 'px ' + height + 'px';
         }
       }
-      function log(x) {
-        //console.log(x);
-      }
-      function SetText(element, text) {
-        if (typeof element.textContent == 'string') {
-          element.textContent = text;
-        } else if (typeof element.innerText == 'string') {
-          element.innerText = text;
-        }
-      }
       function Display(text) {
-        SetText(document.getElementById('status'), text);
+        document.getElementById('status').innerText = text;
       }
       function Clear() {
-        SetText(document.getElementById('status'), '');
+        document.getElementById('status').innerText = '';
       }
     </script>
 
