@@ -36,7 +36,7 @@
         left: -16.6666%;
       }
       a.image img + img {
-        visibility: hidden;
+        opacity: 0;
       }
       a.image + div {
         height: 30px;
@@ -46,13 +46,31 @@
         position: absolute;
         left: 300px;
         right: 300px;
-        visibility: hidden;
+        opacity: 0;
+      }
+      a.image:hover {
+        /* There seems to be a bug in chrome where this has no effect. It uses
+         * the duration of the previous transition. */
+        transition-duration: 0.2s;
+        width: 190px;
+        height: 190px;
+        /* Translating using the transform property is tricky, because
+         * assigning to the property overrides previous values, whereas we need
+         * to add to them. Plus there seems to be a bug resetting the transform
+         * property after it's been animated. Instead simply modify the start
+         * position. */
+        left: calc(50% - 95px);
+        top: calc(50% - 95px);
       }
       a.image:hover img + img {
-        visibility: visible;
+        /* Animating this messes up clipping to the parent element.
+        transition-duration: 0.2s;
+        */
+        opacity: 1;
       }
       a.image:hover + div {
-        visibility: visible;
+        transition-duration: 0.2s;
+        opacity: 1;
       }
       h1 {
         text-align: center;
