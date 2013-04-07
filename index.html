@@ -15,14 +15,20 @@
       a {
         color: #444444;
       }
-      img.preload {
-        position: absolute;
-        left: -1000px;
-      }
       a.image {
         position: absolute;
         display: block;
         padding: 0px;
+      }
+      a.image img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+      a.image img + img {
+        visibility: hidden;
       }
       a.image + div {
         height: 30px;
@@ -32,6 +38,9 @@
         position: absolute;
         width: 100%;
         visibility: hidden;
+      }
+      a.image:hover img + img {
+        visibility: visible;
       }
       a.image:hover + div {
         visibility: visible;
@@ -46,48 +55,6 @@
         width: 900px;
         height: 700px;
         margin: auto;
-      }
-      a.image#canada {
-        background-image: url('canada-mono.jpg');
-      }
-      a.image#canada:hover {
-        background-image: url('canada.jpg');
-      }
-      a.image#britain {
-        background-image: url('britain-mono.jpg');
-      }
-      a.image#britain:hover {
-        background-image: url('britain.jpg');
-      }
-      a.image#iceland {
-        background-image: url('iceland-mono.jpg');
-      }
-      a.image#iceland:hover {
-        background-image: url('iceland.jpg');
-      }
-      a.image#france {
-        background-image: url('france-mono.jpg');
-      }
-      a.image#france:hover {
-        background-image: url('france.jpg');
-      }
-      a.image#newzealand {
-        background-image: url('newzealand-mono.jpg');
-      }
-      a.image#newzealand:hover {
-        background-image: url('newzealand.jpg');
-      }
-      a.image#chile {
-        background-image: url('chile-mono.jpg');
-      }
-      a.image#chile:hover {
-        background-image: url('chile.jpg');
-      }
-      a.image#china {
-        background-image: url('china-mono.jpg');
-      }
-      a.image#china:hover {
-        background-image: url('china.jpg');
       }
     </style>
 
@@ -128,29 +95,42 @@
     <h1>Adventures By Tandem</h1>
 
     <div id="photoGroup">
-      <a class="image" id="canada" href="canada"></a>
+      <a class="image" id="canada" href="canada">
+        <img src="canada-mono.jpg">
+        <img src="canada.jpg">
+      </a>
       <div>Canada '06</div>
-      <a class="image" id="britain" href="britain"></a>
+      <a class="image" id="britain" href="britain">
+        <img src="britain-mono.jpg">
+        <img src="britain.jpg">
+      </a>
       <div>Britain '07</div>
-      <a class="image" id="iceland" href="iceland"></a>
+      <a class="image" id="iceland" href="iceland">
+        <img src="iceland-mono.jpg">
+        <img src="iceland.jpg">
+      </a>
       <div>Iceland '08</div>
-      <a class="image" id="france" href="france"></a>
+      <a class="image" id="france" href="france">
+        <img src="france-mono.jpg">
+        <img src="france.jpg">
+      </a>
       <div>France '09</div>
-      <a class="image" id="newzealand" href="newzealand"></a>
+      <a class="image" id="newzealand" href="newzealand">
+        <img src="newzealand-mono.jpg">
+        <img src="newzealand.jpg">
+      </a>
       <div>New Zealand '10</div>
-      <a class="image" id="chile" href="chile"></a>
+      <a class="image" id="chile" href="chile">
+        <img src="chile-mono.jpg">
+        <img src="chile.jpg">
+      </a>
       <div>Chile '11</div>
-      <a class="image" id="china" href="china"></a>
+      <a class="image" id="china" href="china">
+        <img src="china-mono.jpg">
+        <img src="china.jpg">
+      </a>
       <div>China '12</div>
     </div>
-
-    <img class="preload" src="canada.jpg">
-    <img class="preload" src="britain.jpg">
-    <img class="preload" src="iceland.jpg">
-    <img class="preload" src="france.jpg">
-    <img class="preload" src="newzealand.jpg">
-    <img class="preload" src="chile.jpg">
-    <img class="preload" src="china.jpg">
 
   </body>
 
