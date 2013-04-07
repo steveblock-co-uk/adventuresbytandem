@@ -24,6 +24,18 @@
         display: block;
         padding: 0px;
       }
+      a.image + div {
+        height: 30px;
+        text-align: center;
+        top: 320px;
+        font-size: large;
+        position: absolute;
+        width: 100%;
+        visibility: hidden;
+      }
+      a.image:hover + div {
+        visibility: visible;
+      }
       h1 {
         text-align: center;
         margin-top: 20px;
@@ -77,13 +89,6 @@
       a.image#china:hover {
         background-image: url('china.jpg');
       }
-      div#status {
-        height: 30px;
-        text-align: center;
-        position: relative;
-        top: 320px;
-        font-size: large;
-      }
     </style>
 
     <script type="text/javascript">
@@ -114,12 +119,6 @@
           element.style.backgroundSize = width + 'px ' + height + 'px';
         }
       }
-      function Display(text) {
-        document.getElementById('status').innerText = text;
-      }
-      function Clear() {
-        document.getElementById('status').innerText = '';
-      }
     </script>
 
   </head>
@@ -129,14 +128,20 @@
     <h1>Adventures By Tandem</h1>
 
     <div id="photoGroup">
-      <div id="status"></div>
-      <a class="image" id="canada" href="canada" onmouseover="Display('Canada \'06');" onmouseout="Clear();"></a>
-      <a class="image" id="britain" href="britain" onmouseover="Display('Britain \'07');" onmouseout="Clear();"></a>
-      <a class="image" id="iceland" href="iceland" onmouseover="Display('Iceland \'08');" onmouseout="Clear();"></a>
-      <a class="image" id="france" href="france" onmouseover="Display('France \'09');" onmouseout="Clear();"></a>
-      <a class="image" id="newzealand" href="newzealand" onmouseover="Display('New Zealand \'10');" onmouseout="Clear();"></a>
-      <a class="image" id="chile" href="chile" onmouseover="Display('Chile \'11');" onmouseout="Clear();"></a>
-      <a class="image" id="china" href="china" onmouseover="Display('China \'12');" onmouseout="Clear();"></a>
+      <a class="image" id="canada" href="canada"></a>
+      <div>Canada '06</div>
+      <a class="image" id="britain" href="britain"></a>
+      <div>Britain '07</div>
+      <a class="image" id="iceland" href="iceland"></a>
+      <div>Iceland '08</div>
+      <a class="image" id="france" href="france"></a>
+      <div>France '09</div>
+      <a class="image" id="newzealand" href="newzealand"></a>
+      <div>New Zealand '10</div>
+      <a class="image" id="chile" href="chile"></a>
+      <div>Chile '11</div>
+      <a class="image" id="china" href="china"></a>
+      <div>China '12</div>
     </div>
 
     <img class="preload" src="canada.jpg">
