@@ -17,8 +17,11 @@
       }
       a.image {
         position: absolute;
-        display: block;
         padding: 0px;
+        width: 208px;
+        height: 156px;
+        left: calc(50% - 104px);
+        top: calc(50% - 78px);
       }
       a.image img {
         width: 100%;
@@ -36,7 +39,8 @@
         top: 320px;
         font-size: large;
         position: absolute;
-        width: 100%;
+        left: 300px;
+        right: 300px;
         visibility: hidden;
       }
       a.image:hover img + img {
@@ -52,45 +56,44 @@
       }
       div#photoGroup {
         position: relative;
+        top: 40px;
         width: 900px;
         height: 700px;
         margin: auto;
       }
-    </style>
-
-    <script type="text/javascript">
-      function arrangeInCircle(boundingElement) {
-        // TODO: Put the width and height in CSS?
-        var width = 210;
-        var height = width * 3 / 4;
-        var count = boundingElement.getElementsByClassName('image').length;
-	// Find the maximum circle diameter assuming the elements are arranged
-	// synmetrically horizontally, with a gap always at the bottom.
-        var leftmostIndex = Math.ceil(count / 4);  // 1-based index of leftmost element
-        var topmostIndex = Math.ceil(count / 2);  // 1-based index of topmost element
-        var W = boundingElement.clientWidth;
-        var H = boundingElement.clientHeight;
-        var rFromWidth = (W - width) / (2 * Math.sin((2 * leftmostIndex - 1) * Math.PI / count));
-        var yLower = Math.cos(Math.PI / count);
-        var yUpper = - Math.cos((2 * topmostIndex - 1) * Math.PI / count);
-        var rFromHeight = (H - height) / (yLower + yUpper);
-        var r = Math.min(rFromWidth, rFromHeight);
-        var yOffset = r * (yUpper - yLower) / 2;
-        for (var i = 1; i <= count; i++) {
-          var element = boundingElement.getElementsByClassName('image')[i - 1];
-          var angle = (2 * i - 1) * Math.PI / count;
-          element.style.left = W / 2 - r * Math.sin(angle) - width / 2 + 'px';
-          element.style.top = H / 2 + r * Math.cos(angle) - height / 2 + yOffset + 'px';
-          element.style.width = width + 'px';
-          element.style.height = height + 'px';
-          element.style.backgroundSize = width + 'px ' + height + 'px';
-        }
+      a.image#canada {
+        -webkit-transform: rotateZ(-150deg) translateY(-300px) rotateZ(150deg);
+        transform: rotateZ(-150deg) translateY(-300px) rotateZ(150deg);
       }
-    </script>
+      a.image#britain {
+        -webkit-transform: rotateZ(-100deg) translateY(-300px) rotateZ(100deg);
+        transform: rotateZ(-100deg) translateY(-300px) rotateZ(100deg);
+      }
+      a.image#iceland {
+        -webkit-transform: rotateZ(-50deg) translateY(-300px) rotateZ(50deg);
+        transform: rotateZ(-50deg) translateY(-300px) rotateZ(50deg);
+      }
+      a.image#france {
+        -webkit-transform: rotateZ(0deg) translateY(-300px) rotateZ(0deg);
+        transform: rotateZ(0deg) translateY(-300px) rotateZ(0deg);
+      }
+      a.image#newzealand {
+        -webkit-transform: rotateZ(50deg) translateY(-300px) rotateZ(-50deg);
+        transform: rotateZ(50deg) translateY(-300px) rotateZ(-50deg);
+      }
+      a.image#chile {
+        -webkit-transform: rotateZ(100deg) translateY(-300px) rotateZ(-100deg);
+        transform: rotateZ(100deg) translateY(-300px) rotateZ(-100deg);
+      }
+      a.image#china {
+        -webkit-transform: rotateZ(150deg) translateY(-300px) rotateZ(-150deg);
+        transform: rotateZ(150deg) translateY(-300px) rotateZ(-150deg);
+      }
+    </style>
 
   </head>
 
-  <body onload="arrangeInCircle(document.getElementById('photoGroup'));">
+  <body>
     
     <h1>Adventures By Tandem</h1>
 
