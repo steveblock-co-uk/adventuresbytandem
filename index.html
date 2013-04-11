@@ -117,13 +117,20 @@
         transform: rotateZ(150deg) translateY(-270px) rotateZ(-150deg);
       }
       div#loading {
-        height: 30px;
-        text-align: center;
-        top: 320px;
-        font-size: large;
         position: absolute;
-        left: 300px;
-        right: 300px;
+        top: 320px;
+        text-align: center;
+        width: 100%;
+      }
+      div#loading img {
+        -webkit-animation: rotation1 1s linear infinite;
+        animation: rotation1 1s linear infinite;
+      }
+      @-webkit-keyframes rotation1 {
+        to { -webkit-transform: rotateZ(360deg); }
+      }
+      @keyframes rotation1 {
+        to { transform: rotateZ(360deg); }
       }
     </style>
 
@@ -144,6 +151,8 @@
     <h1>Adventures By Tandem</h1>
 
     <div id="photoGroup">
+      <!-- This must come before other images so it starts loading first. -->
+      <div id="loading"><img src="spinner.png"></div>
       <a class="image" id="canada" href="canada">
         <img src="canada-mono.jpg">
         <img src="canada.jpg">
@@ -179,7 +188,6 @@
         <img src="china.jpg">
       </a>
       <div>China '12</div>
-      <div id="loading">Loading ...</div>
     </div>
 
 
