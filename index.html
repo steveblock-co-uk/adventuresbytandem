@@ -28,6 +28,8 @@
         -webkit-transform: rotateZ(-180deg) translateY(-270px) rotateZ(180deg);
         transform: rotateZ(-180deg) translateY(-270px) rotateZ(180deg);
         visibility: hidden;
+        transition-duration: 1s;
+        transition-property: -webkit-transform, transform;
       }
       a.image img {
         height: 100%;
@@ -47,29 +49,13 @@
         left: 300px;
         right: 300px;
         opacity: 0;
-      }
-      a.image:hover {
-        /* There seems to be a bug in chrome where this has no effect. It uses
-         * the duration of the previous transition. */
-        transition-duration: 0.2s;
-        width: 190px;
-        height: 190px;
-        /* Translating using the transform property is tricky, because
-         * assigning to the property overrides previous values, whereas we need
-         * to add to them. Plus there seems to be a bug resetting the transform
-         * property after it's been animated. Instead simply modify the start
-         * position. */
-        left: calc(50% - 95px);
-        top: calc(50% - 95px);
+        transition-property: opacity;
+        transition-duration: 0.2;
       }
       a.image:hover img + img {
-        /* Animating this messes up clipping to the parent element.
-        transition-duration: 0.2s;
-        */
         opacity: 1;
       }
       a.image:hover + div {
-        transition-duration: 0.2s;
         opacity: 1;
       }
       h1 {
@@ -86,7 +72,6 @@
       }
       a.image.animate {
         visibility: visible;
-        transition-duration: 1s;
       }
       a.image#canada.animate {
         -webkit-transform: rotateZ(-150deg) translateY(-270px) rotateZ(150deg);
@@ -139,6 +124,15 @@
         elements = document.getElementsByClassName('image');
         for (var i = 0; i < elements.length; i++) {
           elements[i].classList.add('animate');
+          // We can't use CSS and :hover to add to the trandsform, so we resort to script.
+          elements[i].addEventListener('mouseover', function(e) {
+            this.cachedTransform = getComputedStyle(this).webkitTransform;
+            this.style.transitionDuration = '0.2s';
+            this.style.webkitTransform = this.cachedTransform + ' scale(1.07)';
+          });
+          elements[i].addEventListener('mouseout', function(e) {
+            this.style.webkitTransform = this.cachedTransform;
+          });
         }
         document.getElementById('loading').style.display = "none";
       }
