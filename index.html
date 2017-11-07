@@ -51,10 +51,10 @@
         transition-property: opacity;
         transition-duration: 0.2;
       }
-      a.image:hover img + img {
+      a.hoverable:hover img + img {
         opacity: 1;
       }
-      a.image:hover + div {
+      a.hoverable:hover + div {
         opacity: 1;
       }
       h1 {
@@ -109,10 +109,18 @@
 
     <script>
       function startAnimation() {
-        elements = document.getElementsByClassName('image');
+        var elements = document.getElementsByClassName('image');
         for (var i = 0; i < elements.length; i++) {
           elements[i].classList.add('animate');
-          // We can't use CSS and :hover to add to the transform, so we resort to script.
+        }
+        document.getElementById('loading').style.display = "none";
+        setTimeout(addHoverAnimation, 1000);
+      }
+      // We can't use CSS and :hover to add to the transform, so we resort to script, but this must be done after the initial animation is complete.
+      function addHoverAnimation() {
+        var elements = document.getElementsByClassName('image');
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.add('hoverable');
           elements[i].addEventListener('mouseover', function(e) {
             this.cachedTransform = getComputedStyle(this).transform;
             this.style.transitionDuration = '0.2s';
@@ -122,7 +130,6 @@
             this.style.transform = this.cachedTransform;
           });
         }
-        document.getElementById('loading').style.display = "none";
       }
     </script>
 
