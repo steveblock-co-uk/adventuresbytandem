@@ -3,7 +3,7 @@ var blogID = '514366542416623469';
 function LoadBlogData() {
   document.getElementById('blogText').innerHTML = 'Fetching blog posts ...';
   var script = document.createElement('script');
-  script.setAttribute('src', 'http://www.blogger.com/feeds/' + blogID + '/posts/default?alt=json-in-script&callback=OnFetchedBlog' );
+  script.setAttribute('src', 'https://www.blogger.com/feeds/' + blogID + '/posts/default?alt=json-in-script&callback=OnFetchedBlog' );
   script.setAttribute('type', 'text/javascript');
   document.documentElement.firstChild.appendChild(script);
 }

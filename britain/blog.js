@@ -5,7 +5,7 @@ function ShowBlog( index ) {
   document.getElementById( 'blogStatus' ).style.visibility = 'visible';
   // Create script to make request
   var script = document.createElement('script');
-  script.setAttribute('src', 'http://www.blogger.com/feeds/' + blogID + '/posts/default/' + days.Day(index).blogID + '?alt=json-in-script&callback=OnFetchedBlog' );
+  script.setAttribute('src', 'https://www.blogger.com/feeds/' + blogID + '/posts/default/' + days.Day(index).blogID + '?alt=json-in-script&callback=OnFetchedBlog' );
   script.setAttribute('type', 'text/javascript');
   document.documentElement.firstChild.appendChild(script);
 }
