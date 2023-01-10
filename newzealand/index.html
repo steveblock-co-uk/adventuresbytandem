@@ -127,7 +127,6 @@
       var numEntries = 0;
       // A single entry on the route
       function Entry(caption, description, routeSegment, photos) {
-        console.log('Entry()');
         this.id_ = ++numEntries;
         this.caption_ = caption;
         this.description_ = description;
@@ -139,7 +138,6 @@
         return this.id_;
       }
       Entry.prototype.show = function(tandem) {
-        console.log('Entry.show(): id_=' + this.id_);
         this.caption_.show();
         this.description_.show();
         this.routeSegment_.showSelected();
@@ -148,7 +146,6 @@
         this.routeSegment_.adoptTandem(tandem)
       }
       Entry.prototype.hide = function() {
-        console.log('Entry.hide(): id_=' + this.id_);
         this.caption_.hide();
         this.description_.hide();
         this.routeSegment_.hide();
@@ -157,27 +154,22 @@
         return this.routeSegment_.tandem();
       }
       Entry.prototype.highlightRouteSegment = function() {
-        console.log('Entry.highlightRouteSegment()');
         this.routeSegment_.showHighlighted();
       }
 
       function Caption(text) {
-        console.log('Caption(): text="' + text + '"');
         this.text_ = text;
       }
       // TODO: Inherit show/hide ?
       Caption.prototype.show = function() {
-        console.log('Caption.show()');
         showElement(this.element());
       }
       Caption.prototype.hide = function() {
-        console.log('Caption.hide()');
         hideElement(this.element());
       }
       Caption.prototype.element = function() {
         if (this.element_)
           return this.element_;
-        console.log('Caption.element()');
         this.element_ = document.createElement('p');
         this.element_.innerText = this.text_;
         this.element_.className = 'defaultCaption';
@@ -186,22 +178,18 @@
       }
 
       function Description(text) {
-        console.log('Description(): text="' + text + '"');
         this.text_ = text;
       }
       // TODO: Inherit show/hide ?
       Description.prototype.show = function() {
-        console.log('Description.show()');
         showElement(this.element());
       }
       Description.prototype.hide = function() {
-        console.log('Description.hide()');
         hideElement(this.element());
       }
       Description.prototype.element = function() {
         if (this.element_)
           return this.element_;
-        console.log('Description.element()');
         this.element_ = document.createElement('p');
         this.element_.innerText = this.text_;
         this.element_.className = 'defaultDescription';
@@ -210,7 +198,6 @@
       }
 
       function RouteSegment(position, size, selectedImageName, selectedImageOffset, highlightedImageName, highlightedImageOffset, text) {
-        console.log('RouteSegment()');
         this.selectedImageName_ = selectedImageName;
         this.selectedImageOffset_ = selectedImageOffset;
         this.highlightedImageName_ = highlightedImageName;
@@ -223,24 +210,20 @@
         this.element_.id = 'route_segment_' + this.entry_.id();
       }
       RouteSegment.prototype.showSelected = function() {
-        console.log('RouteSegment.showSelected()');
         this.element_.style.backgroundImage = 'url(' + this.selectedImageName_ + ')';
         this.element_.style.backgroundPosition = this.selectedImageOffset_.x() + 'px ' + this.selectedImageOffset_.y() + 'px';
         this.isSelected_ = true;
       }
       RouteSegment.prototype.showHighlighted = function() {
-        console.log('RouteSegment.showHighlighted()');
         this.element_.style.backgroundImage = 'url(' + this.highlightedImageName_ + ')';
         this.element_.style.backgroundPosition = this.highlightedImageOffset_.x() + 'px ' + this.highlightedImageOffset_.y() + 'px';
       }
       RouteSegment.prototype.hide = function() {
-        console.log('RouteSegment.hide()');
         this.element_.style.backgroundImage = null;
         this.isSelected_ = false;
       }
       // Need to create RouteSegment for entire line at start up
       RouteSegment.prototype.createElement = function(position, size, text) {
-        console.log('RouteSegment.createElement()');
         this.element_ = document.createElement('div');
         this.element_.className = 'defaultRouteSegment';
         this.addEventListener('dragenter', this.onDragEnter);
@@ -258,11 +241,9 @@
         return this.element_;
       }
       RouteSegment.prototype.tandem = function() {
-        console.log('RouteSegment.tandem(): entry_.id()=' + this.entry_.id() + ', tandem_=' + this.tandem_);
         return this.tandem_;
       }
       RouteSegment.prototype.adoptTandem = function(tandem) {
-        console.log('RouteSegment.adoptTandem(): entry_.id()=' + this.entry_.id() + ', tandem=' + tandem);
         this.tandem_ = tandem;
         this.element_.appendChild(this.tandem_.element());
       }
@@ -275,7 +256,6 @@
         })(this);
       }
       RouteSegment.prototype.onDragEnter = function(event) {
-        console.log('RouteSegment.onDragEnter(): event.target.id=' + event.target.id);
         // Needed once we fix event bubbling?
         if (event.target.id == 'tandem')
           return;
@@ -284,7 +264,6 @@
         this.entry_.highlightRouteSegment(); 
       }
       RouteSegment.prototype.onDragLeave = function(event) {
-        console.log('RouteSegment.onDragLeave(): event.target.id=' + event.target.id);
         // Needed once we fix event bubbling?
         if (event.target.id == 'tandem')
           return;
@@ -293,7 +272,6 @@
         this.entry_.hide(); 
       }
       RouteSegment.prototype.onDragOver = function(event) {
-        //console.log('RouteSegment.onDragOver(): event.target.id=' + event.target.id);
         // Needed once we fix event bubbling?
         if (event.target.id == 'tandem')
           return;
@@ -301,7 +279,6 @@
       }
       RouteSegment.prototype.onDrop = function(event) {
         var previousId = event.dataTransfer.getData('text/plain');
-        console.log('RouteSegment.onDrop(): event.target.id=' + event.target.id + ', previousId=' + previousId);
         tandem = idToEntry(id).hide();
         this.entry_.show(tandem); 
         // Remove the help bubble.
@@ -310,28 +287,23 @@
 
       // TODO: Use getEntry(index) global to avoid need for this.
       function idToEntry(id) {
-        console.log('idToEntry(): id=' + id);
         return entries[new Number(id.split('_')[2]) - 1];
       }
 
       // TODO: Inherit MainPhoto
       function Photo(fileName, style) {
-        console.log('Photo(): fileName="' + fileName + '"');
         this.fileName_ = fileName;
         this.style_ = style;
       }
       Photo.prototype.show = function() {
-        console.log('Photo.show()');
         showElement(this.element());
       }
       Photo.prototype.hide = function() {
-        console.log('Photo.hide()');
         hideElement(this.element());
       }
       Photo.prototype.element = function() {
         if (this.element_)
           return this.element_;
-        console.log('Photo.element()');
         this.element_ = document.createElement('img');
         this.element_.src = 'photos/' + this.fileName_;
         this.element_.className = 'defaultPhoto ' + this.style_;
@@ -342,14 +314,12 @@
       MainPhoto.prototype = new Photo();
       MainPhoto.prototype.constructor = MainPhoto;
       function MainPhoto(fileName, caption) {
-        console.log('MainPhoto(): fileName="' + fileName + '"');
         this.fileName_ = fileName; 
         this.caption_ = caption; 
       }
       MainPhoto.prototype.element = function() {
         if (this.element_)
           return this.element_;
-        console.log('MainPhoto.element()');
         var image = document.createElement('img');
         image.src = 'photos/' + this.fileName_;
         var caption = document.createElement('p');
@@ -382,7 +352,6 @@
       Tandem.prototype.onDragStart = function(event) {
         // event.target is the tandem image.
         id = event.target.parentNode.id;
-        console.log('Tandem.onDragStart(): id=' + id);
         event.dataTransfer.effectAllowed = 'move';
         // TODO: Pass id of entry?
         event.dataTransfer.setData('text/plain', id);
@@ -390,7 +359,6 @@
       }
       Tandem.prototype.onDragEnd = function(event) {
         // event.target is the tandem image.
-        console.log('Tandem.onDragEnd(): event.target.id=' + event.target.id);
       }
 
       function Pair(x, y) {
@@ -408,7 +376,6 @@
       var tertiaryStyle = 'tertiaryPhoto';
       var entries = [];
       function onLoad() {
-        console.log('onLoad()');
         entries = [
             new Entry(
                 new Caption(''),
@@ -556,7 +523,6 @@
                  new MainPhoto('IMGP5570.JPG', 'Another tandem adventure done.'),
                  new Photo('IMGP5563.JPG', tertiaryStyle)])];
         entries[0].show(new Tandem());
-        console.log('onLoad(): Done');
       }
     </script>
   </head>
