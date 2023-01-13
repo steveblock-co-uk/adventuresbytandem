@@ -1,13 +1,8 @@
-var picasaUserID = 'steve.a.block';
-var album = 'LEJOG';
 var imageSize = 640;
-var thumbSize = 200;
 var imageSpacing = 20;
 // Note that if we request an image size greater than the original photo, we only get the original, but the feed describes
 // dimensions equal to the request, not the image. Some of the photos are only 640x480.
 // If we request n thumb sizes, we get exactly n thumbs
-
-// http://code.google.com/apis/picasaweb/reference.html
 
 var numPhotos = null;
 var timer = null;
@@ -21,43 +16,17 @@ function ConfigurePhotos() {
 }
 
 function ShowPhotos( index ) {
-
   // Show status indicator
   document.getElementById( 'photosStatus' ).style.visibility = 'visible';
 
-  // Can't get this to work for tags with spaces, even if escape the space of quote the tag
-  // Also fails if tags have capitals?!
-  var url
-    = 'http://picasaweb.google.com/data/feed/api/user/' + picasaUserID
-    // + '/album/' + album
-    + '?tag=' + days.Day( index ).tag
-    + '&imgmax=' + imageSize
-    + '&kind=photo'
-    + '&alt=json-in-script'
-    + '&callback=OnFetchedPhotos';
-
-  // Javascript provides an 'escape' method to escape all characters for a URL,
-  // but if we use it, we get no response from Picasa
-
-  // TODO: Can we do this directly with HttpRequest and still use a JSON callback?
-  var script = document.createElement('script');
-  script.setAttribute('src', url );
-  script.setAttribute('type', 'text/javascript');
-
-  // TODO better to replace script than add new one - not sure how
-  // document.getElementById('picasaScript').replace( script );
-  document.documentElement.firstChild.appendChild(script);
-}
-
-function OnFetchedPhotos(root) {
-
-  numPhotos = root.feed['openSearch$totalResults'].$t;
+  var photos = allPhotos[days.Day( index ).tag];
+  numPhotos = photos.length;
 
   if( numPhotos > 0 ) {
     // Set width of photos div to force photosScroller to expand horizontally, rather than vertically
     document.getElementById( 'photos' ).style.width = ((imageSize+imageSpacing)*numPhotos) + 'px';
     document.getElementById( 'photos' ).innerHTML = '';
-    AddPhotos( root.feed.entry );
+    AddPhotos( photos );
   } else {
     document.getElementById( 'photos' ).style.width = '100%';
     document.getElementById( 'photos' ).innerHTML = '<p style="text-align: center;">Too busy pedalling for photos today!</p>';
@@ -72,17 +41,16 @@ function OnFetchedPhotos(root) {
   UpdateArrows( 1 );
 }
 
-function AddPhotos( photosObj ) {
+function AddPhotos( photos ) {
 
   // TODO - set photo order?
 
   for( var i=0; i<numPhotos; i++ ) {
-    var photoObj = photosObj[i];
-    var caption  = photoObj['media$group']['media$description'].$t;
-    var imageObj = photoObj['media$group']['media$content'][0];
-    var url      = imageObj.url;
-    var width    = imageObj.width;
-    var height   = imageObj.height;
+    var caption  = photos[i].caption;
+    var url      = "photos/" + photos[i].filename;
+    var aspectRatio = photos[i].width / photos[i].height;
+    var width       = aspectRatio >= 1 ? imageSize : imageSize * aspectRatio;
+    var height      = aspectRatio <= 1 ? imageSize : imageSize / aspectRatio;
 
     var n = caption.indexOf( ':' );
     var tag = caption.substring( 0, n );
@@ -90,7 +58,7 @@ function AddPhotos( photosObj ) {
 
     document.getElementById( 'photos' ).innerHTML
       += '<div class="photoBox" id="photo' + (i+1) + '" style="width:' + imageSize +'px; margin-right:' + imageSpacing + 'px;">'
-      +  '  <img class="photo" src="' + imageObj.url + '" alt="' + tag + '" '
+      +  '  <img class="photo" src="' + url + '" alt="' + tag + '" '
       +       'style="width:' + width + 'px; height:' + height + 'px; margin-top:' + (imageSize-height)/2 + 'px;">'
       +  '  <div class="tag">' + tag + '</div>'
       +  '  <div class="ramble">' + ramble + '</div>'
