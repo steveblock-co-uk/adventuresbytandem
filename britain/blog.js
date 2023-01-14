@@ -19,7 +19,7 @@ function OnFetchedBlog( root ) {
   } else {
     document.getElementById("mileage").innerHTML = '';
   }
-  document.getElementById( 'blog' ).innerHTML = entry.content.$t;
+  document.getElementById( 'blog' ).innerHTML = entry.content.$t.replace(/http:\/\//g, "https://");;
   document.getElementById( 'blogStatus' ).style.visibility = 'hidden';
   var blogPrev = document.getElementById( 'blogPrev' );
   if( currentIndex > 0 ) {

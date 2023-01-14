@@ -26,10 +26,10 @@ function OnFetchedBlog(root) {
 
     var title = entry.title.$t;
     //var date = entry.published.$t;
-    var content = entry.content.$t;
+    var content = entry.content.$t.replace(/http:\/\//g, "https://");;
 
     var blogRaw = document.createElement('div');
-    blogRaw.innerHTML = entry.content.$t;
+    blogRaw.innerHTML = content;
     var locationElements = blogRaw.getElementsByTagName('location');
     if (locationElements.length == 1) {
       var location = locationElements[0].getAttribute('name');
