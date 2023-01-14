@@ -83,8 +83,8 @@
             '  </div>' +
             '  <div id="message' + i + '" class="message">' + entries[i].message + '</div>' +
             '</div>';
-           // To strip HTML markup
-           SetText(document.getElementById('snippet' + i), entries[i].message);
+          // To strip HTML markup
+          SetText(document.getElementById('snippet' + i), entries[i].message.replace(/<p>/g, ""));
         }
       }
 
